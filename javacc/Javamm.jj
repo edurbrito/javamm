@@ -12,7 +12,7 @@ public class Javamm
 
       	System.out.println("Empty");
     }
-	
+
 }
 
 PARSER_END(Javamm)
@@ -87,4 +87,74 @@ TOKEN :
 TOKEN: {
     < INTEGER: (["0"-"9"])+ >
     | < IDENTIFIER: ["A"-"Z", "a"-"z", "_", "$"](["0"-"9", "A"-"Z", "a" - "z", "_", "$"])* >
+}
+
+
+// {..} means (..)* and [..] means (..)?
+
+SimpleNode Parse(): {}
+{
+   (ImportDeclaration())* ClassDeclaration() <EOF> // Java code inside brackets
+}
+
+void ImportDeclaration(): {}
+{
+    <IMPORT> <IDENTIFIER> (<DOT> <IDENTIFIER>)* <SEMICOLON>
+}
+
+void ClassDeclaration(): {}
+{
+    <CLASS> <IDENTIFIER> (<EXTENDS> <IDENTIFIER>)?
+        <LBRACKET>
+        (VarDeclaration())*
+        (MethodDeclaration())*
+        <RBRACKET>
+}
+
+void VarDeclaration(): {}
+{
+    Type() <IDENTIFIER> <SEMICOLON>
+}
+
+void MethodDeclaration(): {}
+{
+    <PUBLIC> (MainMethodDeclaration() | RegularMethodDeclaration())
+}
+
+void MainMethodDeclaration(): {}
+{
+       <STATIC> <VOID> <MAIN> <LPRTHSIS> <STRING> <LSQBRACKET> <RSQBRACKET> <IDENTIFIER> <RPRTHSIS>
+       <LBRACKET>
+               (LOOKAHEAD(2) VarDeclaration())*
+               (Statement())*
+       <RBRACKET>
+}
+
+void RegularMethodDeclaration():{}
+{
+        Type() <IDENTIFIER> <LPRTHSIS> ( MethodArguments() )? <RPRTHSIS>
+        <LBRACKET>
+            (LOOKAHEAD(2) VarDeclaration())*
+            (Statement())*
+            <RETURN> Expression() <SEMICOLON>
+        <RBRACKET>
+}
+
+void MethodArguments(): {}
+{
+        Argument() ( <COMMA> Argument() )*
+}
+
+void Argument(): {}
+{
+        Type() <IDENTIFIER>
+}
+
+void Type(): {}
+{
+    <INT> (<LSQBRACKET> <RSQBRACKET>)?
+    |
+    <BOOLEAN>
+    |
+    <IDENTIFIER>
 }
