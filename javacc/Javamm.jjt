@@ -1,0 +1,131 @@
+options
+{
+    LOOKAHEAD=1;
+}
+
+PARSER_BEGIN(Javamm)
+
+
+public class Javamm
+{
+    public static void main(String args[]) throws ParseException {
+      	System.out.println("Empty");
+    }
+	
+}
+
+PARSER_END(Javamm)
+
+// Ignorable Symbols
+SKIP :
+{
+    " "
+    | "\t"
+    | "\r"
+    | "\n"
+    | < "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>             // inline comments
+    | < "/*" (~["*"])* "*" (~["/"] (~["*"])* "*")* "/" >       // block comments
+}
+
+// Reserved Words
+
+TOKEN :
+{
+    <BOOLEAN: "boolean">
+    | <CLASS: "class" >
+    | <ELSE: "else">
+    | <EXTENDS: "extends">
+    | <FALSE_: "false">
+    | <IF: "if">
+    | <IMPORT: "import">
+    | <INT: "int">
+    | <LENGTH: "length">
+    | <MAIN: "main">
+    | <NEW: "new">
+    | <PUBLIC: "public">
+    | <RETURN: "return">
+    | <STATIC: "static">
+    | <STRING: "String">
+    | <THIS: "this">
+    | <TRUE_: "true">
+    | <VOID: "void">
+    | <WHILE: "while">
+}
+
+// Operations
+
+TOKEN :
+{
+    < AND : "&&">
+    | < DIV : "/">
+    | < EQUAL : "=">
+    | < LESSTHAN : "<">
+    | < MULT : "*">
+    | < NOT : "!">
+    | < SUB : "-">
+    | < SUM : "+">
+}
+
+// Delimiters
+
+TOKEN :
+{
+    < DOT: "." >
+    | < COMMA: "," >
+    | < SEMICOLON: ";" >
+    | < LBRACKET: "{" >
+    | < RBRACKET: "}" >
+    | < LSQBRACKET: "[" >
+    | < RSQBRACKET: "]" >
+    | < LPRTHSIS: "(">
+    | < RPRTHSIS: ")">
+}
+
+// Identifiers
+
+TOKEN: {
+    < INTEGER: (["0"-"9"])+ >
+    | < IDENTIFIER: ["A"-"Z", "a"-"z", "_", "$"](["0"-"9", "A"-"Z", "a" - "z", "_", "$"])* >
+}
+
+
+SimpleNode Expression(): {}
+{
+   Expr1() <LF>  {return jjtThis;} // Java code inside brackets
+}
+
+void Expr1() #void: {}
+{
+   Expr2(1) [
+   	("+" Expr2(1) #Add(2)
+   	| "-" Expr2(1) #Sub(2)
+   	)
+   	
+   ]
+}
+
+void Expr2(int sign) #void: {} // 1: positive; -1: negative, because of the ‘-‘ unitary operator
+{
+   Expr3(sign)  [
+   ("*" Expr3(1) #Mul(2) 
+   | "/" Expr3(1) #Div(2)
+   )
+   
+   ]
+/*
+   Expr3(sign) [
+   ("*" #Mul(2)
+   | "/" #Div(2)
+   )
+   Expr3(1)
+   ]
+   */
+   
+}
+
+void Expr3(int sign) #void: {Token t;}
+{
+    t=<INTEGER> {  jjtThis.val = sign *Integer.parseInt(t.image); } #Term
+    | "-" Expr3(-1)
+    | "(" Expr1() ")"
+}
