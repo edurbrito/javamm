@@ -6,15 +6,17 @@ options
 PARSER_BEGIN(Javamm)
 
 
+import java.sql.Statement;
+
 public class Javamm
 {
-    public static void main(String args[]) throws ParseException {
+    public static void main(String[] args) throws ParseException {
 
-      	System.out.println("Empty");
+      	Javamm MyJava = new Javamm(System.in);
+      	MyJava.Parse();
     }
 
 }
-
 PARSER_END(Javamm)
 
 // Ignorable Symbols
@@ -157,4 +159,94 @@ void Type(): {}
     <BOOLEAN>
     |
     <IDENTIFIER>
+}
+
+void Statement(): {}
+{
+     (<LBRACKET>  (Statement())* <RBRACKET>)
+     |
+     (<IF> <LPRTHSIS> Expression() <RBRACKET> Statement() <ELSE> Statement())
+     |
+     ( <WHILE> <LPRTHSIS> Expression() <RBRACKET> Statement())
+     |
+     ( Expression() <SEMICOLON> )
+     |
+     ( <IDENTIFIER> <EQUAL> Expression() <SEMICOLON> )
+     |
+     ( <IDENTIFIER> <LSQBRACKET> Expression() <RBRACKET> <EQUAL> Expression() <SEMICOLON> )
+}
+
+
+void Expression(): {} {
+
+    And()
+
+}
+
+ void And() : {} {
+     LessThan() ( <AND> LessThan())*
+ }
+
+ void LessThan(): {} {
+     Sum() ( <LESSTHAN> Sum())*
+ }
+
+ void Sum(): {} {
+     Subtraction() ( <SUM> Subtraction())*
+ }
+
+ void Subtraction(): {} {
+      Multiplication() ( <SUB> Multiplication() )*
+  }
+
+ void Multiplication(): {} {
+     Division() ( <MULT> Division())*
+ }
+
+ void Division(): {} {
+      DotExpression() (<DIV> DotExpression())*
+  }
+
+void DotExpression(): {}{
+    FinalExpression()
+    (
+        (
+           <DOT> (<IDENTIFIER> | <LENGTH>)
+            (
+                <LPRTHSIS>
+                (Expression() (<COMMA> Expression())*)?
+                <RPRTHSIS>
+            )?
+        )
+    )?
+ }
+
+void FinalExpression(): {} {
+
+    New()
+    | (<IDENTIFIER>  (accessToArray())? )
+    | <THIS>
+    | <TRUE_>
+    | <FALSE_>
+    | <INTEGER>
+    | ( <NOT> DotExpression() )
+    | ( <LPRTHSIS> Expression() <RPRTHSIS> )
+}
+
+void New(): {} {
+     <NEW> ( InitializeArray() | NewObject() )
+}
+
+void InitializeArray() : {} {
+    <INT> accessToArray()
+}
+
+void NewObject() : {} {
+    <IDENTIFIER> <LPRTHSIS> (Expression() (<COMMA> Expression())*)? <RPRTHSIS>
+}
+
+void accessToArray(): {} {
+
+    <LBRACKET> Expression() <RBRACKET>
+
 }
