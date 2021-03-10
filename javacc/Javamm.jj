@@ -12,7 +12,7 @@ public class Javamm
 {
     public static void main(String[] args) throws ParseException {
 
-      	Javamm MyJava = new Javamm(System.in);
+      	Javamm MyJava = new Javamm("/home/luis/Documentos/FEUP/COMP/COMP_PROJ/javacc/Calculator.jjt");
       	MyJava.Parse();
     }
 

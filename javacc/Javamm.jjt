@@ -1,19 +1,27 @@
 options
 {
     LOOKAHEAD=1;
+    DEBUG_PARSER = true;
 }
 
 PARSER_BEGIN(Javamm)
 
 
+import java.io.FileInputStream;import java.sql.Statement;
+import java.io.FileNotFoundException;
+
 public class Javamm
 {
-    public static void main(String args[]) throws ParseException {
+    public static void main(String[] args) throws ParseException, FileNotFoundException {
 
-      	System.out.println("Empty");
+        FileInputStream file= new FileInputStream("/home/luis/Documentos/FEUP/COMP/COMP_PROJ/test/fixtures/public/HelloWorld.jmm");
+      	Javamm MyJava = new Javamm(file);
+      	MyJava.Parse();
+      	return;
     }
-	
+
 }
+
 
 PARSER_END(Javamm)
 
@@ -87,4 +95,165 @@ TOKEN :
 TOKEN: {
     < INTEGER: (["0"-"9"])+ >
     | < IDENTIFIER: ["A"-"Z", "a"-"z", "_", "$"](["0"-"9", "A"-"Z", "a" - "z", "_", "$"])* >
+}
+
+
+// {..} means (..)* and [..] means (..)?
+
+SimpleNode Parse(): {}
+{
+   (ImportDeclaration())* ClassDeclaration() <EOF> // Java code inside brackets
+   {return jjtThis;}
+}
+
+void ImportDeclaration(): {}
+{
+    <IMPORT> <IDENTIFIER> (<DOT> <IDENTIFIER>)* <SEMICOLON>
+}
+
+void ClassDeclaration(): {}
+{
+    <CLASS> <IDENTIFIER> (<EXTENDS> <IDENTIFIER>)?
+        <LBRACKET>
+        (VarDeclaration())*
+        (MethodDeclaration())*
+        <RBRACKET>
+}
+
+void VarDeclaration(): {}
+{
+    Type() <IDENTIFIER> <SEMICOLON>
+}
+
+void MethodDeclaration(): {}
+{
+    <PUBLIC> (MainMethodDeclaration() | RegularMethodDeclaration())
+}
+
+void MainMethodDeclaration(): {}
+{
+       <STATIC> <VOID> <MAIN> <LPRTHSIS> <STRING> <LSQBRACKET> <RSQBRACKET> <IDENTIFIER> <RPRTHSIS>
+       <LBRACKET>
+               (LOOKAHEAD(2) VarDeclaration())*
+               (Statement())*
+       <RBRACKET>
+}
+
+void RegularMethodDeclaration():{}
+{
+        Type() <IDENTIFIER> <LPRTHSIS> ( MethodArguments() )? <RPRTHSIS>
+        <LBRACKET>
+            (LOOKAHEAD(2) VarDeclaration())*
+            (Statement())*
+            <RETURN> Expression() <SEMICOLON>
+        <RBRACKET>
+}
+
+void MethodArguments(): {}
+{
+        Argument() ( <COMMA> Argument() )*
+}
+
+void Argument(): {}
+{
+        Type() <IDENTIFIER>
+}
+
+void Type(): {}
+{
+    <INT> (<LSQBRACKET> <RSQBRACKET>)?
+    |
+    <BOOLEAN>
+    |
+    <IDENTIFIER>
+}
+
+void Statement(): {}
+{
+     (<LBRACKET>  (Statement())* <RBRACKET>)
+     |
+     (<IF> <LPRTHSIS> Expression() <RBRACKET> Statement() <ELSE> Statement())
+     |
+     ( <WHILE> <LPRTHSIS> Expression() <RBRACKET> Statement())
+     |
+     ( Expression() <SEMICOLON> )
+     /*|
+     ( <IDENTIFIER> <EQUAL> Expression() <SEMICOLON> )
+     |
+     ( <IDENTIFIER> <LSQBRACKET> Expression() <RBRACKET> <EQUAL> Expression() <SEMICOLON> )*/
+}
+
+
+void Expression(): {} {
+
+    And()
+
+}
+
+ void And() : {} {
+     LessThan() ( <AND> LessThan())*
+ }
+
+ void LessThan(): {} {
+     Sum() ( <LESSTHAN> Sum())*
+ }
+
+ void Sum(): {} {
+     Subtraction() ( <SUM> Subtraction())*
+ }
+
+ void Subtraction(): {} {
+      Multiplication() ( <SUB> Multiplication() )*
+  }
+
+ void Multiplication(): {} {
+     Division() ( <MULT> Division())*
+ }
+
+ void Division(): {} {
+      DotExpression() (<DIV> DotExpression())*
+  }
+
+void DotExpression(): {}{
+    FinalExpression()
+    (
+        (
+           <DOT> (<IDENTIFIER> | <LENGTH>)
+            (
+                <LPRTHSIS>
+                (Expression() (<COMMA> Expression())*)?
+                <RPRTHSIS>
+            )?
+        )
+    )?
+ }
+
+void FinalExpression(): {} {
+
+    New()
+    | (<IDENTIFIER>  (accessToArray())? )
+    | <THIS>
+    | <TRUE_>
+    | <FALSE_>
+    | <INTEGER>
+    | ( <NOT> DotExpression() )
+    | ( <LPRTHSIS> Expression() <RPRTHSIS> )
+}
+
+void New(): {} {
+     <NEW> ( InitializeArray() | NewObject() )
+}
+
+void InitializeArray() : {} {
+    <INT> accessToArray()
+}
+
+void NewObject() : {} {
+    <IDENTIFIER> <LPRTHSIS> (Expression() (<COMMA> Expression())*)? <RPRTHSIS>
+}
+
+void accessToArray(): {} {
+
+    <LBRACKET> Expression() <RBRACKET>
+
 }
