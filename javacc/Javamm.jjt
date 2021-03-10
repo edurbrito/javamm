@@ -177,11 +177,10 @@ void Statement(): {}
      ( <WHILE> <LPRTHSIS> Expression() <RBRACKET> Statement())
      |
      ( Expression() <SEMICOLON> )
-     /*|
-     ( <IDENTIFIER> <EQUAL> Expression() <SEMICOLON> )
      |
-     ( <IDENTIFIER> <LSQBRACKET> Expression() <RBRACKET> <EQUAL> Expression() <SEMICOLON> )*/
+     ( <IDENTIFIER> (<LSQBRACKET> Expression() <RBRACKET>)? <EQUAL> Expression() <SEMICOLON> )
 }
+
 
 
 void Expression(): {} {
@@ -215,16 +214,16 @@ void Expression(): {} {
   }
 
 void DotExpression(): {}{
+
     FinalExpression()
     (
+       <DOT> (<IDENTIFIER> | <LENGTH>)
         (
-           <DOT> (<IDENTIFIER> | <LENGTH>)
-            (
-                <LPRTHSIS>
-                (Expression() (<COMMA> Expression())*)?
-                <RPRTHSIS>
-            )?
-        )
+            <LPRTHSIS>
+            (Expression() (<COMMA> Expression())*)?
+            <RPRTHSIS>
+        )?
+
     )?
  }
 
