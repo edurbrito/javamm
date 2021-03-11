@@ -170,15 +170,15 @@ void Type(): {}
 
 void Statement(): {}
 {
-     (<LBRACKET>  (Statement())* <RBRACKET>)
+     ( <LBRACKET>  (Statement())* <RBRACKET>)
      |
-     (<IF> <LPRTHSIS> Expression() <RBRACKET> Statement() <ELSE> Statement())
+     ( <IF> <LPRTHSIS> Expression() <RPRTHSIS> Statement() <ELSE> Statement())
      |
-     ( <WHILE> <LPRTHSIS> Expression() <RBRACKET> Statement())
+     ( <WHILE> <LPRTHSIS> Expression() <RPRTHSIS> Statement())
      |
      ( Expression() <SEMICOLON> )
      |
-     ( <IDENTIFIER> (<LSQBRACKET> Expression() <RBRACKET>)? <EQUAL> Expression() <SEMICOLON> )
+     ( <IDENTIFIER> (<LSQBRACKET> Expression() <RSQBRACKET>)? <EQUAL> Expression() <SEMICOLON> )
 }
 
 
@@ -229,12 +229,12 @@ void DotExpression(): {}{
 
 void FinalExpression(): {} {
 
-    New()
-    | (<IDENTIFIER>  (accessToArray())? )
-    | <THIS>
+    <INTEGER>
     | <TRUE_>
     | <FALSE_>
-    | <INTEGER>
+    | (<IDENTIFIER>  (accessToArray())? )
+    | <THIS>
+    | New()
     | ( <NOT> DotExpression() )
     | ( <LPRTHSIS> Expression() <RPRTHSIS> )
 }
@@ -253,6 +253,6 @@ void NewObject() : {} {
 
 void accessToArray(): {} {
 
-    <LBRACKET> Expression() <RBRACKET>
+    <LSQBRACKET> Expression() <RSQBRACKET>
 
 }
