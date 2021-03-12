@@ -176,9 +176,8 @@ void Statement(): {}
      |
      ( <WHILE> <LPRTHSIS> Expression() <RPRTHSIS> Statement())
      |
-     ( Expression() <SEMICOLON> )
-     |
-     ( <IDENTIFIER> (<LSQBRACKET> Expression() <RSQBRACKET>)? <EQUAL> Expression() <SEMICOLON> )
+     ( (LOOKAHEAD(2) <IDENTIFIER> ( accessToArray() )? <EQUAL>)? Expression() <SEMICOLON> )
+
 }
 
 
@@ -217,17 +216,21 @@ void DotExpression(): {}{
 
     FinalExpression()
     (
-       <DOT> (<IDENTIFIER> | <LENGTH>)
-        (
-            <LPRTHSIS>
-            (Expression() (<COMMA> Expression())*)?
-            <RPRTHSIS>
-        )?
-
+     //Function Call
+       LOOKAHEAD(2) <DOT> (
+           <LENGTH>
+           |
+           <IDENTIFIER>(
+                <LPRTHSIS>
+                (Expression() (<COMMA> Expression())*)?
+                <RPRTHSIS>
+            )?
+       )
     )?
  }
 
-void FinalExpression(): {} {
+void FinalExpression(): {}
+{
 
     <INTEGER>
     | <TRUE_>

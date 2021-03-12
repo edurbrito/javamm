@@ -12,8 +12,8 @@ public class ExampleTest {
 
 
     @Test
-    public void testExpression() {		
-		assertEquals("Expression", TestUtils.parse("2+3\n").getRootNode().getKind());		
+    public void testExpression() {
+        //Ler de ficheiro
+		assertEquals("Parse", TestUtils.parse("2-3\n").getRootNode().getKind());
 	}
-
 }
