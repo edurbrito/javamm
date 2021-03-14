@@ -6,20 +6,9 @@ options
 
 PARSER_BEGIN(Javamm)
 
-
-import java.io.FileInputStream;import java.sql.Statement;
-import java.io.FileNotFoundException;
-
 public class Javamm
 {
-    public static void main(String[] args) throws ParseException, FileNotFoundException {
-
-        FileInputStream file= new FileInputStream("/home/luis/Documentos/FEUP/COMP/COMP_PROJ/test/fixtures/public/HelloWorld.jmm");
-      	Javamm MyJava = new Javamm(file);
-      	MyJava.Parse();
-      	return;
-    }
-
+    // INSERT WHILE ERROR RECOVERY FUNCTIONS HERE
 }
 
 

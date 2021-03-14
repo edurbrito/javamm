@@ -13,7 +13,7 @@ public class ExampleTest {
 
     @Test
     public void testExpression() {
-        //Ler de ficheiro
-		assertEquals("Parse", TestUtils.parse("2-3\n").getRootNode().getKind());
+        // Ler de ficheiro
+        // assertEquals("Parse", TestUtils.parse("test/fixtures/public/HelloWorld.jmm").getRootNode().getKind());
 	}
 }
