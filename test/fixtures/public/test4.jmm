@@ -1,0 +1,40 @@
+/*
+Tests:
+    -warnings in variables not initialized in all the conditional branches
+*/
+
+class test4 {
+
+    public int f1(boolean c) {
+
+        int result;
+        result = 0;
+        if (c) {
+            result = 2;
+        } else {}
+
+        return result;
+    }
+
+    public int f2(int a, int b, int c) {
+
+        int result;
+        if (a + b < c) {
+            if (c < a) {
+                result = 2;
+            } else {}
+        } else {
+            result = 3;
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        test4 x;
+        x = new test4();
+        x.f1(true);
+    }
+
+
+}

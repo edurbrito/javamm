@@ -1,0 +1,145 @@
+/*
+Tests
+    -imports (all)
+    -intertwined loops and ifs (with simple actions)
+    -class functions and attributes
+    -arrays
+*/
+import classA1;
+import classA;
+import classA.func1(int[], int, int) boolean;
+import classA.func1(int[]) int;
+import classA.func2(int) void;
+import classA.func3(int) classA1;
+import static classB.func1(int, int) int;
+
+class test1 {
+
+    int atr1;
+    boolean atr2;
+    classA atr3;
+
+     public boolean init() {
+         atr1 = 2;
+         atr2 = true;
+         atr3 = new classA();
+
+         return true;
+     }
+
+    public int f1() {
+
+        int a;
+        int b;
+        int c;
+        int d;
+
+        a = 2;
+        b = 3;
+        c = 4;
+
+        if (a < b) {
+            if (b < c) {
+                if (a < c) {
+                    d = 2;
+                } else
+                    d = 1;
+
+            } else
+                d = 3;
+
+        } else
+            d = 4;
+
+        return d;
+
+    }
+
+    public int f2(int a, int b, int c) {
+
+        int result;
+        int[] arr;
+        boolean z;
+        boolean p;
+
+        arr = new int[3];
+        arr[0] = 1;
+        arr[1] = 2;
+        arr[2] = 3;
+        z = true;
+        p = false;
+
+        while (a < b) {
+            a = a + 1;
+            while (b < c) {
+                b = b + 1;
+                while (z && p)
+                    a = a + 1;
+            }
+
+        }
+
+        return a + b + c + atr1;
+    }
+
+    public classA f3() {
+        return new classA();
+    }
+
+    public test1 f4() {
+         return new test1();
+    }
+
+    public int f5() {
+        int result;
+        if (atr2)
+            result = atr1;
+        else
+            result = 10;
+
+        return result;
+    }
+
+    public void foo() {
+        classA objA;
+        classA objA2;
+        classA1 objA1;
+        boolean bool1;
+        int i1;
+        int i2;
+        int i3;
+        int i4;
+        int[] ia1;
+        ia1 = new int[3];
+        ia1[0] = 1;
+        ia1[1] = 2;
+        ia1[2] = 3;
+        atr1 = 2;
+
+        atr3 = new classA();
+        objA = new classA();
+        objA2 = new classA();
+        objA1 = new classA1();
+
+        bool1 = objA.func1(ia1, 2, 3);
+        i1 = objA.func1(ia1);
+        objA.func2(i1);
+        objA1 = objA.func3(2);
+        i2 = classB.func1(1, 2);
+        i3 = this.f1();
+        i4 = this.f2(i1, i2, i3);
+        this.f3();
+        ia1[0] = ia1[2];
+        i4 = atr3.func1(ia1);
+        i2 = this.f5();
+        this.f4();
+    }
+
+    public static void main(String[] args) {
+        test1 x;
+        x = new test1();
+        x.init();
+        x.foo();
+    }
+
+}

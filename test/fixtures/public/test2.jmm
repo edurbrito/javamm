@@ -1,0 +1,58 @@
+/*
+Tests:
+   -class extensions
+*/
+import classA;
+import classA.func2(int) void;
+
+class test2 extends classA {
+
+    public int f1(int a, int b) {
+        a = a + b;
+        return a;
+    }
+
+    public test2 f2() {
+        return new test2();
+    }
+
+    public void f3(classA p) {}
+
+    public void f4() {
+        test2 p;
+        p = this.f2();
+        this.f3(new classA());
+        this.f3(new test2());
+        this.f3(p);
+    }
+
+    public void foo(){
+        classA objA;
+        classA objA2;
+        test2 objt2;
+
+        objA = new test2();
+        objA2 = new classA();
+        objt2 = new test2();
+
+        objA.func2(4);
+        objA2.func2(4);
+        this.func2(3);
+        objt2.func2(3);
+
+        objt2.f1(2, 3);
+
+        this.getClassA();
+        this.f4();
+    }
+
+    public static void main(String[] args) {
+        test2 x;
+        x = new test2();
+        x.foo();
+    }
+
+    public classA getClassA() {
+        return new classA();
+    }
+}
