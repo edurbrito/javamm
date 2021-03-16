@@ -186,7 +186,18 @@ void IfStatement(): {}
 
 void WhileStatement(): {}
 {
-        <WHILE> <LPRTHSIS> Expression() <RPRTHSIS> Statement()
+        <WHILE> <LPRTHSIS>
+         try {
+            Expression() <RPRTHSIS>
+         } catch(ParseException e) {
+              System.out.println(e.toString());
+              Token t;
+              do {
+                t = getNextToken();
+              } while (t.kind != RPRTHSIS);
+         }
+
+        Statement()
 }
 
 void EqualStatement(): {}
