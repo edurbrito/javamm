@@ -7,20 +7,25 @@ options
 PARSER_BEGIN(Javamm)
 
 
-import java.io.FileInputStream;import java.sql.Statement;
+import java.io.FileInputStream;
+import java.sql.Statement;
 import java.io.FileNotFoundException;
+import java.text.ParseException;
+
 
 public class Javamm
 {
-    public static void main(String[] args) throws ParseException, FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException {
 
-        FileInputStream file= new FileInputStream("/home/luis/Documentos/FEUP/COMP/COMP_PROJ/test/fixtures/public/HelloWorld.jmm");
+        FileInputStream file= new FileInputStream("C:\\Users\\ricar\\Documents\\Universidade\\3ano\\COMP\\Projeto\\test\\fixtures\\public\\fail\\syntactical\\BlowUp.jmm");
       	Javamm MyJava = new Javamm(file);
       	MyJava.Parse();
       	return;
     }
 
 }
+
+
 
 
 PARSER_END(Javamm)
@@ -174,7 +179,22 @@ void Statement(): {}
      |
      ( <IF> <LPRTHSIS> Expression() <RPRTHSIS> Statement() <ELSE> Statement())
      |
-     ( <WHILE> <LPRTHSIS> Expression() <RPRTHSIS> Statement())
+     (
+
+         <WHILE> <LPRTHSIS>
+         try{
+         Expression()
+         <RPRTHSIS>
+         }catch(ParseException e){
+              System.out.println(e.toString());
+              Token t;
+              do {
+                t = getNextToken();
+              } while (t.kind != RPRTHSIS);
+         }
+          Statement()
+     )
+
      |
      ( (LOOKAHEAD(2) <IDENTIFIER> ( accessToArray() )? <EQUAL>)? Expression() <SEMICOLON> )
 

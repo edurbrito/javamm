@@ -1,0 +1,21 @@
+import static io.print(int) void;
+import static io.printArray(int []) void;
+
+class Array3 {
+
+    public static void main(String[] args){
+        int[] a;
+
+        //array store
+        a = new int[8];
+
+        //array position store
+        a[0] = 2;
+
+        //array access
+        io.printArray(a);
+
+        //array position load
+        io.print(a[0]);
+    }
+}

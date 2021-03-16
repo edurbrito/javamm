@@ -1,0 +1,25 @@
+class Custom {
+
+    public int add(int a, int b){
+        int c;
+        c = a+b;
+        return c;
+    }
+
+    public static void main(String[] args){
+        int a;
+        int b;
+        int c;
+        Custom s;
+        boolean y;
+        a = 20;
+        b = 10;
+
+        while(b < a ){
+            b = a + a;
+            while(false){
+                a = b;
+            }
+        }
+    }
+}

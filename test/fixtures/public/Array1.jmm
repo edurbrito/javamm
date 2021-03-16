@@ -1,0 +1,16 @@
+import static io.println(int) void;
+import static io.println(int []) void;
+
+class Array {
+    public static void main(String[] args){
+        int[] buffer;
+        int bufsz;
+        int value;
+        bufsz = 100;
+        value = 12;
+        buffer = new int[bufsz];
+        buffer[10] = value;
+        value = buffer[11];
+
+    }
+}
