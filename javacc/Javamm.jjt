@@ -6,9 +6,26 @@ options
 
 PARSER_BEGIN(Javamm)
 
+
 public class Javamm
 {
-    // INSERT WHILE ERROR RECOVERY FUNCTIONS HERE
+    private static final int MAX_ERRORS = 10;
+    private int nErrors = 0;
+
+    private void while_err_handling(ParseException pe){
+        this.nErrors++;
+
+        if( this.nErrors > MAX_ERRORS){
+            throw new RuntimeException("Limit of" + MAX_ERRORS + " errors reached!");
+        }
+
+        System.out.println(pe.toString());
+        Token t;
+        do {
+            t = getNextToken();
+        } while (t.kind != RPRTHSIS);
+
+    }
 };
 
 PARSER_END(Javamm)
@@ -189,11 +206,7 @@ void WhileStatement(): {}
          try {
             Expression() <RPRTHSIS>
          } catch(ParseException e) {
-              System.out.println(e.toString());
-              Token t;
-              do {
-                t = getNextToken();
-              } while (t.kind != RPRTHSIS);
+              while_err_handling(e);
          }
 
         Statement()
