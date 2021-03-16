@@ -9,7 +9,7 @@ PARSER_BEGIN(Javamm)
 public class Javamm
 {
     // INSERT WHILE ERROR RECOVERY FUNCTIONS HERE
-}
+};
 
 
 PARSER_END(Javamm)
@@ -103,10 +103,15 @@ void ImportDeclaration(): {}
 void ClassDeclaration(): {}
 {
     <CLASS> <IDENTIFIER> (<EXTENDS> <IDENTIFIER>)?
-        <LBRACKET>
+       ClassBody()
+}
+
+void ClassBody() : {}
+{
+    <LBRACKET>
         (VarDeclaration())*
         (MethodDeclaration())*
-        <RBRACKET>
+    <RBRACKET>
 }
 
 void VarDeclaration(): {}
@@ -123,8 +128,7 @@ void MainMethodDeclaration(): {}
 {
        <STATIC> <VOID> <MAIN> <LPRTHSIS> <STRING> <LSQBRACKET> <RSQBRACKET> <IDENTIFIER> <RPRTHSIS>
        <LBRACKET>
-               (LOOKAHEAD(2) VarDeclaration())*
-               (Statement())*
+             MethodBody()
        <RBRACKET>
 }
 
@@ -132,10 +136,20 @@ void RegularMethodDeclaration():{}
 {
         Type() <IDENTIFIER> <LPRTHSIS> ( MethodArguments() )? <RPRTHSIS>
         <LBRACKET>
-            (LOOKAHEAD(2) VarDeclaration())*
-            (Statement())*
-            <RETURN> Expression() <SEMICOLON>
+            MethodBody()
+            ReturnExpression()
         <RBRACKET>
+}
+
+void MethodBody(): {}
+{
+        ( LOOKAHEAD(2) VarDeclaration())*
+        (Statement())*
+}
+
+void ReturnExpression(): {}
+{
+        <RETURN> Expression() <SEMICOLON>
 }
 
 void MethodArguments(): {}
@@ -150,101 +164,103 @@ void Argument(): {}
 
 void Type(): {}
 {
-    <INT> (<LSQBRACKET> <RSQBRACKET>)?
-    |
-    <BOOLEAN>
-    |
-    <IDENTIFIER>
+        <INT> (<LSQBRACKET> <RSQBRACKET>)?
+        |
+        <BOOLEAN>
+        |
+        <IDENTIFIER>
 }
 
 void Statement(): {}
 {
-     ( <LBRACKET>  (Statement())* <RBRACKET>)
-     |
-     ( <IF> <LPRTHSIS> Expression() <RPRTHSIS> Statement() <ELSE> Statement())
-     |
-     ( <WHILE> <LPRTHSIS> Expression() <RPRTHSIS> Statement())
-     |
-     ( (LOOKAHEAD(2) <IDENTIFIER> ( accessToArray() )? <EQUAL>)? Expression() <SEMICOLON> )
-
+         <LBRACKET> (Statement())* <RBRACKET>
+         | IfStatement()
+         | WhileStatement()
+         | (LOOKAHEAD(2) EqualStatement() | Expression()) <SEMICOLON>
 }
 
+void IfStatement(): {}
+{
+        <IF> <LPRTHSIS> Expression() <RPRTHSIS> Statement() <ELSE> Statement() // else shouldn't be optional???
+}
 
+void WhileStatement(): {}
+{
+        <WHILE> <LPRTHSIS> Expression() <RPRTHSIS> Statement()
+}
+
+void EqualStatement(): {}
+{
+        <IDENTIFIER> ( AccessToArray() )? <EQUAL> Expression()
+}
 
 void Expression(): {} {
-
-    And()
-
+        AndExpression()
 }
 
- void And() : {} {
-     LessThan() ( <AND> LessThan())*
+ void AndExpression() : {}
+ {
+        LessThanExpression() ( <AND> LessThanExpression())*
  }
 
- void LessThan(): {} {
-     Sum() ( <LESSTHAN> Sum())*
+ void LessThanExpression(): {}
+ {
+        AdditiveExpression() ( <LESSTHAN> AdditiveExpression())*
  }
 
- void Sum(): {} {
-     Subtraction() ( <SUM> Subtraction())*
- }
-
- void Subtraction(): {} {
-      Multiplication() ( <SUB> Multiplication() )*
-  }
-
- void Multiplication(): {} {
-     Division() ( <MULT> Division())*
- }
-
- void Division(): {} {
-      DotExpression() (<DIV> DotExpression())*
-  }
-
-void DotExpression(): {}{
-
-    FinalExpression()
-    (
-     //Function Call
-       LOOKAHEAD(2) <DOT> (
-           <LENGTH>
-           |
-           <IDENTIFIER>(
-                <LPRTHSIS>
-                (Expression() (<COMMA> Expression())*)?
-                <RPRTHSIS>
-            )?
-       )
-    )?
- }
-
-void FinalExpression(): {}
+ void AdditiveExpression(): {}
 {
-
-    <INTEGER>
-    | <TRUE_>
-    | <FALSE_>
-    | (<IDENTIFIER>  (accessToArray())? )
-    | <THIS>
-    | New()
-    | ( <NOT> DotExpression() )
-    | ( <LPRTHSIS> Expression() <RPRTHSIS> )
+        MultiplicativeExpression() ( ( <SUM> | <SUB> ) MultiplicativeExpression() )*
 }
 
-void New(): {} {
-     <NEW> ( InitializeArray() | NewObject() )
+void MultiplicativeExpression(): {}
+{
+        PrimaryExpression() ( ( <MULT> | <DIV> ) PrimaryExpression() )*
 }
 
-void InitializeArray() : {} {
-    <INT> accessToArray()
+void PrimaryExpression(): {}
+{
+        PrimaryPrefix() (PrimarySuffix())?
 }
 
-void NewObject() : {} {
-    <IDENTIFIER> <LPRTHSIS> (Expression() (<COMMA> Expression())*)? <RPRTHSIS>
+void PrimaryPrefix(): {}
+{
+        Literal()
+        | AllocationExpression()
+        | <NOT> Expression()
+        | <LPRTHSIS> Expression() <RPRTHSIS>
 }
 
-void accessToArray(): {} {
+void PrimarySuffix(): {}
+{
+    AccessToArray()
+    | DotExpression()
+}
 
-    <LSQBRACKET> Expression() <RSQBRACKET>
+void Literal(): {}
+{
+         <INTEGER>
+         | <TRUE_>
+         | <FALSE_>
+         | <IDENTIFIER>
+         | <THIS>
+}
 
+void AllocationExpression(): {}
+{
+        <NEW> (<INT> AccessToArray() | <IDENTIFIER> <LPRTHSIS> <RPRTHSIS> )
+}
+
+void DotExpression(): {}
+{
+        <DOT>
+        (
+            <LENGTH>
+            | <IDENTIFIER> <LPRTHSIS> (Expression() (<COMMA> Expression())*)? <RPRTHSIS>
+        )
+}
+
+void AccessToArray(): {}
+{
+        <LSQBRACKET> Expression() <RSQBRACKET>
 }
