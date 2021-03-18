@@ -111,9 +111,9 @@ SimpleNode Parse() #Program : {}
    {return jjtThis;}
 }
 
-void ImportDeclaration() #Import : {}
+void ImportDeclaration() #Import : {Token importToken;}
 {
-    <IMPORT> (<IDENTIFIER> (<DOT> <IDENTIFIER>)*) #Library  <SEMICOLON>
+    <IMPORT> (importToken=<IDENTIFIER> {jjtThis.put("importLibrary",importToken.image);} (<DOT> <IDENTIFIER>)*) #Library  <SEMICOLON>
 }
 
 void ClassDeclaration() #Class : {Token classToken;}
@@ -130,9 +130,9 @@ void ClassBody() #void : {}
     <RBRACKET>
 }
 
-void VarDeclaration() #Var: {}
+void VarDeclaration() #Var: {Token var;}
 {
-    Type() <IDENTIFIER> <SEMICOLON>
+    Type() var=<IDENTIFIER>{jjtThis.put("varName", var.image);} <SEMICOLON>
 }
 
 void MethodDeclaration() #void : {}
@@ -148,9 +148,9 @@ void MainMethodDeclaration() #MainMethod : {}
        <RBRACKET>
 }
 
-void RegularMethodDeclaration() #RegularMethod :{}
+void RegularMethodDeclaration() #Method :{Token method;}
 {
-        Type() <IDENTIFIER> <LPRTHSIS> ( MethodArguments() )? <RPRTHSIS>
+        Type() method=<IDENTIFIER> {jjtThis.put("methodName",method.image);} <LPRTHSIS> ( MethodArguments() )? <RPRTHSIS>
         <LBRACKET>
             MethodBody()
             ReturnExpression()
@@ -173,18 +173,18 @@ void MethodArguments(): {}
         Argument() ( <COMMA> Argument() )*
 }
 
-void Argument(): {}
+void Argument(): {Token argument;}
 {
-        Type() <IDENTIFIER> #Identifier
+        Type() argument=<IDENTIFIER> {jjtThis.put("argumentName",argument.image);}
 }
 
-void Type(): {}
+void Type(): {Token type;}
 {
-        (<INT> (ArrayType())?) #Integer
+        (type=<INT> {jjtThis.put("typeName",type.image);} (ArrayType())?)
         |
-        <BOOLEAN> #Boolean
+        type=<BOOLEAN> {jjtThis.put("typeName",type.image);}
         |
-        <IDENTIFIER> #Identifier
+        type=<IDENTIFIER> {jjtThis.put("typeName",type.image);}
 }
 
 void ArrayType() #Array : {}
@@ -217,9 +217,9 @@ void WhileStatement() #void : {}
         (Statement()) #WhileBody ) #While(2)
 }
 
-void EqualStatement() #void : {}
+void EqualStatement() #void : {Token equalToken;}
 {
-        (<IDENTIFIER> ( AccessToArray() )?) #Identifier <EQUAL> Expression() #EqualStatement(2)
+        (equalToken=<IDENTIFIER> {jjtThis.put("varName",equalToken.image);} ( AccessToArray() )?) #Var <EQUAL> Expression() #EqualStatement(2)
 }
 
 void Expression() #void : {} {
@@ -265,26 +265,26 @@ void PrimarySuffix() #void : {}
     | DotExpression()
 }
 
-void Literal() #void : {}
+void Literal() #void : {Token literalToken;}
 {
-         <INTEGER> #Integer
-         | <TRUE_> #Boolean
-         | <FALSE_> #Boolean
-         | <IDENTIFIER> #Identifier
+         literalToken=<INTEGER> {jjtThis.put("literalName",literalToken.image);} #Integer
+         | literalToken=<TRUE_> {jjtThis.put("literalName",literalToken.image);} #Boolean
+         | literalToken=<FALSE_> {jjtThis.put("literalName",literalToken.image);} #Boolean
+         | literalToken=<IDENTIFIER> {jjtThis.put("literalName",literalToken.image);} #Identifier
          | <THIS> #This
 }
 
-void AllocationExpression() #void : {}
+void AllocationExpression() #void : {Token allocationToken;}
 {
-        <NEW> (<INT> AccessToArray() | <IDENTIFIER> #Identifier <LPRTHSIS> <RPRTHSIS> )
+        <NEW> (<INT> AccessToArray() | allocationToken=<IDENTIFIER>{jjtThis.put("className",allocationToken.image);} #Class <LPRTHSIS> <RPRTHSIS> )
 }
 
-void DotExpression() : {}
+void DotExpression() : {Token dotToken;}
 {
         <DOT>
         (
             <LENGTH> #Length
-            | (<IDENTIFIER> <LPRTHSIS> (Expression() (<COMMA> Expression())*)? <RPRTHSIS>) #Method
+            | (dotToken=<IDENTIFIER>{jjtThis.put("methodName",dotToken.image);} <LPRTHSIS> (Expression() (<COMMA> Expression())*)? <RPRTHSIS>) #Method
         )
 }
 

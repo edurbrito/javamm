@@ -6,6 +6,8 @@ import java.lang.RuntimeException;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.StringJoiner;
 
 
 public
@@ -15,36 +17,33 @@ class SimpleNode implements Node, JmmNode {
   protected Node[] children;
   protected int id;
   protected Object value;
-  protected Calculator parser;
+  protected Javamm parser;
 
-    // added
-    public int val;
-    public Operator op = null;
+  private HashMap<String,String> map = new HashMap<>();
 
   public SimpleNode(int i) {
     id = i;
   }
 
-  public SimpleNode(Calculator p, int i) {
+  public SimpleNode(Javamm p, int i) {
     this(i);
     parser = p;
   }
-
 
   public String getKind() {
 	  return toString();
   }
   
   public List<String> getAttributes() {
-	throw new RuntimeException("Not implemented yet");
+	return new ArrayList<String>(this.map.keySet());
   }
 
   public void put(String attribute, String value) {
-	throw new RuntimeException("Not implemented yet");	  
+    this.map.put(attribute,value);
   }
 
   public String get(String attribute) {
-	throw new RuntimeException("Not implemented yet");
+	return this.map.get(attribute);
   }
   
   public List<JmmNode> getChildren() {
@@ -102,7 +101,29 @@ class SimpleNode implements Node, JmmNode {
      you need to do. */
 
   public String toString() {
-    return CalculatorTreeConstants.jjtNodeName[id];
+
+    StringJoiner joiner = new StringJoiner(" ");
+    String nodeName = JavammTreeConstants.jjtNodeName[id];
+    joiner.add(nodeName);
+
+    if(nodeName.equals("Library"))
+      joiner.add(this.get("importLibrary"));
+    else if(nodeName.equals("Class"))
+      joiner.add(this.get("className"));
+      if(this.map.containsKey("classExtended"))
+        joiner.add("extends " + this.get("classExtended"));
+    else if(nodeName.equals("Var"))
+      joiner.add(this.get("varName"));
+    else if(nodeName.equals("Method"))
+      joiner.add(this.get("methodName"));
+    else if(nodeName.equals("Argument"))
+      joiner.add(this.get("argumentName"));
+    else if(nodeName.equals("Type"))
+      joiner.add(this.get("typeName"));
+    else if(nodeName.equals("Integer") || nodeName.equals("Boolean") || nodeName.equals("Identifier"))
+      joiner.add(this.get("literalName"));
+
+    return joiner.toString();
   }
   public String toString(String prefix) { return prefix + toString(); }
 
