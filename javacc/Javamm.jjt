@@ -105,24 +105,24 @@ TOKEN: {
 
 // {..} means (..)* and [..] means (..)?
 
-SimpleNode Parse(): {}
+SimpleNode Parse() #Program : {}
 {
    (ImportDeclaration())* ClassDeclaration() <EOF> // Java code inside brackets
    {return jjtThis;}
 }
 
-void ImportDeclaration(): {}
+void ImportDeclaration() #Import : {}
 {
-    <IMPORT> <IDENTIFIER> (<DOT> <IDENTIFIER>)* <SEMICOLON>
+    <IMPORT> (<IDENTIFIER> (<DOT> <IDENTIFIER>)*) #Library  <SEMICOLON>
 }
 
-void ClassDeclaration(): {}
+void ClassDeclaration() #Class : {Token classToken;}
 {
-    <CLASS> <IDENTIFIER> (<EXTENDS> <IDENTIFIER>)?
+    <CLASS> classToken=<IDENTIFIER> {jjtThis.put("className", classToken.image);} (<EXTENDS> classToken=<IDENTIFIER> {jjtThis.put("classExtended", classToken.image);})?
        ClassBody()
 }
 
-void ClassBody() : {}
+void ClassBody() #void : {}
 {
     <LBRACKET>
         (VarDeclaration())*
@@ -130,17 +130,17 @@ void ClassBody() : {}
     <RBRACKET>
 }
 
-void VarDeclaration(): {}
+void VarDeclaration() #Var: {}
 {
     Type() <IDENTIFIER> <SEMICOLON>
 }
 
-void MethodDeclaration(): {}
+void MethodDeclaration() #void : {}
 {
     <PUBLIC> (MainMethodDeclaration() | RegularMethodDeclaration())
 }
 
-void MainMethodDeclaration(): {}
+void MainMethodDeclaration() #MainMethod : {}
 {
        <STATIC> <VOID> <MAIN> <LPRTHSIS> <STRING> <LSQBRACKET> <RSQBRACKET> <IDENTIFIER> <RPRTHSIS>
        <LBRACKET>
@@ -148,7 +148,7 @@ void MainMethodDeclaration(): {}
        <RBRACKET>
 }
 
-void RegularMethodDeclaration():{}
+void RegularMethodDeclaration() #RegularMethod :{}
 {
         Type() <IDENTIFIER> <LPRTHSIS> ( MethodArguments() )? <RPRTHSIS>
         <LBRACKET>
@@ -157,13 +157,13 @@ void RegularMethodDeclaration():{}
         <RBRACKET>
 }
 
-void MethodBody(): {}
+void MethodBody() #void : {}
 {
         ( LOOKAHEAD(2) VarDeclaration())*
         (Statement())*
 }
 
-void ReturnExpression(): {}
+void ReturnExpression() #Return : {}
 {
         <RETURN> Expression() <SEMICOLON>
 }
@@ -175,19 +175,24 @@ void MethodArguments(): {}
 
 void Argument(): {}
 {
-        Type() <IDENTIFIER>
+        Type() <IDENTIFIER> #Identifier
 }
 
 void Type(): {}
 {
-        <INT> (<LSQBRACKET> <RSQBRACKET>)?
+        (<INT> (ArrayType())?) #Integer
         |
-        <BOOLEAN>
+        <BOOLEAN> #Boolean
         |
-        <IDENTIFIER>
+        <IDENTIFIER> #Identifier
 }
 
-void Statement(): {}
+void ArrayType() #Array : {}
+{
+    <LSQBRACKET> <RSQBRACKET>
+}
+
+void Statement() #void : {}
 {
          <LBRACKET> (Statement())* <RBRACKET>
          | IfStatement()
@@ -195,91 +200,91 @@ void Statement(): {}
          | (LOOKAHEAD(2) EqualStatement() | Expression()) <SEMICOLON>
 }
 
-void IfStatement(): {}
+void IfStatement() #void: {}
 {
-        <IF> <LPRTHSIS> Expression() <RPRTHSIS> Statement() <ELSE> Statement() // else shouldn't be optional???
+        (<IF> <LPRTHSIS> (Expression()) #IfCondition <RPRTHSIS> (Statement()) #IfBody <ELSE> (Statement()) #ElseBody ) #IfElse(3)
 }
 
-void WhileStatement(): {}
+void WhileStatement() #void : {}
 {
-        <WHILE> <LPRTHSIS>
+        (<WHILE> <LPRTHSIS>
          try {
-            Expression() <RPRTHSIS>
+            (Expression()) #WhileCondition <RPRTHSIS>
          } catch(ParseException e) {
               while_err_handling(e);
          }
 
-        Statement()
+        (Statement()) #WhileBody ) #While(2)
 }
 
-void EqualStatement(): {}
+void EqualStatement() #void : {}
 {
-        <IDENTIFIER> ( AccessToArray() )? <EQUAL> Expression()
+        (<IDENTIFIER> ( AccessToArray() )?) #Identifier <EQUAL> Expression() #EqualStatement(2)
 }
 
-void Expression(): {} {
+void Expression() #void : {} {
         AndExpression()
 }
 
- void AndExpression() : {}
+ void AndExpression() #void : {}
  {
-        LessThanExpression() ( <AND> LessThanExpression())*
+        LessThanExpression() ( <AND> LessThanExpression() #And(2) )*
  }
 
- void LessThanExpression(): {}
+ void LessThanExpression() #void : {}
  {
-        AdditiveExpression() ( <LESSTHAN> AdditiveExpression())*
+        AdditiveExpression() ( <LESSTHAN> AdditiveExpression() #LessThan(2))*
  }
 
- void AdditiveExpression(): {}
+ void AdditiveExpression() #void : {}
 {
-        MultiplicativeExpression() ( ( <SUM> | <SUB> ) MultiplicativeExpression() )*
+        MultiplicativeExpression() ( ( <SUM> MultiplicativeExpression() #Sum(2) | <SUB> MultiplicativeExpression() #Sub(2)) )*
 }
 
-void MultiplicativeExpression(): {}
+void MultiplicativeExpression() #void : {}
 {
-        PrimaryExpression() ( ( <MULT> | <DIV> ) PrimaryExpression() )*
+        PrimaryExpression() ( ( <MULT> PrimaryExpression() #Mult(2) | <DIV> PrimaryExpression() #Div(2)))*
 }
 
-void PrimaryExpression(): {}
+void PrimaryExpression() #void : {}
 {
         PrimaryPrefix() (PrimarySuffix())?
 }
 
-void PrimaryPrefix(): {}
+void PrimaryPrefix() #void : {}
 {
         Literal()
-        | AllocationExpression()
-        | <NOT> Expression()
+        | AllocationExpression() #New
+        | (<NOT> Expression())  #Not
         | <LPRTHSIS> Expression() <RPRTHSIS>
 }
 
-void PrimarySuffix(): {}
+void PrimarySuffix() #void : {}
 {
     AccessToArray()
     | DotExpression()
 }
 
-void Literal(): {}
+void Literal() #void : {}
 {
-         <INTEGER>
-         | <TRUE_>
-         | <FALSE_>
-         | <IDENTIFIER>
-         | <THIS>
+         <INTEGER> #Integer
+         | <TRUE_> #Boolean
+         | <FALSE_> #Boolean
+         | <IDENTIFIER> #Identifier
+         | <THIS> #This
 }
 
-void AllocationExpression(): {}
+void AllocationExpression() #void : {}
 {
-        <NEW> (<INT> AccessToArray() | <IDENTIFIER> <LPRTHSIS> <RPRTHSIS> )
+        <NEW> (<INT> AccessToArray() | <IDENTIFIER> #Identifier <LPRTHSIS> <RPRTHSIS> )
 }
 
-void DotExpression(): {}
+void DotExpression() : {}
 {
         <DOT>
         (
-            <LENGTH>
-            | <IDENTIFIER> <LPRTHSIS> (Expression() (<COMMA> Expression())*)? <RPRTHSIS>
+            <LENGTH> #Length
+            | (<IDENTIFIER> <LPRTHSIS> (Expression() (<COMMA> Expression())*)? <RPRTHSIS>) #Method
         )
 }
 
