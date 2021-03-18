@@ -1,7 +1,7 @@
 options
 {
     LOOKAHEAD=1;
-    DEBUG_PARSER = true;
+    //DEBUG_PARSER = true;
 }
 
 PARSER_BEGIN(Javamm)
@@ -20,12 +20,21 @@ public class Javamm
         }
 
         System.out.println(pe.toString());
-        Token t;
+        Token t, previewT;
         do {
+            previewT = getToken(1);
+            if( previewT.kind == LBRACKET){
+                break;
+            }
             t = getNextToken();
         } while (t.kind != RPRTHSIS);
 
     }
+
+    public boolean hasErrors(){
+        return this.nErrors > 0;
+    }
+
 };
 
 PARSER_END(Javamm)
