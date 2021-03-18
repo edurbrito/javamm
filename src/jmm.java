@@ -27,12 +27,12 @@ public class jmm implements JmmParser {
 
             root.dump(""); // prints the tree on the screen
 
-            /*
+
             FileOutputStream jsonFile = new FileOutputStream("AST.json");
 
             jsonFile.write( root.toJson().getBytes() );
 
-            jsonFile.close(); */
+            jsonFile.close();
 
             return new JmmParserResult(root, new ArrayList<Report>());
         } catch (Exception e) {
