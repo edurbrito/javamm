@@ -23,7 +23,6 @@ gradlew.bat
 .idea/
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear
