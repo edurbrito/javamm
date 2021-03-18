@@ -1,5 +1,5 @@
 import ioPlus;
-class HelloWorld {
+class HelloWorld extends Oi{
 	public static void main(String[] args) {
 		ioPlus.printHelloWorld();
 	}

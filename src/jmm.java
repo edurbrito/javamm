@@ -5,6 +5,7 @@ import pt.up.fe.comp.jmm.report.Report;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,7 +22,13 @@ public class jmm implements JmmParser {
             Javamm javamm = new Javamm(new FileInputStream(jmmFile));
             SimpleNode root = javamm.Parse(); // returns reference to root node
 
-            root.dump(""); // prints the tree on the screen
+            //root.dump(""); // prints the tree on the screen
+
+            FileOutputStream jsonFile = new FileOutputStream("AST.json");
+
+            jsonFile.write( root.toJson().getBytes() );
+
+            jsonFile.close();
 
             return new JmmParserResult(root, new ArrayList<Report>());
         } catch (Exception e) {
