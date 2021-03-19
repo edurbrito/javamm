@@ -22,11 +22,7 @@ public class jmm implements JmmParser {
             Javamm javamm = new Javamm(new FileInputStream(jmmFile));
             SimpleNode root = javamm.Parse(); // returns reference to root node
 
-            if(javamm.hasErrors())
-                return null;
-
             root.dump(""); // prints the tree on the screen
-
 
             FileOutputStream jsonFile = new FileOutputStream("AST.json");
 
@@ -34,7 +30,7 @@ public class jmm implements JmmParser {
 
             jsonFile.close();
 
-            return new JmmParserResult(root, new ArrayList<Report>());
+            return new JmmParserResult(root, javamm.getReports());
         } catch (Exception e) {
             printUsage(e,true);
             return null;

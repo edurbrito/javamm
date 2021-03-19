@@ -6,34 +6,53 @@ options
 
 PARSER_BEGIN(Javamm)
 
+import pt.up.fe.comp.jmm.report.Report;
+import pt.up.fe.comp.jmm.report.ReportType;
+import pt.up.fe.comp.jmm.report.Stage;
+import java.util.ArrayList;
 
-public class Javamm
+import java.util.List;public class Javamm
 {
     private static final int MAX_ERRORS = 10;
     private int nErrors = 0;
+    private ArrayList<Report> reportList = new ArrayList<Report>();
 
     private void while_err_handling(ParseException pe){
         this.nErrors++;
+
 
         if( this.nErrors > MAX_ERRORS){
             throw new RuntimeException("Limit of" + MAX_ERRORS + " errors reached!");
         }
 
-        System.out.println(pe.toString());
+
+
         Token t, previewT;
+        int line = 0;
+        boolean first = true;
+
         do {
             previewT = getToken(1);
             if( previewT.kind == LBRACKET){
                 break;
             }
             t = getNextToken();
+            if(first){
+                line = t.beginLine;
+                first = false;
+            }
+
         } while (t.kind != RPRTHSIS);
 
+        Report rep = new Report(ReportType.ERROR, Stage.SYNTATIC, line, "Detected error in while statement");
+        this.reportList.add(rep);
     }
 
     public boolean hasErrors(){
         return this.nErrors > 0;
     }
+
+    public ArrayList<Report> getReports() { return this.reportList;}
 
 };
 
