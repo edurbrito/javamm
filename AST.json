@@ -7,19 +7,31 @@
       "attributes": {},
       "children": [
         {
-          "kind": "Library ioPlus",
+          "kind": "Library io",
           "attributes": {
-            "importLibrary": "ioPlus"
+            "importLibrary": "io"
           },
           "children": []
         }
       ]
     },
     {
-      "kind": "Class HelloWorld extends Oi",
+      "kind": "Import",
+      "attributes": {},
+      "children": [
+        {
+          "kind": "Library io",
+          "attributes": {
+            "importLibrary": "io"
+          },
+          "children": []
+        }
+      ]
+    },
+    {
+      "kind": "Class Array",
       "attributes": {
-        "classExtended": "Oi",
-        "className": "HelloWorld"
+        "className": "Array"
       },
       "children": [
         {
@@ -27,22 +39,192 @@
           "attributes": {},
           "children": [
             {
-              "kind": "Identifier ioPlus",
+              "kind": "Var buffer",
               "attributes": {
-                "literalName": "ioPlus"
+                "varName": "buffer"
+              },
+              "children": [
+                {
+                  "kind": "Type int",
+                  "attributes": {
+                    "typeName": "int"
+                  },
+                  "children": [
+                    {
+                      "kind": "Array",
+                      "attributes": {},
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "Var bufsz",
+              "attributes": {
+                "varName": "bufsz"
+              },
+              "children": [
+                {
+                  "kind": "Type int",
+                  "attributes": {
+                    "typeName": "int"
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "kind": "Var value",
+              "attributes": {
+                "varName": "value"
+              },
+              "children": [
+                {
+                  "kind": "Type int",
+                  "attributes": {
+                    "typeName": "int"
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "kind": "EqualStatement",
+              "attributes": {},
+              "children": [
+                {
+                  "kind": "Var bufsz",
+                  "attributes": {
+                    "varName": "bufsz"
+                  },
+                  "children": []
+                },
+                {
+                  "kind": "Integer 100",
+                  "attributes": {
+                    "literalName": "100"
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "kind": "EqualStatement",
+              "attributes": {},
+              "children": [
+                {
+                  "kind": "Var value",
+                  "attributes": {
+                    "varName": "value"
+                  },
+                  "children": []
+                },
+                {
+                  "kind": "Integer 12",
+                  "attributes": {
+                    "literalName": "12"
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "kind": "EqualStatement",
+              "attributes": {},
+              "children": [
+                {
+                  "kind": "Var buffer",
+                  "attributes": {
+                    "varName": "buffer"
+                  },
+                  "children": []
+                },
+                {
+                  "kind": "New",
+                  "attributes": {},
+                  "children": [
+                    {
+                      "kind": "AccessToArray",
+                      "attributes": {},
+                      "children": [
+                        {
+                          "kind": "Identifier bufsz",
+                          "attributes": {
+                            "literalName": "bufsz"
+                          },
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "EqualStatement",
+              "attributes": {},
+              "children": [
+                {
+                  "kind": "Var buffer",
+                  "attributes": {
+                    "varName": "buffer"
+                  },
+                  "children": [
+                    {
+                      "kind": "AccessToArray",
+                      "attributes": {},
+                      "children": [
+                        {
+                          "kind": "Integer 10",
+                          "attributes": {
+                            "literalName": "10"
+                          },
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "Identifier value",
+                  "attributes": {
+                    "literalName": "value"
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "kind": "Var value",
+              "attributes": {
+                "varName": "value"
               },
               "children": []
             },
             {
-              "kind": "DotExpression",
+              "kind": "EqualStatement",
               "attributes": {},
               "children": [
                 {
-                  "kind": "Method printHelloWorld",
+                  "kind": "Identifier buffer",
                   "attributes": {
-                    "methodName": "printHelloWorld"
+                    "literalName": "buffer"
                   },
                   "children": []
+                },
+                {
+                  "kind": "AccessToArray",
+                  "attributes": {},
+                  "children": [
+                    {
+                      "kind": "Integer 11",
+                      "attributes": {
+                        "literalName": "11"
+                      },
+                      "children": []
+                    }
+                  ]
                 }
               ]
             }
