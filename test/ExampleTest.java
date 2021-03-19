@@ -121,65 +121,54 @@ public class ExampleTest {
     }
 
     @Test
-    public void testExpression15() {
-        // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/QuickSort.jmm").getRootNode().getKind());
+    public void QuickSort() {
 
-
-
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/QuickSort.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
     }
 
     @Test
-    public void testExpression16() {
-        // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/Simple.jmm").getRootNode().getKind());
+    public void Simple() {
 
-
-
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/Simple.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
     }
 
     @Test
-    public void testExpression17() {
-        // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/test2.jmm").getRootNode().getKind());
-
-
-
+    public void test2() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/test2.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
     }
 
     @Test
-    public void testExpression18() {
-        // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/test3.jmm").getRootNode().getKind());
-
-
-
+    public void test3() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/test3.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
     }
 
     @Test
-    public void testExpression19() {
-        // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/test4.jmm").getRootNode().getKind());
-
-
-
+    public void test4() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/test4.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
     }
 
     @Test
-    public void testExpression20() {
-        // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/test5.jmm").getRootNode().getKind());
-
-
-
+    public void test5() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/test5.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
     }
 
     @Test
-    public void testExpression21() {
-        // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/TicTacToe.jmm").getRootNode().getKind());
-
-
+    public void TicTacToe() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/TicTacToe.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
 
     }
 

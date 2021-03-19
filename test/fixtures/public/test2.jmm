@@ -3,7 +3,7 @@ Tests:
    -class extensions
 */
 import classA;
-import classA.func2(int) void;
+import classA.func2;
 
 class test2 extends classA {
 
@@ -16,17 +16,20 @@ class test2 extends classA {
         return new test2();
     }
 
-    public void f3(classA p) {}
+    public int f3(classA p) {
+        return 3;
+    }
 
-    public void f4() {
+    public int f4() {
         test2 p;
         p = this.f2();
         this.f3(new classA());
         this.f3(new test2());
         this.f3(p);
+        return 4;
     }
 
-    public void foo(){
+    public int foo(){
         classA objA;
         classA objA2;
         test2 objt2;
@@ -44,6 +47,7 @@ class test2 extends classA {
 
         this.getClassA();
         this.f4();
+        return 5;
     }
 
     public static void main(String[] args) {
@@ -52,7 +56,7 @@ class test2 extends classA {
         x.foo();
     }
 
-    public classA getClassA() {
-        return new classA();
+    public boolean getClassA() {
+        return false;
     }
 }
