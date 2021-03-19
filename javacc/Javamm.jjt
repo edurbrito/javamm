@@ -247,7 +247,7 @@ void Expression() #void : {} {
 
  void AdditiveExpression() #void : {}
 {
-        MultiplicativeExpression() ( ( <SUM> MultiplicativeExpression() #Sum(2) | <SUB> MultiplicativeExpression() #Sub(2)) )*
+        (<NOT> AdditiveExpression() #Not) | (MultiplicativeExpression() ( ( <SUM> MultiplicativeExpression() #Sum(2) | <SUB> MultiplicativeExpression() #Sub(2)) )*)
 }
 
 void MultiplicativeExpression() #void : {}
@@ -264,7 +264,6 @@ void PrimaryPrefix() #void : {}
 {
         Literal()
         | AllocationExpression() #New
-        | (<NOT> Expression())  #Not
         | <LPRTHSIS> Expression() <RPRTHSIS>
 }
 
