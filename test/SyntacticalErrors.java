@@ -21,9 +21,31 @@ public class SyntacticalErrors {
     }
 
     @Test
+    public void LengthError() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/fail/syntactical/LengthError.jmm");
+        assertEquals("Program", res.getRootNode().getKind());
+        assertEquals(1, TestUtils.getNumErrors(res.getReports()));
+    }
+
+    @Test
     public void MissingRightPar() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/fail/syntactical/MissingRightPar.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         assertEquals(1, TestUtils.getNumErrors(res.getReports()));
+    }
+
+    @Test
+    public void MultipleSequential() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/fail/syntactical/MultipleSequential.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        assertEquals(2, TestUtils.getNumErrors(res.getReports()));
+    }
+
+    @Test
+    public void NestedLoop() {
+
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/fail/syntactical/NestedLoop.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        assertEquals(2, TestUtils.getNumErrors(res.getReports()));
     }
 }
