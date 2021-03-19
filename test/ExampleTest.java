@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 public class ExampleTest {
 
     @Test
-    public void testExpression1() {
+    public void Array1() {
         // Ler de ficheiro
 
         JmmParserResult res = TestUtils.parse("test/fixtures/public/Array1.jmm");
@@ -17,105 +17,114 @@ public class ExampleTest {
 	}
 
     @Test
-    public void testExpression2() {
+    public void Array2() {
         // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/Array2.jmm").getRootNode().getKind());
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/Array2.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
 
     }
 
     @Test
-    public void testExpression3() {
+    public void Array3() {
         // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/Array3.jmm").getRootNode().getKind());
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/Array3.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+    }
 
+    @Test
+    public void Custom() {
+        // Ler de ficheiro
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/Custom.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+    }
+
+    @Test
+    public void FindMaximum() {
+        // Ler de ficheiro
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/FindMaximum.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
 
     }
 
     @Test
-    public void testExpression4() {
+    public void HelloWorld() {
         // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/Custom.jmm").getRootNode().getKind());
-
-
-    }
-
-    @Test
-    public void testExpression5() {
-        // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/FindMaximum.jmm").getRootNode().getKind());
-
-
-    }
-
-    @Test
-    public void testExpression6() {
-        // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/HelloWorld.jmm").getRootNode().getKind());
-
-
-    }
-
-    @Test
-    public void testExpression7() {
-        // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/Lazysort.jmm").getRootNode().getKind());
-
-
-    }
-
-    @Test
-    public void testExpression8() {
-        // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/Lif.jmm").getRootNode().getKind());
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/HelloWorld.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
 
 
     }
 
     @Test
-    public void testExpression9() {
+    public void Lazysort() {
         // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/MonteCarloPi.jmm").getRootNode().getKind());
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/Lazysort.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+
+    }
+
+    @Test
+    public void Life() {
+        // Ler de ficheiro
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/Life.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+
+    }
+
+    @Test
+    public void MonteCarloPi() {
+        // Ler de ficheiro
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/MonteCarloPi.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
 
 
     }
 
     @Test
-    public void testExpression10() {
+    public void notInitInIf() {
         // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/notInitInIf.jmm").getRootNode().getKind());
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/notInitInIf.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
 
 
     }
 
     @Test
-    public void testExpression11() {
+    public void notInitInIf2() {
         // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/notInitInIf2.jmm").getRootNode().getKind());
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/notInitInIf2.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
 
 
     }
 
     @Test
-    public void testExpression12() {
+    public void notInitInIf3() {
         // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/notInitInIf3.jmm").getRootNode().getKind());
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/notInitInIf3.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
 
 
     }
 
     @Test
-    public void testExpression13() {
+    public void NotInitInIf4() {
         // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/notInitInIf4.jmm").getRootNode().getKind());
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/NotInitInIf4.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
 
-
-
-    }
-
-    @Test
-    public void testExpression14() {
-        // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/notInitInIf3.jmm").getRootNode().getKind());
 
 
     }
@@ -173,19 +182,21 @@ public class ExampleTest {
     }
 
     @Test
-    public void testExpression22() {
+    public void varNotInit() {
         // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/varNotInit.jmm").getRootNode().getKind());
-
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/varNotInit.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
 
 
     }
 
     @Test
-    public void testExpression23() {
+    public void WhileAndIF() {
         // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/WhileAndIF.jmm").getRootNode().getKind());
-
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/WhileAndIF.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
 
 
     }
