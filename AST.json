@@ -1,0 +1,54 @@
+{
+  "kind": "Program",
+  "attributes": {},
+  "children": [
+    {
+      "kind": "Import",
+      "attributes": {},
+      "children": [
+        {
+          "kind": "Library ioPlus",
+          "attributes": {
+            "importLibrary": "ioPlus"
+          },
+          "children": []
+        }
+      ]
+    },
+    {
+      "kind": "Class HelloWorld extends Oi",
+      "attributes": {
+        "classExtended": "Oi",
+        "className": "HelloWorld"
+      },
+      "children": [
+        {
+          "kind": "MainMethod",
+          "attributes": {},
+          "children": [
+            {
+              "kind": "Identifier ioPlus",
+              "attributes": {
+                "literalName": "ioPlus"
+              },
+              "children": []
+            },
+            {
+              "kind": "DotExpression",
+              "attributes": {},
+              "children": [
+                {
+                  "kind": "Method printHelloWorld",
+                  "attributes": {
+                    "methodName": "printHelloWorld"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

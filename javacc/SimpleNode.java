@@ -70,6 +70,7 @@ class SimpleNode implements Node, JmmNode {
   }
 
   public void jjtSetParent(Node n) { parent = n; }
+
   public Node jjtGetParent() { return parent; }
 
   public void jjtAddChild(Node n, int i) {
@@ -92,6 +93,7 @@ class SimpleNode implements Node, JmmNode {
   }
 
   public void jjtSetValue(Object value) { this.value = value; }
+
   public Object jjtGetValue() { return value; }
 
   /* You can override these two methods in subclasses of SimpleNode to

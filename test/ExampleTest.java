@@ -9,7 +9,7 @@ public class ExampleTest {
     @Test
     public void testExpression1() {
         // Ler de ficheiro
-        assertEquals("Parse", TestUtils.parse("test/fixtures/public/Array1.jmm").getRootNode().getKind());
+        assertEquals("Program", TestUtils.parse("test/fixtures/public/HelloWorld.jmm").getRootNode().getKind());
 
 	}
 

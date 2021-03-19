@@ -30,6 +30,8 @@ public class jmm implements JmmParser {
 
             jsonFile.close();
 
+
+
             return new JmmParserResult(root, javamm.getReports());
         } catch (Exception e) {
             printUsage(e,true);
