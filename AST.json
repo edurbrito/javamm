@@ -3,242 +3,15 @@
   "attributes": {},
   "children": [
     {
-      "kind": "Class Custom",
+      "kind": "Class MissingRightPar",
       "attributes": {
-        "className": "Custom"
+        "className": "MissingRightPar"
       },
       "children": [
-        {
-          "kind": "Method add",
-          "attributes": {
-            "methodName": "add"
-          },
-          "children": [
-            {
-              "kind": "Type int",
-              "attributes": {
-                "typeName": "int"
-              },
-              "children": []
-            },
-            {
-              "kind": "MethodArguments",
-              "attributes": {},
-              "children": [
-                {
-                  "kind": "Argument a",
-                  "attributes": {
-                    "argumentName": "a"
-                  },
-                  "children": [
-                    {
-                      "kind": "Type int",
-                      "attributes": {
-                        "typeName": "int"
-                      },
-                      "children": []
-                    }
-                  ]
-                },
-                {
-                  "kind": "Argument b",
-                  "attributes": {
-                    "argumentName": "b"
-                  },
-                  "children": [
-                    {
-                      "kind": "Type int",
-                      "attributes": {
-                        "typeName": "int"
-                      },
-                      "children": []
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "kind": "Var c",
-              "attributes": {
-                "varName": "c"
-              },
-              "children": [
-                {
-                  "kind": "Type int",
-                  "attributes": {
-                    "typeName": "int"
-                  },
-                  "children": []
-                }
-              ]
-            },
-            {
-              "kind": "EqualStatement",
-              "attributes": {},
-              "children": [
-                {
-                  "kind": "Var c",
-                  "attributes": {
-                    "varName": "c"
-                  },
-                  "children": []
-                },
-                {
-                  "kind": "Sum",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "kind": "Identifier a",
-                      "attributes": {
-                        "literalName": "a"
-                      },
-                      "children": []
-                    },
-                    {
-                      "kind": "Identifier b",
-                      "attributes": {
-                        "literalName": "b"
-                      },
-                      "children": []
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "kind": "Return",
-              "attributes": {},
-              "children": [
-                {
-                  "kind": "Identifier c",
-                  "attributes": {
-                    "literalName": "c"
-                  },
-                  "children": []
-                }
-              ]
-            }
-          ]
-        },
         {
           "kind": "MainMethod",
           "attributes": {},
           "children": [
-            {
-              "kind": "Var a",
-              "attributes": {
-                "varName": "a"
-              },
-              "children": [
-                {
-                  "kind": "Type int",
-                  "attributes": {
-                    "typeName": "int"
-                  },
-                  "children": []
-                }
-              ]
-            },
-            {
-              "kind": "Var b",
-              "attributes": {
-                "varName": "b"
-              },
-              "children": [
-                {
-                  "kind": "Type int",
-                  "attributes": {
-                    "typeName": "int"
-                  },
-                  "children": []
-                }
-              ]
-            },
-            {
-              "kind": "Var c",
-              "attributes": {
-                "varName": "c"
-              },
-              "children": [
-                {
-                  "kind": "Type int",
-                  "attributes": {
-                    "typeName": "int"
-                  },
-                  "children": []
-                }
-              ]
-            },
-            {
-              "kind": "Var s",
-              "attributes": {
-                "varName": "s"
-              },
-              "children": [
-                {
-                  "kind": "Type Custom",
-                  "attributes": {
-                    "typeName": "Custom"
-                  },
-                  "children": []
-                }
-              ]
-            },
-            {
-              "kind": "Var y",
-              "attributes": {
-                "varName": "y"
-              },
-              "children": [
-                {
-                  "kind": "Type boolean",
-                  "attributes": {
-                    "typeName": "boolean"
-                  },
-                  "children": []
-                }
-              ]
-            },
-            {
-              "kind": "EqualStatement",
-              "attributes": {},
-              "children": [
-                {
-                  "kind": "Var a",
-                  "attributes": {
-                    "varName": "a"
-                  },
-                  "children": []
-                },
-                {
-                  "kind": "Integer 20",
-                  "attributes": {
-                    "literalName": "20"
-                  },
-                  "children": []
-                }
-              ]
-            },
-            {
-              "kind": "EqualStatement",
-              "attributes": {},
-              "children": [
-                {
-                  "kind": "Var b",
-                  "attributes": {
-                    "varName": "b"
-                  },
-                  "children": []
-                },
-                {
-                  "kind": "Integer 10",
-                  "attributes": {
-                    "literalName": "10"
-                  },
-                  "children": []
-                }
-              ]
-            },
             {
               "kind": "While",
               "attributes": {},
@@ -252,16 +25,16 @@
                       "attributes": {},
                       "children": [
                         {
-                          "kind": "Identifier b",
+                          "kind": "Identifier i",
                           "attributes": {
-                            "literalName": "b"
+                            "literalName": "i"
                           },
                           "children": []
                         },
                         {
-                          "kind": "Identifier a",
+                          "kind": "Integer 10",
                           "attributes": {
-                            "literalName": "a"
+                            "literalName": "10"
                           },
                           "children": []
                         }
@@ -272,86 +45,7 @@
                 {
                   "kind": "WhileBody",
                   "attributes": {},
-                  "children": [
-                    {
-                      "kind": "EqualStatement",
-                      "attributes": {},
-                      "children": [
-                        {
-                          "kind": "Var b",
-                          "attributes": {
-                            "varName": "b"
-                          },
-                          "children": []
-                        },
-                        {
-                          "kind": "Sum",
-                          "attributes": {},
-                          "children": [
-                            {
-                              "kind": "Identifier a",
-                              "attributes": {
-                                "literalName": "a"
-                              },
-                              "children": []
-                            },
-                            {
-                              "kind": "Identifier a",
-                              "attributes": {
-                                "literalName": "a"
-                              },
-                              "children": []
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "kind": "While",
-                      "attributes": {},
-                      "children": [
-                        {
-                          "kind": "WhileCondition",
-                          "attributes": {},
-                          "children": [
-                            {
-                              "kind": "Boolean false",
-                              "attributes": {
-                                "literalName": "false"
-                              },
-                              "children": []
-                            }
-                          ]
-                        },
-                        {
-                          "kind": "WhileBody",
-                          "attributes": {},
-                          "children": [
-                            {
-                              "kind": "EqualStatement",
-                              "attributes": {},
-                              "children": [
-                                {
-                                  "kind": "Var a",
-                                  "attributes": {
-                                    "varName": "a"
-                                  },
-                                  "children": []
-                                },
-                                {
-                                  "kind": "Identifier b",
-                                  "attributes": {
-                                    "literalName": "b"
-                                  },
-                                  "children": []
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "children": []
                 }
               ]
             }

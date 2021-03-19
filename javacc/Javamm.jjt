@@ -33,14 +33,16 @@ import java.util.List;public class Javamm
 
         do {
             previewT = getToken(1);
+            if(first){
+                line = previewT.beginLine;
+                first = false;
+            }
+
             if( previewT.kind == LBRACKET){
                 break;
             }
             t = getNextToken();
-            if(first){
-                line = t.beginLine;
-                first = false;
-            }
+
 
         } while (t.kind != RPRTHSIS);
 
