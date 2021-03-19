@@ -1,16 +1,19 @@
 
 import org.junit.Test;
 import pt.up.fe.comp.TestUtils;
+import pt.up.fe.comp.jmm.JmmParserResult;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class ExampleTest {
 
     @Test
     public void testExpression1() {
         // Ler de ficheiro
-        assertEquals("Program", TestUtils.parse("test/fixtures/public/HelloWorld.jmm").getRootNode().getKind());
 
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/Array1.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
 	}
 
     @Test
