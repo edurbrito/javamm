@@ -9,7 +9,6 @@ WARNING: Near line 59: b is not initialized!
 
 */
 import Map;
-import Map.put(int, int);
 
 class VarNotInit {
 

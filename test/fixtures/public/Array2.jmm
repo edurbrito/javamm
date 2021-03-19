@@ -1,6 +1,6 @@
-import static io.print(int) void;
-import static io.printArray(int []) void;
-import Map(int, int);
+import io.print;
+import io.printArray;
+import Map;
 
 class Array2 {
 
@@ -47,6 +47,6 @@ class Array2 {
         //array position load
         io.print(a[0]);
 
-        map = new Map(1, 1);
+        map = new Map();
     }
 }
