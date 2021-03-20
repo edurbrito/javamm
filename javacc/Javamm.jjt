@@ -10,8 +10,9 @@ import pt.up.fe.comp.jmm.report.Report;
 import pt.up.fe.comp.jmm.report.ReportType;
 import pt.up.fe.comp.jmm.report.Stage;
 import java.util.ArrayList;
+import java.util.List;
 
-import java.util.List;public class Javamm
+public class Javamm
 {
     private static final int MAX_ERRORS = 10;
     private int nErrors = 0;
@@ -20,12 +21,9 @@ import java.util.List;public class Javamm
     private void while_err_handling(ParseException pe){
         this.nErrors++;
 
-
         if( this.nErrors > MAX_ERRORS){
             throw new RuntimeException("Limit of" + MAX_ERRORS + " errors reached!");
         }
-
-
 
         Token t, previewT;
         int line = 0;
@@ -42,7 +40,6 @@ import java.util.List;public class Javamm
                 break;
             }
             t = getNextToken();
-
 
         } while (t.kind != RPRTHSIS);
 
