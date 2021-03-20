@@ -41,7 +41,7 @@ public class Javamm
             }
             t = getNextToken();
 
-        } while (t.kind != RPRTHSIS);
+        } while (t.kind != EOF);
 
         Report rep = new Report(ReportType.ERROR, Stage.SYNTATIC, line, "Detected error in while statement");
         this.reportList.add(rep);
@@ -134,8 +134,14 @@ TOKEN: {
 
 SimpleNode Parse() #Program : {}
 {
-   (ImportDeclaration())* ClassDeclaration() <EOF> // Java code inside brackets
-   {return jjtThis;}
+   try {
+    (ImportDeclaration())* ClassDeclaration() <EOF> // Java code inside brackets
+   } catch(ParseException e) {
+        Report rep = new Report(ReportType.ERROR, Stage.SYNTATIC, e.currentToken.beginLine, "Detected generic error: " + e.getMessage());
+        this.reportList.add(rep);
+   } finally {
+        return jjtThis;
+   }
 }
 
 void ImportDeclaration() #Import : {Token importToken;}

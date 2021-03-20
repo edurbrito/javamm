@@ -6,10 +6,8 @@ import static org.junit.Assert.*;
 
 public class FileTests {
 
-
     @Test
     public void Array1() {
-
         JmmParserResult res = TestUtils.parse("test/fixtures/public/Array1.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
@@ -20,7 +18,6 @@ public class FileTests {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/Array2.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
-
     }
 
     @Test
@@ -39,11 +36,9 @@ public class FileTests {
 
     @Test
     public void FindMaximum() {
-
         JmmParserResult res = TestUtils.parse("test/fixtures/public/FindMaximum.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
-
     }
 
     @Test
@@ -51,8 +46,6 @@ public class FileTests {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/HelloWorld.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
-
-
     }
 
     @Test
@@ -60,7 +53,6 @@ public class FileTests {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/Lazysort.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
-
     }
 
     @Test
@@ -68,7 +60,6 @@ public class FileTests {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/Life.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
-
     }
 
     @Test
@@ -76,8 +67,6 @@ public class FileTests {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/MonteCarloPi.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
-
-
     }
 
     @Test
@@ -85,8 +74,6 @@ public class FileTests {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/notInitInIf.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
-
-
     }
 
     @Test
@@ -94,8 +81,6 @@ public class FileTests {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/notInitInIf2.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
-
-
     }
 
     @Test
@@ -103,8 +88,6 @@ public class FileTests {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/notInitInIf3.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
-
-
     }
 
     @Test
@@ -112,12 +95,10 @@ public class FileTests {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/NotInitInIf4.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
-
     }
 
     @Test
     public void QuickSort() {
-
         JmmParserResult res = TestUtils.parse("test/fixtures/public/QuickSort.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
@@ -164,7 +145,6 @@ public class FileTests {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/TicTacToe.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
-
     }
 
     @Test
@@ -172,8 +152,6 @@ public class FileTests {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/varNotInit.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
-
-
     }
 
     @Test
@@ -181,8 +159,6 @@ public class FileTests {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/WhileAndIF.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
-
-
     }
 
 }

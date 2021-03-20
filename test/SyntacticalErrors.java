@@ -17,7 +17,7 @@ public class SyntacticalErrors {
     public void CompleteWhileTest() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/fail/syntactical/CompleteWhileTest.jmm");
         assertEquals("Program",res.getRootNode().getKind());
-        assertEquals(4, TestUtils.getNumErrors(res.getReports()));          // Não sei qual o numero
+        assertEquals(10, TestUtils.getNumErrors(res.getReports()));
     }
 
     @Test
