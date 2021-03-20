@@ -1,5 +1,5 @@
-import static io.print(int) void;
-import static io.printArray(int []) void;
+import io.print;
+import io.printArray;
 
 class Array3 {
 

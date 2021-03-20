@@ -10,21 +10,19 @@ Tests:
 */
 
 import classA;
-import classA(int, int);
-import classA.func1(int) int;
-import static io.func(int) void;
-import static io.println(int) void;
+import io.println;
 
 class test5 {
 
     int atr1;
 
-    public void f1(boolean c) {
+    public int f1(boolean c) {
         if (c) {
             atr1 = 5;
         } else {
             atr1 = 10;
         }
+        return 0;
     }
 
     public int f2(int a) {
@@ -62,12 +60,12 @@ class test5 {
         return w;
     }
 
-    public void f4(boolean a) {
+    public int f4(boolean a) {
 
         while (a) {
             this.f3();
         }
-
+        return 0;
     }
 
     public int f5() {
@@ -87,10 +85,11 @@ class test5 {
         return 0;
     }
 
-    public void f6(int a) {
+    public int f6(int a) {
         int c;
         c = a;
         io.println(c);
+        return 0;
     }
 
     public int f7() {
@@ -106,7 +105,7 @@ class test5 {
         return a;
     }
 
-    public void foo() {
+    public int foo() {
         classA objA;
         int i1;
         int a;
@@ -115,7 +114,7 @@ class test5 {
         boolean flag;
         flag = false;
         a = 2;
-        objA = new classA(2, 2);
+        objA = new classA();
         b = 2 * 3 + 4 / a + 1;
         a = 4;
         b = a + 2;
@@ -127,6 +126,7 @@ class test5 {
         this.f3();
         this.f4(flag);
         this.f5();
+        return 0;
     }
 
     public static void main(String[] args) {

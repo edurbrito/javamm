@@ -2,9 +2,10 @@
 import pt.up.fe.comp.jmm.JmmParser;
 import pt.up.fe.comp.jmm.JmmParserResult;
 import pt.up.fe.comp.jmm.report.Report;
+import pt.up.fe.comp.jmm.report.ReportType;
+import pt.up.fe.comp.jmm.report.Stage;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -20,24 +21,24 @@ public class jmm implements JmmParser {
 
         try {
             Javamm javamm = new Javamm(new FileInputStream(jmmFile));
-            SimpleNode root = javamm.Parse(); // returns reference to root node
 
-            if(javamm.hasErrors())
-                return null;
+            SimpleNode root = javamm.Parse(); // returns reference to root node
 
             root.dump(""); // prints the tree on the screen
 
-
             FileOutputStream jsonFile = new FileOutputStream("AST.json");
 
-            jsonFile.write( root.toJson().getBytes() );
+            JmmParserResult parserResult = new JmmParserResult(root, javamm.getReports());
+            jsonFile.write(parserResult.toJson().getBytes());
 
             jsonFile.close();
 
-            return new JmmParserResult(root, new ArrayList<Report>());
+            return parserResult;
         } catch (Exception e) {
-            printUsage(e,true);
-            return null;
+            // printUsage(e,true);
+            ArrayList<Report> reports = new ArrayList<Report>();
+            reports.add(new Report(ReportType.ERROR, Stage.SYNTATIC, ((ParseException) e).currentToken.beginLine, "Detected generic error: " + e.getMessage()));
+            return new JmmParserResult(null, reports);
         }
     }
 

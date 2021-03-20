@@ -1,0 +1,33 @@
+{
+  "rootNode": {
+    "kind": "Program",
+    "attributes": {},
+    "children": []
+  },
+  "reports": [
+    {
+      "type": "ERROR",
+      "stage": "SYNTATIC",
+      "line": 3,
+      "message": "Detected error in while statement"
+    },
+    {
+      "type": "ERROR",
+      "stage": "SYNTATIC",
+      "line": 4,
+      "message": "Detected error in while statement"
+    },
+    {
+      "type": "ERROR",
+      "stage": "SYNTATIC",
+      "line": 12,
+      "message": "Detected error in while statement"
+    },
+    {
+      "type": "ERROR",
+      "stage": "SYNTATIC",
+      "line": 14,
+      "message": "Detected generic error: Encountered \" \"}\" \"} \"\" at line 15, column 3.\r\nWas expecting one of:\r\n    \"false\" ...\r\n    \"if\" ...\r\n    \"new\" ...\r\n    \"return\" ...\r\n    \"this\" ...\r\n    \"true\" ...\r\n    \"while\" ...\r\n    \"!\" ...\r\n    \"{\" ...\r\n    \"(\" ...\r\n    \u003cINTEGER\u003e ...\r\n    \u003cIDENTIFIER\u003e ...\r\n    "
+    }
+  ]
+}

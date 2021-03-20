@@ -70,6 +70,7 @@ class SimpleNode implements Node, JmmNode {
   }
 
   public void jjtSetParent(Node n) { parent = n; }
+
   public Node jjtGetParent() { return parent; }
 
   public void jjtAddChild(Node n, int i) {
@@ -92,6 +93,7 @@ class SimpleNode implements Node, JmmNode {
   }
 
   public void jjtSetValue(Object value) { this.value = value; }
+
   public Object jjtGetValue() { return value; }
 
   /* You can override these two methods in subclasses of SimpleNode to
@@ -101,29 +103,7 @@ class SimpleNode implements Node, JmmNode {
      you need to do. */
 
   public String toString() {
-
-    StringJoiner joiner = new StringJoiner(" ");
-    String nodeName = JavammTreeConstants.jjtNodeName[id];
-    joiner.add(nodeName);
-
-    if(nodeName.equals("Library"))
-      joiner.add(this.get("importLibrary"));
-    else if(nodeName.equals("Class"))
-      joiner.add(this.get("className"));
-      if(this.map.containsKey("classExtended"))
-        joiner.add("extends " + this.get("classExtended"));
-    else if(nodeName.equals("Var"))
-      joiner.add(this.get("varName"));
-    else if(nodeName.equals("Method"))
-      joiner.add(this.get("methodName"));
-    else if(nodeName.equals("Argument"))
-      joiner.add(this.get("argumentName"));
-    else if(nodeName.equals("Type"))
-      joiner.add(this.get("typeName"));
-    else if(nodeName.equals("Integer") || nodeName.equals("Boolean") || nodeName.equals("Identifier"))
-      joiner.add(this.get("literalName"));
-
-    return joiner.toString();
+    return JavammTreeConstants.jjtNodeName[id];
   }
   public String toString(String prefix) { return prefix + toString(); }
 
