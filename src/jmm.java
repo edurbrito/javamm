@@ -17,17 +17,19 @@ public class jmm implements JmmParser {
 
         try {
             Javamm javamm = new Javamm(new FileInputStream(jmmFile));
+
             SimpleNode root = javamm.Parse(); // returns reference to root node
 
             root.dump(""); // prints the tree on the screen
 
             FileOutputStream jsonFile = new FileOutputStream("AST.json");
 
-            jsonFile.write( root.toJson().getBytes() );
+            JmmParserResult parserResult = new JmmParserResult(root, javamm.getReports());
+            jsonFile.write(parserResult.toJson().getBytes());
 
             jsonFile.close();
 
-            return new JmmParserResult(root, javamm.getReports());
+            return parserResult;
         } catch (Exception e) {
             printUsage(e,true);
             return null;
