@@ -1,9 +1,13 @@
 
 import pt.up.fe.comp.jmm.JmmParser;
 import pt.up.fe.comp.jmm.JmmParserResult;
+import pt.up.fe.comp.jmm.report.Report;
+import pt.up.fe.comp.jmm.report.ReportType;
+import pt.up.fe.comp.jmm.report.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,8 +35,10 @@ public class jmm implements JmmParser {
 
             return parserResult;
         } catch (Exception e) {
-            printUsage(e,true);
-            return null;
+            // printUsage(e,true);
+            ArrayList<Report> reports = new ArrayList<Report>();
+            reports.add(new Report(ReportType.ERROR, Stage.SYNTATIC, ((ParseException) e).currentToken.beginLine, "Detected generic error: " + e.getMessage()));
+            return new JmmParserResult(null, reports);
         }
     }
 

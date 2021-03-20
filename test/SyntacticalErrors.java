@@ -9,15 +9,13 @@ public class SyntacticalErrors {
     @Test
     public void BlowUp() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/fail/syntactical/BlowUp.jmm");
-        assertEquals("Program",res.getRootNode().getKind());
-        assertEquals(4, TestUtils.getNumErrors(res.getReports()));
+        TestUtils.mustFail(res.getReports());
     }
 
     @Test
     public void CompleteWhileTest() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/fail/syntactical/CompleteWhileTest.jmm");
-        assertEquals("Program",res.getRootNode().getKind());
-        assertEquals(10, TestUtils.getNumErrors(res.getReports()));
+        TestUtils.mustFail(res.getReports());
     }
 
     @Test
