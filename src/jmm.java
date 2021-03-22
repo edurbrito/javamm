@@ -37,7 +37,10 @@ public class jmm implements JmmParser {
         } catch (Exception e) {
             // printUsage(e,true);
             ArrayList<Report> reports = new ArrayList<Report>();
-            reports.add(new Report(ReportType.ERROR, Stage.SYNTATIC, ((ParseException) e).currentToken.beginLine, "Detected generic error: " + e.getMessage()));
+            if(e instanceof ParseException)
+                reports.add(new Report(ReportType.ERROR, Stage.SYNTATIC, ((ParseException) e).currentToken.beginLine, "Detected generic error: " + e.getMessage()));
+            else
+                reports.add(new Report(ReportType.ERROR, Stage.SYNTATIC, e.getStackTrace()[0].getLineNumber(), "Detected generic error: " + e.getMessage()));
             return new JmmParserResult(null, reports);
         }
     }
