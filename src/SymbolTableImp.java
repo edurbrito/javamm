@@ -100,4 +100,15 @@ public class SymbolTableImp implements SymbolTable {
     public void assignMethodVariable(String methodName, String variableName, String value) {
         methods.get(methodName).assignVariable(variableName, value);
     }
+
+    @Override
+    public String toString() {
+        return "SymbolTableImp{" +
+                "imports=" + imports +
+                ", className='" + className + '\'' +
+                ", superClass='" + superClass + '\'' +
+                ", fields=" + fields +
+                ", methods=" + methods +
+                '}';
+    }
 }

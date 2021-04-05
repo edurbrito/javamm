@@ -83,6 +83,11 @@ public class jmm implements JmmParser {
 
             AnalysisStage analysisStage = new AnalysisStage();
             JmmSemanticsResult semanticsResult = analysisStage.semanticAnalysis(parserResult);
+
+            // for(Report report : semanticsResult.getReports()){
+            //    System.out.println(report.toString());
+            // }
+
         } catch (Exception e) {
             printUsage(e,false);
             return;

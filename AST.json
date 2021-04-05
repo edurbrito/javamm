@@ -2,32 +2,113 @@
   "rootNode": {
     "kind": "Program",
     "attributes": {},
-    "children": []
+    "children": [
+      {
+        "kind": "Import",
+        "attributes": {},
+        "children": [
+          {
+            "kind": "Library",
+            "attributes": {
+              "name": "ioPlus"
+            },
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "Class",
+        "attributes": {
+          "extends": "Oi",
+          "name": "HelloWorld"
+        },
+        "children": [
+          {
+            "kind": "Var",
+            "attributes": {
+              "name": "a"
+            },
+            "children": [
+              {
+                "kind": "Type",
+                "attributes": {
+                  "name": "int"
+                },
+                "children": []
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "attributes": {
+              "name": "b"
+            },
+            "children": [
+              {
+                "kind": "Type",
+                "attributes": {
+                  "name": "boolean"
+                },
+                "children": []
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "attributes": {
+              "name": "c"
+            },
+            "children": [
+              {
+                "kind": "Type",
+                "attributes": {
+                  "name": "int"
+                },
+                "children": [
+                  {
+                    "kind": "Array",
+                    "attributes": {},
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "MainMethod",
+            "attributes": {},
+            "children": [
+              {
+                "kind": "MethodBody",
+                "attributes": {},
+                "children": [
+                  {
+                    "kind": "Identifier",
+                    "attributes": {
+                      "name": "ioPlus"
+                    },
+                    "children": []
+                  },
+                  {
+                    "kind": "DotExpression",
+                    "attributes": {},
+                    "children": [
+                      {
+                        "kind": "Method",
+                        "attributes": {
+                          "name": "printHelloWorld"
+                        },
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
-  "reports": [
-    {
-      "type": "ERROR",
-      "stage": "SYNTATIC",
-      "line": 3,
-      "message": "Detected error in while statement"
-    },
-    {
-      "type": "ERROR",
-      "stage": "SYNTATIC",
-      "line": 4,
-      "message": "Detected error in while statement"
-    },
-    {
-      "type": "ERROR",
-      "stage": "SYNTATIC",
-      "line": 12,
-      "message": "Detected error in while statement"
-    },
-    {
-      "type": "ERROR",
-      "stage": "SYNTATIC",
-      "line": 14,
-      "message": "Detected generic error: Encountered \" \"}\" \"} \"\" at line 15, column 3.\r\nWas expecting one of:\r\n    \"false\" ...\r\n    \"if\" ...\r\n    \"new\" ...\r\n    \"return\" ...\r\n    \"this\" ...\r\n    \"true\" ...\r\n    \"while\" ...\r\n    \"!\" ...\r\n    \"{\" ...\r\n    \"(\" ...\r\n    \u003cINTEGER\u003e ...\r\n    \u003cIDENTIFIER\u003e ...\r\n    "
-    }
-  ]
+  "reports": []
 }
