@@ -1,6 +1,7 @@
 
 import pt.up.fe.comp.jmm.JmmParser;
 import pt.up.fe.comp.jmm.JmmParserResult;
+import pt.up.fe.comp.jmm.analysis.JmmSemanticsResult;
 import pt.up.fe.comp.jmm.report.Report;
 import pt.up.fe.comp.jmm.report.ReportType;
 import pt.up.fe.comp.jmm.report.Stage;
@@ -30,9 +31,7 @@ public class jmm implements JmmParser {
 
             JmmParserResult parserResult = new JmmParserResult(root, javamm.getReports());
             jsonFile.write(parserResult.toJson().getBytes());
-
             jsonFile.close();
-
             return parserResult;
         } catch (Exception e) {
             // printUsage(e,true);
@@ -80,8 +79,10 @@ public class jmm implements JmmParser {
 
             jmm main = new jmm();
 
-            main.parse(fileName);
+            JmmParserResult parserResult = main.parse(fileName);
 
+            AnalysisStage analysisStage = new AnalysisStage();
+            JmmSemanticsResult semanticsResult = analysisStage.semanticAnalysis(parserResult);
         } catch (Exception e) {
             printUsage(e,false);
             return;
