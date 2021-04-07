@@ -11,7 +11,7 @@ public class SymbolTableImp implements SymbolTable {
     List<String> imports = new ArrayList();
     String className = "";
     String superClass = "";
-    HashMap<Symbol, String> fields = new HashMap<>();
+    HashMap<Symbol, String> fields = new HashMap<>();   // String is the value of the variable
     HashMap<String, MethodTable> methods = new HashMap<>();
 
     @Override
@@ -54,6 +54,7 @@ public class SymbolTableImp implements SymbolTable {
         return new ArrayList<>(methods.get(methodName).getLocalVariables().keySet());
     }
 
+
     public void addImport(String _import){
         this.imports.add(_import);
     }
@@ -70,6 +71,8 @@ public class SymbolTableImp implements SymbolTable {
         fields.put(new Symbol(type, name), "");
     }
 
+    public void addField(Symbol symbol){fields.put(symbol,"");}
+
     public void addField(Type type, String name, String value) {
         fields.put(new Symbol(type, name), value);
     }
@@ -80,6 +83,8 @@ public class SymbolTableImp implements SymbolTable {
                 fields.put(symbol,value);
         }
     }
+
+    public void addMethod(String methodName, MethodTable methodTable){this.methods.put(methodName, methodTable);}
 
     public void addMethod(String methodName, Type returnType, HashSet<Symbol> parameters) {
         methods.put(methodName, new MethodTable(returnType, parameters));

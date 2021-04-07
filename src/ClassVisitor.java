@@ -14,7 +14,11 @@ public class ClassVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
         addVisit("Library", this::dealWithImports);
         addVisit("Class", this::dealWithClass);
         addVisit("Var", this::dealWithClassFields);
+
     }
+
+
+
 
     public Boolean dealWithImports(JmmNode node, Boolean dummy) {
         this.symbolTableImp.addImport(node.get("name"));

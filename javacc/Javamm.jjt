@@ -168,9 +168,9 @@ void MethodDeclaration() #void : {}
     <PUBLIC> (MainMethodDeclaration() | RegularMethodDeclaration())
 }
 
-void MainMethodDeclaration() #MainMethod : {}
+void MainMethodDeclaration() #MainMethod : {Token arg;}
 {
-       <STATIC> <VOID> <MAIN> <LPRTHSIS> <STRING> <LSQBRACKET> <RSQBRACKET> <IDENTIFIER> <RPRTHSIS>
+       <STATIC> <VOID> <MAIN> <LPRTHSIS> <STRING> <LSQBRACKET> <RSQBRACKET> arg=<IDENTIFIER> {jjtThis.put("argName", arg.image);} <RPRTHSIS>
        <LBRACKET>
              MethodBody()
        <RBRACKET>
@@ -311,7 +311,7 @@ void DotExpression() : {Token dotToken;}
         <DOT>
         (
             <LENGTH> #Length
-            | (dotToken=<IDENTIFIER>{jjtThis.put("name",dotToken.image);} <LPRTHSIS> (Expression() (<COMMA> Expression())*)? <RPRTHSIS>) #Method
+            | (dotToken=<IDENTIFIER>{jjtThis.put("name",dotToken.image);} <LPRTHSIS> (Expression() (<COMMA> Expression())*)? <RPRTHSIS>) #MethodCall
         )
 }
 
