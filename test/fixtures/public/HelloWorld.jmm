@@ -2,16 +2,29 @@ import ioPlus;
 class HelloWorld extends Oi{
     int a;
 	public static void main(String[] args) {
-	    int a;
-	    int b;
-	    int c;
-	    c = a+b;
 		ioPlus.printHelloWorld();
 	}
 	public int hello(int a, int b){
 	    int c;
 	    int[] d;
-	    c = a + b;
+	    boolean x;
+
+	    c = a + d;
+	    c = a + true;
+	    c = a + e;
+	    c = a - true;
+	    c = a / true;
+	    c = a * true;
+
+
+	    d = a + b;
+	    true < false;
+	    !1;
+	    1 && 2;
+
+	    x = !false;
+	    x = true && false;
+
 	    return c;
 	}
 }

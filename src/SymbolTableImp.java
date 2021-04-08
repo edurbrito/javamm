@@ -38,6 +38,9 @@ public class SymbolTableImp implements SymbolTable {
     public List<String> getMethods() {
         return new ArrayList<>(methods.keySet());
     }
+    public MethodTable getMethods(String methodName) {
+        return methods.get(methodName);
+    }
 
     @Override
     public Type getReturnType(String methodName) {

@@ -1,6 +1,7 @@
 options
 {
     LOOKAHEAD=1;
+    NODE_SCOPE_HOOK=true;
     // DEBUG_PARSER = true;
 }
 
@@ -17,6 +18,14 @@ public class Javamm
     private static final int MAX_ERRORS = 10;
     private int nErrors = 0;
     private ArrayList<Report> reportList = new ArrayList<Report>();
+
+     void jjtreeOpenNodeScope(Node n) {
+            ((SimpleNode)n).put("line", Integer.toString(getToken(1).beginLine));
+            ((SimpleNode)n).put("col", Integer.toString(getToken(1).beginColumn));
+    }
+
+    void jjtreeCloseNodeScope(Node n) {
+    }
 
     private void while_err_handling(ParseException pe){
         this.nErrors++;
@@ -247,7 +256,7 @@ void WhileStatement() #While : {}
 
 void EqualStatement() #void : {Token equalToken;}
 {
-        (equalToken=<IDENTIFIER> {jjtThis.put("name",equalToken.image);} ( AccessToArray() )?) #Var <EQUAL> Expression() #EqualStatement(2)
+        (equalToken=<IDENTIFIER> {jjtThis.put("name",equalToken.image);} ( AccessToArray() )?) #Identifier <EQUAL> Expression() #EqualStatement(2)
 }
 
 void Expression() #void : {} {

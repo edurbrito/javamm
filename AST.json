@@ -1,15 +1,23 @@
 {
   "rootNode": {
     "kind": "Program",
-    "attributes": {},
+    "attributes": {
+      "col": "1",
+      "line": "1"
+    },
     "children": [
       {
         "kind": "Import",
-        "attributes": {},
+        "attributes": {
+          "col": "1",
+          "line": "1"
+        },
         "children": [
           {
             "kind": "Library",
             "attributes": {
+              "col": "8",
+              "line": "1",
               "name": "ioPlus"
             },
             "children": []
@@ -19,19 +27,25 @@
       {
         "kind": "Class",
         "attributes": {
+          "col": "1",
           "extends": "Oi",
+          "line": "2",
           "name": "HelloWorld"
         },
         "children": [
           {
             "kind": "Var",
             "attributes": {
+              "col": "5",
+              "line": "3",
               "name": "a"
             },
             "children": [
               {
                 "kind": "Type",
                 "attributes": {
+                  "col": "5",
+                  "line": "3",
                   "name": "int"
                 },
                 "children": []
@@ -41,105 +55,39 @@
           {
             "kind": "MainMethod",
             "attributes": {
-              "argName": "args"
+              "col": "9",
+              "argName": "args",
+              "line": "4"
             },
             "children": [
               {
                 "kind": "MethodBody",
-                "attributes": {},
+                "attributes": {
+                  "col": "3",
+                  "line": "5"
+                },
                 "children": [
-                  {
-                    "kind": "Var",
-                    "attributes": {
-                      "name": "a"
-                    },
-                    "children": [
-                      {
-                        "kind": "Type",
-                        "attributes": {
-                          "name": "int"
-                        },
-                        "children": []
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "Var",
-                    "attributes": {
-                      "name": "b"
-                    },
-                    "children": [
-                      {
-                        "kind": "Type",
-                        "attributes": {
-                          "name": "int"
-                        },
-                        "children": []
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "Var",
-                    "attributes": {
-                      "name": "c"
-                    },
-                    "children": [
-                      {
-                        "kind": "Type",
-                        "attributes": {
-                          "name": "int"
-                        },
-                        "children": []
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "EqualStatement",
-                    "attributes": {},
-                    "children": [
-                      {
-                        "kind": "Var",
-                        "attributes": {
-                          "name": "c"
-                        },
-                        "children": []
-                      },
-                      {
-                        "kind": "Sum",
-                        "attributes": {},
-                        "children": [
-                          {
-                            "kind": "Identifier",
-                            "attributes": {
-                              "name": "a"
-                            },
-                            "children": []
-                          },
-                          {
-                            "kind": "Identifier",
-                            "attributes": {
-                              "name": "b"
-                            },
-                            "children": []
-                          }
-                        ]
-                      }
-                    ]
-                  },
                   {
                     "kind": "Identifier",
                     "attributes": {
+                      "col": "9",
+                      "line": "5",
                       "name": "ioPlus"
                     },
                     "children": []
                   },
                   {
                     "kind": "DotExpression",
-                    "attributes": {},
+                    "attributes": {
+                      "col": "9",
+                      "line": "5"
+                    },
                     "children": [
                       {
                         "kind": "MethodCall",
                         "attributes": {
+                          "col": "10",
+                          "line": "5",
                           "name": "printHelloWorld"
                         },
                         "children": []
@@ -153,29 +101,40 @@
           {
             "kind": "Method",
             "attributes": {
+              "col": "9",
+              "line": "7",
               "name": "hello"
             },
             "children": [
               {
                 "kind": "Type",
                 "attributes": {
+                  "col": "9",
+                  "line": "7",
                   "name": "int"
                 },
                 "children": []
               },
               {
                 "kind": "MethodArguments",
-                "attributes": {},
+                "attributes": {
+                  "col": "19",
+                  "line": "7"
+                },
                 "children": [
                   {
                     "kind": "Argument",
                     "attributes": {
+                      "col": "19",
+                      "line": "7",
                       "name": "a"
                     },
                     "children": [
                       {
                         "kind": "Type",
                         "attributes": {
+                          "col": "19",
+                          "line": "7",
                           "name": "int"
                         },
                         "children": []
@@ -185,12 +144,16 @@
                   {
                     "kind": "Argument",
                     "attributes": {
+                      "col": "26",
+                      "line": "7",
                       "name": "b"
                     },
                     "children": [
                       {
                         "kind": "Type",
                         "attributes": {
+                          "col": "26",
+                          "line": "7",
                           "name": "int"
                         },
                         "children": []
@@ -201,17 +164,24 @@
               },
               {
                 "kind": "MethodBody",
-                "attributes": {},
+                "attributes": {
+                  "col": "6",
+                  "line": "8"
+                },
                 "children": [
                   {
                     "kind": "Var",
                     "attributes": {
+                      "col": "6",
+                      "line": "8",
                       "name": "c"
                     },
                     "children": [
                       {
                         "kind": "Type",
                         "attributes": {
+                          "col": "6",
+                          "line": "8",
                           "name": "int"
                         },
                         "children": []
@@ -221,18 +191,89 @@
                   {
                     "kind": "Var",
                     "attributes": {
+                      "col": "6",
+                      "line": "9",
                       "name": "d"
                     },
                     "children": [
                       {
                         "kind": "Type",
                         "attributes": {
+                          "col": "6",
+                          "line": "9",
                           "name": "int"
                         },
                         "children": [
                           {
                             "kind": "Array",
-                            "attributes": {},
+                            "attributes": {
+                              "col": "9",
+                              "line": "9"
+                            },
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "Var",
+                    "attributes": {
+                      "col": "6",
+                      "line": "10",
+                      "name": "x"
+                    },
+                    "children": [
+                      {
+                        "kind": "Type",
+                        "attributes": {
+                          "col": "6",
+                          "line": "10",
+                          "name": "boolean"
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "10",
+                      "line": "12"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "6",
+                          "line": "12",
+                          "name": "c"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "Sum",
+                        "attributes": {
+                          "col": "14",
+                          "line": "12"
+                        },
+                        "children": [
+                          {
+                            "kind": "Identifier",
+                            "attributes": {
+                              "col": "12",
+                              "line": "12",
+                              "name": "a"
+                            },
+                            "children": []
+                          },
+                          {
+                            "kind": "Identifier",
+                            "attributes": {
+                              "col": "15",
+                              "line": "12",
+                              "name": "d"
+                            },
                             "children": []
                           }
                         ]
@@ -241,22 +282,77 @@
                   },
                   {
                     "kind": "EqualStatement",
-                    "attributes": {},
+                    "attributes": {
+                      "col": "10",
+                      "line": "13"
+                    },
                     "children": [
                       {
-                        "kind": "Var",
+                        "kind": "Identifier",
                         "attributes": {
+                          "col": "6",
+                          "line": "13",
                           "name": "c"
                         },
                         "children": []
                       },
                       {
                         "kind": "Sum",
-                        "attributes": {},
+                        "attributes": {
+                          "col": "14",
+                          "line": "13"
+                        },
                         "children": [
                           {
                             "kind": "Identifier",
                             "attributes": {
+                              "col": "12",
+                              "line": "13",
+                              "name": "a"
+                            },
+                            "children": []
+                          },
+                          {
+                            "kind": "Boolean",
+                            "attributes": {
+                              "col": "18",
+                              "line": "13",
+                              "value": "true"
+                            },
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "10",
+                      "line": "14"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "6",
+                          "line": "14",
+                          "name": "c"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "Sum",
+                        "attributes": {
+                          "col": "14",
+                          "line": "14"
+                        },
+                        "children": [
+                          {
+                            "kind": "Identifier",
+                            "attributes": {
+                              "col": "12",
+                              "line": "14",
                               "name": "a"
                             },
                             "children": []
@@ -264,7 +360,342 @@
                           {
                             "kind": "Identifier",
                             "attributes": {
+                              "col": "15",
+                              "line": "14",
+                              "name": "e"
+                            },
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "10",
+                      "line": "15"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "6",
+                          "line": "15",
+                          "name": "c"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "Sub",
+                        "attributes": {
+                          "col": "14",
+                          "line": "15"
+                        },
+                        "children": [
+                          {
+                            "kind": "Identifier",
+                            "attributes": {
+                              "col": "12",
+                              "line": "15",
+                              "name": "a"
+                            },
+                            "children": []
+                          },
+                          {
+                            "kind": "Boolean",
+                            "attributes": {
+                              "col": "18",
+                              "line": "15",
+                              "value": "true"
+                            },
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "10",
+                      "line": "16"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "6",
+                          "line": "16",
+                          "name": "c"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "Div",
+                        "attributes": {
+                          "col": "14",
+                          "line": "16"
+                        },
+                        "children": [
+                          {
+                            "kind": "Identifier",
+                            "attributes": {
+                              "col": "12",
+                              "line": "16",
+                              "name": "a"
+                            },
+                            "children": []
+                          },
+                          {
+                            "kind": "Boolean",
+                            "attributes": {
+                              "col": "18",
+                              "line": "16",
+                              "value": "true"
+                            },
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "10",
+                      "line": "17"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "6",
+                          "line": "17",
+                          "name": "c"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "Mult",
+                        "attributes": {
+                          "col": "14",
+                          "line": "17"
+                        },
+                        "children": [
+                          {
+                            "kind": "Identifier",
+                            "attributes": {
+                              "col": "12",
+                              "line": "17",
+                              "name": "a"
+                            },
+                            "children": []
+                          },
+                          {
+                            "kind": "Boolean",
+                            "attributes": {
+                              "col": "18",
+                              "line": "17",
+                              "value": "true"
+                            },
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "10",
+                      "line": "20"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "6",
+                          "line": "20",
+                          "name": "d"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "Sum",
+                        "attributes": {
+                          "col": "14",
+                          "line": "20"
+                        },
+                        "children": [
+                          {
+                            "kind": "Identifier",
+                            "attributes": {
+                              "col": "12",
+                              "line": "20",
+                              "name": "a"
+                            },
+                            "children": []
+                          },
+                          {
+                            "kind": "Identifier",
+                            "attributes": {
+                              "col": "15",
+                              "line": "20",
                               "name": "b"
+                            },
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "LessThan",
+                    "attributes": {
+                      "col": "13",
+                      "line": "21"
+                    },
+                    "children": [
+                      {
+                        "kind": "Boolean",
+                        "attributes": {
+                          "col": "11",
+                          "line": "21",
+                          "value": "true"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "Boolean",
+                        "attributes": {
+                          "col": "18",
+                          "line": "21",
+                          "value": "false"
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "Not",
+                    "attributes": {
+                      "col": "7",
+                      "line": "22"
+                    },
+                    "children": [
+                      {
+                        "kind": "Integer",
+                        "attributes": {
+                          "col": "8",
+                          "line": "22",
+                          "value": "1"
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "And",
+                    "attributes": {
+                      "col": "11",
+                      "line": "23"
+                    },
+                    "children": [
+                      {
+                        "kind": "Integer",
+                        "attributes": {
+                          "col": "8",
+                          "line": "23",
+                          "value": "1"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "Integer",
+                        "attributes": {
+                          "col": "12",
+                          "line": "23",
+                          "value": "2"
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "10",
+                      "line": "25"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "6",
+                          "line": "25",
+                          "name": "x"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "Not",
+                        "attributes": {
+                          "col": "11",
+                          "line": "25"
+                        },
+                        "children": [
+                          {
+                            "kind": "Boolean",
+                            "attributes": {
+                              "col": "16",
+                              "line": "25",
+                              "value": "false"
+                            },
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "10",
+                      "line": "26"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "6",
+                          "line": "26",
+                          "name": "x"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "And",
+                        "attributes": {
+                          "col": "18",
+                          "line": "26"
+                        },
+                        "children": [
+                          {
+                            "kind": "Boolean",
+                            "attributes": {
+                              "col": "15",
+                              "line": "26",
+                              "value": "true"
+                            },
+                            "children": []
+                          },
+                          {
+                            "kind": "Boolean",
+                            "attributes": {
+                              "col": "23",
+                              "line": "26",
+                              "value": "false"
                             },
                             "children": []
                           }
@@ -276,11 +707,16 @@
               },
               {
                 "kind": "Return",
-                "attributes": {},
+                "attributes": {
+                  "col": "6",
+                  "line": "28"
+                },
                 "children": [
                   {
                     "kind": "Identifier",
                     "attributes": {
+                      "col": "14",
+                      "line": "28",
                       "name": "c"
                     },
                     "children": []
