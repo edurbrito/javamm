@@ -31,10 +31,39 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
         addVisit("EqualStatement", this::dealWithEqual);
         addVisit("Not", this::dealWithNot);
 
+        // Verifies if inside access is integer and if parent is array
+        addVisit("AccessToArray", this::dealWithAccessArray);
+
+        // Verifies if inside while and if condition is boolean
+        addVisit("IfCondition", this::dealWithIfWhile);
+        addVisit("WhileCondition", this::dealWithIfWhile);
 
 
 
+    }
 
+    private Boolean dealWithIfWhile(JmmNode node, List<Report> reports) {
+
+        Type onlyChild = getNodeType(node.getChildren().get(0));
+        if(!onlyChild.getName().equals("boolean")){
+            Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "If or while condition: Expected boolean");
+            reports.add(report);
+        }
+        return true;
+    }
+
+    private Boolean dealWithAccessArray(JmmNode node, List<Report> reports) {
+        JmmNode parent = node.getParent();
+        List<JmmNode> children = node.getChildren();
+        if (!isIdentifierArray(parent)) {
+            Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Trying to index non-array variable");
+            reports.add(report);
+        }
+        if(!getNodeType(children.get(0)).getName().equals("int") && !getNodeType(children.get(0)).isArray()){
+            Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Incorrect index access value");
+            reports.add(report);
+        }
+        return true;
     }
 
     private Boolean dealWithLessThan(JmmNode node, List<Report> reports) {
@@ -125,35 +154,76 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
         }
 
         //check if both variables are equal in terms of being arrays
+
         if (leftChild.isArray() != rightChild.isArray()){
-            Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Equal statement with arrays");
+            Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Equal statement where on side is an array and the other is not");
             reports.add(report);
+
         }
         return true;
+    }
+
+    private boolean isIdentifierArray(JmmNode node) {
+
+        // Searching the symbols of the local variables to see if any has the name we're looking for
+        HashMap<Symbol, String> localVariables = symbolTableImp.getMethods(methodName).getLocalVariables();
+        for (Symbol i : localVariables.keySet()){
+            if (i.getName().equals(node.get("name")))
+                return i.getType().isArray();
+        }
+        // Searching the symbols in the function parameters
+        HashSet<Symbol> parameters = symbolTableImp.getMethods(methodName).getParameters();
+        for (Symbol i : parameters){
+            if (i.getName().equals(node.get("name")))
+                return i.getType().isArray();
+        }
+
+        // Searching the symbols of the class variables to see if any has the name we're looking for
+        List <Symbol> classVariables = symbolTableImp.getFields();
+        for (Symbol i:classVariables){
+            if (i.getName().equals(node.get("name")))
+                return i.getType().isArray();
+        }
+        return false;
     }
 
 
     private Type getNodeType(JmmNode node){
         String nodeKind=node.getKind();
-        Type type;
+        Type type = null;
         if (nodeKind.equals("Identifier")) {
+
             // Searching the symbols of the local variables to see if any has the name we're looking for
             HashMap<Symbol, String> localVariables = symbolTableImp.getMethods(methodName).getLocalVariables();
             for (Symbol i : localVariables.keySet()){
                 if (i.getName().equals(node.get("name")))
-                    return i.getType();
+                    type = i.getType();
             }
             // Searching the symbols in the function parameters
             HashSet<Symbol> parameters = symbolTableImp.getMethods(methodName).getParameters();
             for (Symbol i : parameters){
                 if (i.getName().equals(node.get("name")))
-                    return i.getType();
+                    type = i.getType();
             }
+
             // Searching the symbols of the class variables to see if any has the name we're looking for
             List <Symbol> classVariables = symbolTableImp.getFields();
             for (Symbol i:classVariables){
                 if (i.getName().equals(node.get("name")))
-                    return i.getType();
+                    type = i.getType();
+            }
+
+            // If didn't find
+            if(type == null){
+                return null;
+            }
+
+
+
+            if (!type.isArray() || node.getChildren().size() == 0){
+                return type;
+            }else {
+                return new Type(type.getName(), false);
             }
 
         }

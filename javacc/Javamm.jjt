@@ -254,9 +254,9 @@ void WhileStatement() #While : {}
         (Statement()) #WhileBody
 }
 
-void EqualStatement() #void : {Token equalToken;}
+void EqualStatement() : {Token equalToken;}
 {
-        (equalToken=<IDENTIFIER> {jjtThis.put("name",equalToken.image);} ( AccessToArray() )?) #Identifier <EQUAL> Expression() #EqualStatement(2)
+        (equalToken=<IDENTIFIER> {jjtThis.put("name",equalToken.image);} ( AccessToArray() )?) #Identifier <EQUAL> Expression()
 }
 
 void Expression() #void : {} {
