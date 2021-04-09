@@ -31,7 +31,10 @@ public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
 
     public Boolean dealWithClass(JmmNode node, Boolean bool) {
         this.symbolTableImp.setClassName(node.get("name"));
-        this.symbolTableImp.setSuperClass(node.get("extends"));
+
+        if(node.getAttributes().contains("extends"))
+            this.symbolTableImp.setSuperClass(node.get("extends"));
+
         fillClassVar(node);
         return true;
     }

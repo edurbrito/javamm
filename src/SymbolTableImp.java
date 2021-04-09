@@ -39,7 +39,7 @@ public class SymbolTableImp implements SymbolTable {
         return new ArrayList<>(methods.keySet());
     }
 
-    public MethodTable getMethods(String methodName) {
+    public MethodTable getMethod(String methodName) {
         return methods.get(methodName);
     }
 
@@ -58,6 +58,11 @@ public class SymbolTableImp implements SymbolTable {
         return new ArrayList<>(methods.get(methodName).getLocalVariables().keySet());
     }
 
+    public boolean hasImport(String _import){
+        return this.imports.contains(_import);
+    }
+
+    public boolean hasSuperClass(){return this.superClass != "";}
 
     public void addImport(String _import) {
         this.imports.add(_import);

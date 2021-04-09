@@ -285,7 +285,7 @@ void MultiplicativeExpression() #void : {}
 
 void PrimaryExpression() #void : {}
 {
-        PrimaryPrefix() (PrimarySuffix())?
+        PrimaryPrefix() (PrimarySuffix() #TwoPartExpression(2))?
 }
 
 void PrimaryPrefix() #void : {}
