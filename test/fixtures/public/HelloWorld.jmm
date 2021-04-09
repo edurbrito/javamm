@@ -6,7 +6,9 @@ class HelloWorld extends Oi{
 	}
 	public int hello(int a, int b){
         int c;
+        boolean c;
         c = a.sum(a, b);
+        c = a.sum();
 
 
 

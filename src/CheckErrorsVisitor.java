@@ -42,15 +42,43 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
 
 
     }
+    private Boolean dealWithMethodCall(JmmNode node, List<Report> reports){
 
-    private Boolean dealWithMethodCall(JmmNode node, List<Report> reports) {
+        List<JmmNode> uncles = node.getParent().getParent().getChildren();
+
+        //verify if method is from local class or from import and deal accordingly
+        if (uncles.get(1).get("name").equals("this") && uncles.get(1).getKind().equals("DotExpression")){
+            return dealWithLocalMethodCall(node,reports);
+
+        }else if (!siblings.get(0).get("name").equals("this") && siblings.get(1).getKind().equals("DotExpression")){
+            return dealWithImportMethodCall(node,reports);
+        }
+        else{
+            Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Unknown kind for method call");
+            reports.add(report);
+            return true;
+        }
+    }
+
+    private Boolean dealWithImportMethodCall(JmmNode node, List<Report> reports) {
+//caso o método não seja da classe declarada, isto é uma classe importada, assumir como existente e assumir tipos esperados. (e.g. a = Foo.b(), se a é um inteiro, e Foo é uma classe importada, assumir que o método b é estático (pois estamos a aceder a uma método diretamente da classe), que não tem argumentos e que retorna um inteiro)
+        List<JmmNode> children = node.getChildren();
+        if(children.size()==0){
+
+        }
+
+        return true;
+    }
+
+    private Boolean dealWithLocalMethodCall(JmmNode node, List<Report> reports) {
 
         List<JmmNode> children = node.getChildren();
-         //TODO:se calhar este nó devia ser o this/a classe em lugar de ser diretamente a invocação do método...ou então ter uma função que lide com as chamadas a metodos de outras classes
+
 
         MethodTable methodTable = symbolTableImp.getMethods(node.get("name"));
 
-        if (methodTable==null){ //TODO: falta verificar se é um método de uma classe que não a nossa
+        // Verifies if function exists
+        if (methodTable == null){
             Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Method does not exist");
             reports.add(report);
             return true;
@@ -59,15 +87,17 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
 
         // Verifies if number of arguments is equal
         if (methodTable.getParameters().size() != children.size()) {
-            Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "No contructor with " + children.size() + " arguments. Expecting " + methodTable.getParameters().size() + " arguments.");
+            Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "No constructor with " + children.size() + " arguments. Expecting " + methodTable.getParameters().size() + " arguments.");
             reports.add(report);
+            return true;
         }
 
-
+        //verify if parameters are of the correct type
         for (int i = 0; i < methodTable.getParameters().size(); i++) {
             if (!methodTable.getParameters().get(i).getType().equals(getNodeType(children.get(i)))) {
                 Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Wrong object type in parameter " + i + ". Expecting " + methodTable.getParameters().get(i).getType() + " but got " + getNodeType(children.get(i)));
                 reports.add(report);
+                return true;
             }
         }
 
@@ -249,11 +279,9 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
         String nodeKind = node.getKind();
         Type type = null;
         if (nodeKind.equals("Identifier")) {
-            System.out.println("Node: " + node);
 
             type = getIdentifierType(node);
 
-            System.out.println("Type: " + type);
 
             // If didn't find
             if (type == null) {
@@ -270,15 +298,6 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
         } else if (nodeKind.equals("Boolean")) {
             return new Type("boolean", false);
         } else if (nodeKind.equals("Sum") || nodeKind.equals("Sub") || nodeKind.equals("Mult") || nodeKind.equals("Div")) {//if it is another expression
-            /*List<JmmNode> children = node.getChildren();
-            Type leftChild  = getNodeType(children.get(0));
-            Type rightChild  = getNodeType(children.get(1));
-
-            if(leftChild.getName().equals(rightChild.getName())){
-                return leftChild;
-            }else{
-                return new Type("fail", false);
-            }*/
             return new Type("int", false);
 
         } else if (nodeKind.equals("And") || nodeKind.equals("Not") || nodeKind.equals("LessThan")) {
