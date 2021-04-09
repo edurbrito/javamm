@@ -50,7 +50,7 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
         if (uncles.get(1).get("name").equals("this") && uncles.get(1).getKind().equals("DotExpression")){
             return dealWithLocalMethodCall(node,reports);
 
-        }else if (!siblings.get(0).get("name").equals("this") && siblings.get(1).getKind().equals("DotExpression")){
+        }else if (!uncles.get(0).get("name").equals("this") && uncles.get(1).getKind().equals("DotExpression")){
             return dealWithImportMethodCall(node,reports);
         }
         else{

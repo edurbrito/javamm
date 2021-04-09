@@ -208,21 +208,21 @@
                     ]
                   },
                   {
-                    "kind": "EqualStatement",
+                    "kind": "Identifier",
                     "attributes": {
                       "col": "9",
+                      "line": "10",
+                      "name": "c"
+                    },
+                    "children": []
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "13",
                       "line": "10"
                     },
                     "children": [
-                      {
-                        "kind": "Identifier",
-                        "attributes": {
-                          "col": "9",
-                          "line": "10",
-                          "name": "c"
-                        },
-                        "children": []
-                      },
                       {
                         "kind": "Identifier",
                         "attributes": {
@@ -272,21 +272,21 @@
                     ]
                   },
                   {
-                    "kind": "EqualStatement",
+                    "kind": "Identifier",
                     "attributes": {
                       "col": "9",
+                      "line": "11",
+                      "name": "c"
+                    },
+                    "children": []
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "13",
                       "line": "11"
                     },
                     "children": [
-                      {
-                        "kind": "Identifier",
-                        "attributes": {
-                          "col": "9",
-                          "line": "11",
-                          "name": "c"
-                        },
-                        "children": []
-                      },
                       {
                         "kind": "Identifier",
                         "attributes": {
@@ -431,7 +431,7 @@
                   {
                     "kind": "EqualStatement",
                     "attributes": {
-                      "col": "6",
+                      "col": "10",
                       "line": "20"
                     },
                     "children": [
