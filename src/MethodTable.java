@@ -1,15 +1,17 @@
 import pt.up.fe.comp.jmm.analysis.table.Symbol;
 import pt.up.fe.comp.jmm.analysis.table.Type;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class MethodTable {
-    HashSet<Symbol> parameters;
+    List<Symbol> parameters;
     HashMap<Symbol, String> localVariables = new HashMap<>();
     Type returnType;
 
-    public MethodTable(Type returnType, HashSet<Symbol> parameters) {
+    public MethodTable(Type returnType, List<Symbol> parameters) {
         this.returnType = returnType;
         this.parameters = parameters;
     }
@@ -18,11 +20,11 @@ public class MethodTable {
         this.parameters.add(parameter);
     }
 
-    public HashSet<Symbol> getParameters() {
-        return parameters;
+    public List<Symbol> getParameters() {
+        return this.parameters;
     }
 
-    public void setParameters(HashSet<Symbol> parameters) {
+    public void setParameters(List<Symbol> parameters) {
         this.parameters = parameters;
     }
 
@@ -43,8 +45,8 @@ public class MethodTable {
     }
 
     public void assignVariable(String variableName, String value) {
-        for(Symbol symbol : localVariables.keySet()) {
-            if(symbol.getName().equals(variableName))
+        for (Symbol symbol : localVariables.keySet()) {
+            if (symbol.getName().equals(variableName))
                 localVariables.put(symbol, value);
         }
     }

@@ -38,6 +38,7 @@ public class SymbolTableImp implements SymbolTable {
     public List<String> getMethods() {
         return new ArrayList<>(methods.keySet());
     }
+
     public MethodTable getMethods(String methodName) {
         return methods.get(methodName);
     }
@@ -58,7 +59,7 @@ public class SymbolTableImp implements SymbolTable {
     }
 
 
-    public void addImport(String _import){
+    public void addImport(String _import) {
         this.imports.add(_import);
     }
 
@@ -74,22 +75,26 @@ public class SymbolTableImp implements SymbolTable {
         fields.put(new Symbol(type, name), "");
     }
 
-    public void addField(Symbol symbol){fields.put(symbol,"");}
+    public void addField(Symbol symbol) {
+        fields.put(symbol, "");
+    }
 
     public void addField(Type type, String name, String value) {
         fields.put(new Symbol(type, name), value);
     }
 
     public void addFieldValue(String name, String value) {
-        for(Symbol symbol : fields.keySet()) {
-            if(symbol.getName().equals(name))
-                fields.put(symbol,value);
+        for (Symbol symbol : fields.keySet()) {
+            if (symbol.getName().equals(name))
+                fields.put(symbol, value);
         }
     }
 
-    public void addMethod(String methodName, MethodTable methodTable){this.methods.put(methodName, methodTable);}
+    public void addMethod(String methodName, MethodTable methodTable) {
+        this.methods.put(methodName, methodTable);
+    }
 
-    public void addMethod(String methodName, Type returnType, HashSet<Symbol> parameters) {
+    public void addMethod(String methodName, Type returnType, List<Symbol> parameters) {
         methods.put(methodName, new MethodTable(returnType, parameters));
     }
 

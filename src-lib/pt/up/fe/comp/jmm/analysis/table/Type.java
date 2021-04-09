@@ -1,5 +1,7 @@
 package pt.up.fe.comp.jmm.analysis.table;
 
+import java.util.Objects;
+
 public class Type {
     private final String name;
     private final boolean isArray;
@@ -22,4 +24,16 @@ public class Type {
         return "Type [name=" + name + ", isArray=" + isArray + "]";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Type type = (Type) o;
+        return isArray == type.isArray && name.equals(type.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, isArray);
+    }
 }

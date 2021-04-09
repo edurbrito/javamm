@@ -41,24 +41,32 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
         addVisit("MethodCall", this::dealWithMethodCall);
 
 
-
     }
 
     private Boolean dealWithMethodCall(JmmNode node, List<Report> reports) {
 
         List<JmmNode> children = node.getChildren();
+         //TODO:se calhar este nó devia ser o this/a classe em lugar de ser diretamente a invocação do método...ou então ter uma função que lide com as chamadas a metodos de outras classes
 
         MethodTable methodTable = symbolTableImp.getMethods(node.get("name"));
 
+        if (methodTable==null){ //TODO: falta verificar se é um método de uma classe que não a nossa
+            Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Method does not exist");
+            reports.add(report);
+            return true;
+        }
+
+
         // Verifies if number of arguments is equal
-        if(methodTable.getParameters().size() != children.size()){
-            Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Method call with different number of arguments");
+        if (methodTable.getParameters().size() != children.size()) {
+            Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "No contructor with " + children.size() + " arguments. Expecting " + methodTable.getParameters().size() + " arguments.");
             reports.add(report);
         }
 
-        for (JmmNode child:children){
-            if (!methodTable.getParameters().contains(getNodeType(child))){
-                Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Wrong parameter type");
+
+        for (int i = 0; i < methodTable.getParameters().size(); i++) {
+            if (!methodTable.getParameters().get(i).getType().equals(getNodeType(children.get(i)))) {
+                Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Wrong object type in parameter " + i + ". Expecting " + methodTable.getParameters().get(i).getType() + " but got " + getNodeType(children.get(i)));
                 reports.add(report);
             }
         }
@@ -71,11 +79,10 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
 
         Type onlyChild = getNodeType(node.getChildren().get(0));
 
-        if(onlyChild == null){
+        if (onlyChild == null) {
             Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Variable is not declared beforehand");
             reports.add(report);
-        }
-        else if(!onlyChild.getName().equals("boolean")){
+        } else if (!onlyChild.getName().equals("boolean")) {
             Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "If or while condition: Expected boolean");
             reports.add(report);
         }
@@ -86,15 +93,14 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
         JmmNode parent = node.getParent();
         List<JmmNode> children = node.getChildren();
 
-        if(getIdentifierType(parent) == null){
+        if (getIdentifierType(parent) == null) {
             Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Variable is not declared beforehand");
             reports.add(report);
-        }
-        else if (!getIdentifierType(parent).isArray()) {
+        } else if (!getIdentifierType(parent).isArray()) {
             Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Trying to index non-array variable");
             reports.add(report);
         }
-        if(!getNodeType(children.get(0)).getName().equals("int") && !getNodeType(children.get(0)).isArray()){
+        if (!getNodeType(children.get(0)).getName().equals("int") && !getNodeType(children.get(0)).isArray()) {
             Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Incorrect index access value");
             reports.add(report);
         }
@@ -103,19 +109,19 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
 
     private Boolean dealWithLessThan(JmmNode node, List<Report> reports) {
         List<JmmNode> children = node.getChildren();
-        Type leftChild  = getNodeType(children.get(0));
-        Type rightChild  = getNodeType(children.get(1));
+        Type leftChild = getNodeType(children.get(0));
+        Type rightChild = getNodeType(children.get(1));
 
         if (verifyNotNull(node, reports, leftChild, rightChild)) return true;
 
         // Check if the arith. exp. is with two arrays
-        if(leftChild.isArray() || rightChild.isArray()){
+        if (leftChild.isArray() || rightChild.isArray()) {
             Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Less than operation with arrays");
             reports.add(report);
         }
 
         // Check if arithmetic expression operands are of different types
-        if(!leftChild.getName().equals("int") || !rightChild.getName().equals("int")){ //its effective because this language only deals with int and boolean
+        if (!leftChild.getName().equals("int") || !rightChild.getName().equals("int")) { //its effective because this language only deals with int and boolean
             Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Less than operation with different types");
             reports.add(report);
         }
@@ -131,12 +137,12 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
 
         Type onlyChild = getNodeType(node.getChildren().get(0));
 
-        if(onlyChild == null){
+        if (onlyChild == null) {
             Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Less than operation with arrays");
             reports.add(report);
         }
         // Check if inside Not there is a boolean
-        else if(!onlyChild.getName().equals("boolean")){
+        else if (!onlyChild.getName().equals("boolean")) {
             Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Miss match with operator Not: Expected boolean");
             reports.add(report);
         }
@@ -147,13 +153,13 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
     private Boolean dealWithLogicOp(JmmNode node, List<Report> reports) {
 
         List<JmmNode> children = node.getChildren();
-        Type leftChild  = getNodeType(children.get(0));
-        Type rightChild  = getNodeType(children.get(1));
+        Type leftChild = getNodeType(children.get(0));
+        Type rightChild = getNodeType(children.get(1));
 
         if (verifyNotNull(node, reports, leftChild, rightChild)) return true;
 
         // Check if logic expression operands are of different types
-        if(!leftChild.getName().equals("boolean") || !rightChild.getName().equals("boolean")){
+        if (!leftChild.getName().equals("boolean") || !rightChild.getName().equals("boolean")) {
             Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Logic expression of different types");
             reports.add(report);
         }
@@ -161,49 +167,51 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
     }
 
 
-    public Boolean dealWithMethod(JmmNode node, List<Report> reports){
+    public Boolean dealWithMethod(JmmNode node, List<Report> reports) {
+
         this.methodName = node.get("name");
+
         return true;
     }
 
     public Boolean dealWithArithmetic(JmmNode node, List<Report> reports) {
 
         List<JmmNode> children = node.getChildren();
-        Type leftChild  = getNodeType(children.get(0));
-        Type rightChild  = getNodeType(children.get(1));
+        Type leftChild = getNodeType(children.get(0));
+        Type rightChild = getNodeType(children.get(1));
 
-        if(verifyNotNull(node,reports, leftChild, rightChild)) return true;
+        if (verifyNotNull(node, reports, leftChild, rightChild)) return true;
 
         // Check if the arith. exp. is with two arrays
-        if(leftChild.isArray() || rightChild.isArray()){
+        if (leftChild.isArray() || rightChild.isArray()) {
             Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Arithmetic operation with arrays");
             reports.add(report);
         }
 
         // Check if arithmetic expression operands are of different types
-        if(!leftChild.getName().equals("int") || !rightChild.getName().equals("int")){ //its effective because this language only deals with int and boolean
+        if (!leftChild.getName().equals("int") || !rightChild.getName().equals("int")) { //its effective because this language only deals with int and boolean
             Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Arithmetic expression of different types");
             reports.add(report);
         }
         return true;
     }
 
-    public Boolean dealWithEqual(JmmNode node, List<Report> reports){
+    public Boolean dealWithEqual(JmmNode node, List<Report> reports) {
         List<JmmNode> children = node.getChildren();
-        Type leftChild  = getNodeType(children.get(0));
-        Type rightChild  = getNodeType(children.get(1));
+        Type leftChild = getNodeType(children.get(0));
+        Type rightChild = getNodeType(children.get(1));
 
-        if(verifyNotNull(node, reports, leftChild, rightChild)) return true;
+        if (verifyNotNull(node, reports, leftChild, rightChild)) return true;
 
         //check if both variables are of same type
-        if (!leftChild.getName().equals(rightChild.getName())){
+        if (!leftChild.getName().equals(rightChild.getName())) {
             Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Equal statement with different types");
             reports.add(report);
         }
 
         //check if both variables are equal in terms of being arrays
 
-        if (leftChild.isArray() != rightChild.isArray()){
+        if (leftChild.isArray() != rightChild.isArray()) {
             Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Equal statement where on side is an array and the other is not");
             reports.add(report);
 
@@ -215,21 +223,21 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
 
         // Searching the symbols of the local variables to see if any has the name we're looking for
         HashMap<Symbol, String> localVariables = symbolTableImp.getMethods(methodName).getLocalVariables();
-        for (Symbol i : localVariables.keySet()){
+        for (Symbol i : localVariables.keySet()) {
             if (i.getName().equals(node.get("name")))
                 return i.getType();
         }
 
         // Searching the symbols in the function parameters
-        HashSet<Symbol> parameters = symbolTableImp.getMethods(methodName).getParameters();
-        for (Symbol i : parameters){
+        List<Symbol> parameters = symbolTableImp.getMethods(methodName).getParameters();
+        for (Symbol i : parameters) {
             if (i.getName().equals(node.get("name")))
                 return i.getType();
         }
 
         // Searching the symbols of the class variables to see if any has the name we're looking for
-        List <Symbol> classVariables = symbolTableImp.getFields();
-        for (Symbol i:classVariables){
+        List<Symbol> classVariables = symbolTableImp.getFields();
+        for (Symbol i : classVariables) {
             if (i.getName().equals(node.get("name")))
                 return i.getType();
         }
@@ -237,8 +245,8 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
     }
 
 
-    private Type getNodeType(JmmNode node){
-        String nodeKind=node.getKind();
+    private Type getNodeType(JmmNode node) {
+        String nodeKind = node.getKind();
         Type type = null;
         if (nodeKind.equals("Identifier")) {
             System.out.println("Node: " + node);
@@ -248,23 +256,20 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
             System.out.println("Type: " + type);
 
             // If didn't find
-            if(type == null){
+            if (type == null) {
                 return null;
             }
-            if (!type.isArray() || node.getChildren().size() == 0){
+            if (!type.isArray() || node.getChildren().size() == 0) {
                 return type;
-            }else {
+            } else {
                 return new Type(type.getName(), false);
             }
 
-        }
-        else if (nodeKind.equals("Integer")) {
+        } else if (nodeKind.equals("Integer")) {
             return new Type("int", false);
-        }
-        else if (nodeKind.equals("Boolean")){
+        } else if (nodeKind.equals("Boolean")) {
             return new Type("boolean", false);
-        }
-        else if (nodeKind.equals("Sum") || nodeKind.equals("Sub") || nodeKind.equals("Mult") || nodeKind.equals("Div")){//if it is another expression
+        } else if (nodeKind.equals("Sum") || nodeKind.equals("Sub") || nodeKind.equals("Mult") || nodeKind.equals("Div")) {//if it is another expression
             /*List<JmmNode> children = node.getChildren();
             Type leftChild  = getNodeType(children.get(0));
             Type rightChild  = getNodeType(children.get(1));
@@ -276,7 +281,7 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
             }*/
             return new Type("int", false);
 
-        }else if(nodeKind.equals("And") || nodeKind.equals("Not") || nodeKind.equals("LessThan")){
+        } else if (nodeKind.equals("And") || nodeKind.equals("Not") || nodeKind.equals("LessThan")) {
             return new Type("boolean", false);
         }
         return null;

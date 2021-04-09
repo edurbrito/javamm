@@ -6,6 +6,7 @@ import java.util.List;
 
 public class ClassVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
     private SymbolTableImp symbolTableImp;
+
     public ClassVisitor(SymbolTableImp symbolTableImp) {
         super();
 
@@ -16,8 +17,6 @@ public class ClassVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
         addVisit("Var", this::dealWithClassFields);
 
     }
-
-
 
 
     public Boolean dealWithImports(JmmNode node, Boolean dummy) {
@@ -31,7 +30,7 @@ public class ClassVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
         return true;
     }
 
-    public Boolean dealWithClassFields(JmmNode node, Boolean dummy){
+    public Boolean dealWithClassFields(JmmNode node, Boolean dummy) {
         JmmNode child = node.getChildren().get(0);
         List<JmmNode> grandChild = child.getChildren();
         Type type = new Type(child.get("name"), !grandChild.isEmpty());
