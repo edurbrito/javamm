@@ -5,17 +5,18 @@ class HelloWorld extends Oi{
 		ioPlus.printHelloWorld();
 	}
 	public int hello(int a, int b){
-	    int c;
-	    int[] d;
+        int c;
+        c = a.sum(a, b);
 
-        d[false] = 1;
+
+
         return 2;
 	}
-    /*
+
 	public int sum(int a, int b){
 	    int c;
 	    c = a + b;
 	    return c;
 	}
-	*/
+
 }
