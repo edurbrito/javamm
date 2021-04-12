@@ -4,12 +4,13 @@ import pt.up.fe.comp.jmm.ast.PreorderJmmVisitor;
 import pt.up.fe.comp.jmm.analysis.table.Type;
 import pt.up.fe.comp.jmm.report.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     private SymbolTableImp symbolTableImp;
-    private String methodName;
+    private String methodSignature;
 
     public CheckErrorsVisitor(SymbolTableImp symbolTableImp) {
         super();
@@ -39,12 +40,21 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
     }
 
     private Boolean dealWithMain(JmmNode jmmNode, List<Report> reports) {
-        this.methodName = "main";
+        this.methodSignature = "main";
         return true;
     }
 
     private Boolean dealWithMethod(JmmNode node, List<Report> reports) {
-        this.methodName = node.get("name");
+        List<JmmNode> arguments = node.getChildren().get(1).getChildren();
+        List<Symbol> symbols = new ArrayList<>();
+
+        for (JmmNode argument : arguments) {
+            if (argument.getKind().equals("Argument")) {
+                symbols.add(new Symbol(new Type(argument.getChildren().get(0).get("name"), argument.getNumChildren() > 0), null));
+            }
+        }
+
+        this.methodSignature = (new MethodTable(node.get("name"), null, symbols)).getSignature();
         return true;
     }
 
@@ -66,6 +76,13 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
             Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), node.getKind() + " only supports integer operands");
             reports.add(report);
         }
+
+        // Check if variables are both initialized
+        if (!symbolTableImp.isAssigned(methodSignature, children.get(0).get("name")) || !symbolTableImp.isAssigned(methodSignature, children.get(1).get("name"))) {
+            Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Assignment with variables not yet initialized ");
+            reports.add(report);
+        }
+
         return true;
     }
 
@@ -125,13 +142,16 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
         JmmNode nodeIdentifier = node.getParent().getChildren().get(0);
         List<JmmNode> children = node.getChildren();
 
-        if (getIdentifierType(nodeIdentifier) == null) {
-            Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Variable is not declared beforehand");
-            reports.add(report);
-        } else if (!getIdentifierType(nodeIdentifier).isArray()) {
-            Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Trying to index non-array variable");
-            reports.add(report);
+        if (!node.getParent().getKind().equals("AllocationExpression")) {
+            if (getIdentifierType(nodeIdentifier) == null) {
+                Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Variable is not declared beforehand");
+                reports.add(report);
+            } else if (!getIdentifierType(nodeIdentifier).isArray()) {
+                Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Trying to index non-array variable");
+                reports.add(report);
+            }
         }
+
         if (!getNodeType(children.get(0)).getName().equals("int") && !getNodeType(children.get(0)).isArray()) {
             Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Incorrect index access value");
             reports.add(report);
@@ -157,7 +177,7 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
         return true;
     }
 
-    private Boolean dealWithMethodCall(JmmNode nodeMethodCall, List<Report> reports){
+    private Boolean dealWithMethodCall(JmmNode nodeMethodCall, List<Report> reports) {
         JmmNode partExpression = nodeMethodCall.getParent().getParent(); // two parts expression node
         JmmNode objectCaller = partExpression.getChildren().get(0);
 
@@ -187,33 +207,47 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
     }
 
     private Boolean checkLocalFunction(JmmNode nodeMethodCall, List<Report> reports) {
+        String methodSignature = getMethodSignature(nodeMethodCall);
 
         // Gets method table associated to function
-        MethodTable methodTable = symbolTableImp.getMethod(nodeMethodCall.get("name"));
+        MethodTable methodTable = symbolTableImp.getMethod(methodSignature);
+        List<MethodTable> overloadMethods = new ArrayList<>();
 
         // Verifies if function exists
-        if (methodTable == null){
-            return false;
+        if (methodTable == null) {
+            for (String sig : symbolTableImp.getMethods()) {
+                MethodTable m = symbolTableImp.getMethod(sig);
+                if (m.getName().equals(nodeMethodCall.get("name"))) {
+                    overloadMethods.add(m);
+                    break;
+                }
+            }
+
+            if(overloadMethods.isEmpty())
+                return false;
         }
 
         // Get parameters
         List<JmmNode>children = nodeMethodCall.getChildren();
 
         // Verifies if number of arguments is equal
-        if (methodTable.getParameters().size() != children.size()) {
-            Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(nodeMethodCall.get("line")), Integer.parseInt(nodeMethodCall.get("col")), "No method with " + children.size() + " arguments. Expecting " + methodTable.getParameters().size() + " arguments.");
-            reports.add(report);
-            return true;
-        }
-
-        // Verify if parameters are of the correct type
-        for (int i = 0; i < methodTable.getParameters().size(); i++) {
-            if (!methodTable.getParameters().get(i).getType().equals(getNodeType(children.get(i)))) {
-                Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(nodeMethodCall.get("line")), Integer.parseInt(nodeMethodCall.get("col")), "Wrong object type in parameter " + i + ". Expecting " + methodTable.getParameters().get(i).getType() + " but got " + getNodeType(children.get(i)));
+        for (MethodTable overload : overloadMethods) {
+            if (overload.getParameters().size() != children.size()) {
+                Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(nodeMethodCall.get("line")), Integer.parseInt(nodeMethodCall.get("col")), "No method with " + children.size() + " arguments. Expecting " + overload.getParameters().size() + " arguments.");
                 reports.add(report);
-                return true;
+                continue;
+            }
+
+            // Verify if parameters are of the correct type
+            for (int i = 0; i < overload.getParameters().size(); i++) {
+                if (!overload.getParameters().get(i).getType().equals(getNodeType(children.get(i)))) {
+                    Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(nodeMethodCall.get("line")), Integer.parseInt(nodeMethodCall.get("col")), "Wrong object type in parameter " + i + ". Expecting " + overload.getParameters().get(i).getType() + " but got " + getNodeType(children.get(i)));
+                    reports.add(report);
+                    continue;
+                }
             }
         }
+
         return true;
     }
 
@@ -238,16 +272,22 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
             return new Type("int", false);
         } else if (nodeKind.equals("Boolean")) {
             return new Type("boolean", false);
-        } /* else if (nodeKind.equals("Sum") || nodeKind.equals("Sub") || nodeKind.equals("Mult") || nodeKind.equals("Div")) { // if it is another expression
+        } else if (nodeKind.equals("Sum") || nodeKind.equals("Sub") || nodeKind.equals("Mult") || nodeKind.equals("Div")) { // if it is another expression
             return new Type("int", false);
         } else if (nodeKind.equals("And") || nodeKind.equals("Not") || nodeKind.equals("LessThan")) {
             return new Type("boolean", false);
-        }*/ else if(nodeKind.equals("TwoPartExpression")) {
+        } else if(nodeKind.equals("TwoPartExpression")) {
             if (node.getChildren().get(1).getKind().equals("AccessToArray")) { // Array access
                 return getArrayType(node);
             } else { // Method Call
                 return getMethodReturnType(node);
             }
+        } else if (nodeKind.equals("AllocationExpression")) {
+            String childKind = node.getChildren().get(0).getKind();
+            if(childKind.equals("AccessToArray"))
+                return new Type("int", true);
+            else
+                return new Type(node.getChildren().get(0).get("name"), false);
         }
         return null;
     }
@@ -274,34 +314,40 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
             return null;
         }
 
+        if (!objectCaller.getKind().equals("Identifier")) {
+            return null;
+        }
+
         if (this.symbolTableImp.hasImport(objectCaller.get("name"))) {
             return new Type("any", false);
         }
 
-        // return getIdentifierType(objectCaller);
-        return null;
+        return getIdentifierType(objectCaller);
     }
 
-    private Type getLocalFunctionReturn(JmmNode nodeMethodCall){
-        MethodTable mT = this.symbolTableImp.getMethod(nodeMethodCall.get("name"));
+    private Type getLocalFunctionReturn(JmmNode nodeMethodCall) {
+        String methodSignature = getMethodSignature(nodeMethodCall);
+
+        // Gets method table associated to function
+        MethodTable methodTable = symbolTableImp.getMethod(methodSignature);
 
         // Verify if method exists
-        if(mT == null)
+        if(methodTable == null)
             return null;
 
-        return mT.getReturnType();
+        return methodTable.getReturnType();
     }
 
     private Type getIdentifierType(JmmNode node) {
         // Searching the symbols of the local variables to see if any has the name we're looking for
-        HashMap<Symbol, String> localVariables = symbolTableImp.getMethod(methodName).getLocalVariables();
+        HashMap<Symbol, Boolean> localVariables = symbolTableImp.getMethod(methodSignature).getLocalVariables();
         for (Symbol i : localVariables.keySet()) {
             if (i.getName().equals(node.get("name")))
                 return i.getType();
         }
 
         // Searching the symbols in the function parameters
-        List<Symbol> parameters = symbolTableImp.getMethod(methodName).getParameters();
+        List<Symbol> parameters = symbolTableImp.getMethod(methodSignature).getParameters();
         for (Symbol i : parameters) {
             if (i.getName().equals(node.get("name")))
                 return i.getType();
@@ -316,8 +362,22 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
         return null;
     }
 
-    private boolean verifyNotNull(JmmNode node, List<Report> reports, Type leftChild, Type rightChild) {
+    private String getMethodSignature(JmmNode nodeMethodCall) {
+        if (nodeMethodCall.getNumChildren() == 0) {
+            return (new MethodTable(nodeMethodCall.get("name"), null, new ArrayList<>())).getSignature();
+        }
 
+        List<JmmNode> arguments = nodeMethodCall.getChildren().subList(1, nodeMethodCall.getNumChildren());
+        List<Symbol> symbols = new ArrayList<>();
+
+        for (JmmNode argument : arguments) {
+            symbols.add(new Symbol(getNodeType(argument), null));
+        }
+
+        return (new MethodTable(nodeMethodCall.get("name"), null, symbols)).getSignature();
+    }
+
+    private boolean verifyNotNull(JmmNode node, List<Report> reports, Type leftChild, Type rightChild) {
         if (leftChild == null || rightChild == null) {
             Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Variable is not declared beforehand");
             reports.add(report);

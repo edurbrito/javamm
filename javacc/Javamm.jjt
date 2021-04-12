@@ -291,7 +291,7 @@ void PrimaryExpression() #void : {}
 void PrimaryPrefix() #void : {}
 {
         Literal()
-        | AllocationExpression() #New
+        | AllocationExpression()
         | <LPRTHSIS> Expression() <RPRTHSIS>
 }
 
@@ -310,7 +310,7 @@ void Literal() #void : {Token literalToken;}
          | <THIS> #This
 }
 
-void AllocationExpression() #void : {Token allocationToken;}
+void AllocationExpression() : {Token allocationToken;}
 {
         <NEW> (<INT> AccessToArray() | allocationToken=<IDENTIFIER>{jjtThis.put("name",allocationToken.image);} #Class <LPRTHSIS> <RPRTHSIS> )
 }

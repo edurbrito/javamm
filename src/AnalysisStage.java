@@ -44,13 +44,10 @@ public class AnalysisStage implements JmmAnalysis {
         errorsVisitor.visit(node, reports);
 
         System.out.println("Reports: ");
-        for(Report r: reports){
+        for(Report r: reports) {
             System.out.println("   " + r);
         }
 
-        // No Symbol Table being calculated yet
-        return new JmmSemanticsResult(parserResult, symbolTable, new ArrayList<>());
-
+        return new JmmSemanticsResult(parserResult, symbolTable, reports);
     }
-
 }
