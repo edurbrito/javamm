@@ -2,10 +2,8 @@ import pt.up.fe.comp.jmm.JmmNode;
 import pt.up.fe.comp.jmm.analysis.table.Symbol;
 import pt.up.fe.comp.jmm.ast.PreorderJmmVisitor;
 import pt.up.fe.comp.jmm.analysis.table.Type;
-import pt.up.fe.comp.jmm.report.Report;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
@@ -18,13 +16,11 @@ public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
 
         addVisit("Library", this::dealWithImports);
         addVisit("Class", this::dealWithClass);
-        addVisit("Method", this::dealWithMethod);
         addVisit("MainMethod", this::dealWithMain);
-
+        addVisit("Method", this::dealWithMethod);
     }
 
     public Boolean dealWithImports(JmmNode node, Boolean bool) {
-
         this.symbolTableImp.addImport(node.get("name"));
         return true;
     }
@@ -44,7 +40,7 @@ public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
         int i = 0;
         JmmNode current = children.get(i);
 
-        while (current.getKind().equals("Var")) { //TODO:should we check if this is repeated declaration of the same variable?
+        while (current.getKind().equals("Var")) { // TODO: should we check if this is repeated declaration of the same variable?
             this.symbolTableImp.addField(getSymbol(current));
             i++;
             if (i == children.size())
@@ -52,19 +48,16 @@ public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
 
             current = children.get(i);
         }
-
-
     }
 
     private Boolean dealWithMain(JmmNode node, Boolean bool) {
-
         List<JmmNode> children = node.getChildren();
 
         List<Symbol> parameters = new ArrayList<>();
 
-        parameters.add(new Symbol(new Type("string", true), node.get("argName")));
+        parameters.add(new Symbol(new Type("string", true), node.get("argName"))); // String [] args
 
-        MethodTable methodTable = new MethodTable(new Type("void", false), parameters);
+        MethodTable methodTable = new MethodTable(new Type("void", false), parameters); // public static void main
 
         fillMethodVar(children.get(0), methodTable);
 
@@ -73,10 +66,8 @@ public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
         return true;
     }
 
-    public Boolean dealWithMethod(JmmNode node, Boolean bool) {      // Node has kind Method
-
+    public Boolean dealWithMethod(JmmNode node, Boolean bool) {
         List<JmmNode> children = node.getChildren();
-
 
         List<Symbol> parameters = getParameters(children.get(1));
 
@@ -102,7 +93,7 @@ public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
         return symbolSet;
     }
 
-    private void fillMethodVar(JmmNode node, MethodTable methodTable) {     // Node has kind MethodBody
+    private void fillMethodVar(JmmNode node, MethodTable methodTable) {
         List<JmmNode> children = node.getChildren();
         int i = 0;
         JmmNode current = children.get(i);
@@ -126,5 +117,4 @@ public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
         boolean isArray = typeNode.getChildren().size() > 0;
         return new Type(type, isArray);
     }
-
 }
