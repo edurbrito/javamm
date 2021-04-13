@@ -1,6 +1,7 @@
 import org.junit.Test;
 import pt.up.fe.comp.TestUtils;
 import pt.up.fe.comp.jmm.JmmParserResult;
+import pt.up.fe.comp.jmm.analysis.JmmSemanticsResult;
 
 import static org.junit.Assert.*;
 
@@ -46,6 +47,9 @@ public class FileTests {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/HelloWorld.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
+
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
     }
 
     @Test

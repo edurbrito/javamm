@@ -19,6 +19,7 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
 
         addVisit("MainMethod", this::dealWithMain);
         addVisit("Method", this::dealWithMethod);
+        addVisit("Var", this::dealWithVar);
 
         addVisit("Sum", this::dealWithExpression);
         addVisit("Sub", this::dealWithExpression);
@@ -55,6 +56,19 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
         }
 
         this.methodSignature = (new MethodTable(node.get("name"), null, symbols)).getSignature();
+        return true;
+    }
+
+    private Boolean dealWithVar(JmmNode node, List<Report> reports){
+        JmmNode typeChild = node.getChildren().get(0);
+        String name = typeChild.get("name");
+
+        if(!name.equals("int") && !name.equals("boolean")){
+            if(!name.equals(symbolTableImp.getClassName()) && symbolTableImp.imports.isEmpty()){
+                reports.add(new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")),  "Variable type " + name + " does not exist."));
+            }
+        }
+
         return true;
     }
 
