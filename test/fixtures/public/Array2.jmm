@@ -7,7 +7,31 @@ class Array2 {
     int[] a;
     int c;
 
-   public static void main(String[] args){
+    public int test() {
+
+        return c;
+    }
+
+    public int test(int ola){
+
+        c = 1;
+        //array store
+        a = new int[8];
+
+        //array position store
+        a[0] = 2;
+
+        //array access
+
+        (a);
+
+        //array position load
+        io.print(a[0]);
+
+        return 1;
+    }
+
+    public static void main(String[] args){
         int[] a;
         Map map;
 
@@ -24,30 +48,5 @@ class Array2 {
         io.print(a[0]);
 
         map = new Map();
-   }
-
-    public int test() {
-
-           return c;
-   }
-
-   public int test(int ola){
-
-       c = 1;
-       //array store
-       a = new int[8];
-
-       //array position store
-       a[0] = 2;
-
-       //array access
-
-       (a);
-
-       //array position load
-       io.print(a[0]);
-
-       return 1;
-   }
-
+    }
 }
