@@ -10,12 +10,12 @@ class Simple {
     public static void main(String[] args){
         int a;
         int b;
-        int c;
+        int d;
         Simple s;
         a = 20;
         b = 10;
         s = new Simple();
-        c = s.add(a,b);
+        d = s.add(a,b);
         io.println(c);
     }
 

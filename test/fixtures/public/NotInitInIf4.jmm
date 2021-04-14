@@ -29,6 +29,8 @@ class VarNotInit {
         i = c;
 
         k = 2;
+        b = 1;
+        c = 2;
 
          if(true){
 

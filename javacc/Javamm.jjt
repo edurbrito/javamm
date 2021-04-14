@@ -312,7 +312,7 @@ void Literal() #void : {Token literalToken;}
 
 void AllocationExpression() : {Token allocationToken;}
 {
-        <NEW> (<INT> AccessToArray() | allocationToken=<IDENTIFIER>{jjtThis.put("name",allocationToken.image);} #Class <LPRTHSIS> <RPRTHSIS> )
+        <NEW> (<INT> AccessToArray() | allocationToken=<IDENTIFIER>{jjtThis.put("name",allocationToken.image);} #Object <LPRTHSIS> <RPRTHSIS> )
 }
 
 void DotExpression() : {Token dotToken;}
