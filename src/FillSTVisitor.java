@@ -20,6 +20,7 @@ public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
         addVisit("Class", this::dealWithClass);
         addVisit("MainMethod", this::dealWithMain);
         addVisit("Method", this::dealWithMethod);
+        addVisit("MethodBody", this::dealWithMethodBody);
         addVisit("EqualStatement", this::dealWithAssignment);
     }
 
@@ -78,12 +79,21 @@ public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
 
         MethodTable methodTable = new MethodTable(node.get("name"), getType(children.get(0)), parameters);
 
+        for(Symbol s: parameters)
+            methodTable.addLocalVariable(s, true);
+
         methodSignature = methodTable.getSignature();
 
-        if(!children.get(2).getChildren().isEmpty())
-            fillMethodVar(children.get(2), methodTable);
-
         this.symbolTableImp.addMethod(methodTable.getSignature(), methodTable);
+
+        return true;
+    }
+
+    public Boolean dealWithMethodBody(JmmNode node, Boolean bool){
+        List<JmmNode> children = node.getChildren();
+
+        if(!children.isEmpty())
+            fillMethodVar(node, symbolTableImp.getMethod(this.methodSignature));
 
         return true;
     }

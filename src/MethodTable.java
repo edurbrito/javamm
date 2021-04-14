@@ -40,6 +40,10 @@ public class MethodTable {
         this.localVariables.put(variable, false);
     }
 
+    public void addLocalVariable(Symbol variable, Boolean assign) {
+        this.localVariables.put(variable, assign);
+    }
+
     public void assignVariable(String variableName) {
         for (Symbol symbol : localVariables.keySet()) {
             if (symbol.getName().equals(variableName))

@@ -21,7 +21,7 @@ import pt.up.fe.specs.util.SpecsIo;
 
 public class BackendTest {
 
-    @Test
+    // @Test
     public void testHelloWorld() {
         var result = TestUtils.backend(SpecsIo.getResource("fixtures/public/HelloWorld.jmm"));
         TestUtils.noErrors(result.getReports());
