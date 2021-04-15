@@ -55,7 +55,6 @@ public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
     }
 
     private Boolean dealWithMain(JmmNode node, Boolean bool) {
-        List<JmmNode> children = node.getChildren();
 
         List<Symbol> parameters = new ArrayList<>();
 
@@ -64,8 +63,6 @@ public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
         MethodTable methodTable = new MethodTable("main", new Type("void", false), parameters); // public static void main
 
         methodSignature = "main";
-
-        fillMethodVar(children.get(0), methodTable);
 
         this.symbolTableImp.addMethod("main", methodTable);
 
