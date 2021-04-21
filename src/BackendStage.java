@@ -1,9 +1,6 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-import org.specs.comp.ollir.ClassUnit;
-import org.specs.comp.ollir.OllirErrorException;
+import org.specs.comp.ollir.*;
 
 import pt.up.fe.comp.jmm.jasmin.JasminBackend;
 import pt.up.fe.comp.jmm.jasmin.JasminResult;
@@ -27,8 +24,16 @@ import pt.up.fe.specs.util.SpecsIo;
 
 public class BackendStage implements JasminBackend {
 
+    HashMap<ElementType, String> types = new HashMap<>() {{
+        put(ElementType.INT32,"I");
+        put(ElementType.BOOLEAN,"Z");
+        put(ElementType.STRING,"Ljava/lang/String;");
+        put(ElementType.ARRAYREF,"[");
+    }};
+
     @Override
     public JasminResult toJasmin(OllirResult ollirResult) {
+
         ClassUnit ollirClass = ollirResult.getOllirClass();
 
         try {
@@ -41,7 +46,8 @@ public class BackendStage implements JasminBackend {
             ollirClass.show(); // print to console main information about the input OLLIR
 
             // Convert the OLLIR to a String containing the equivalent Jasmin code
-            String jasminCode = ""; // Convert node ...
+
+            String jasminCode = generateJasmin(ollirClass); // Convert node ...
 
             // More reports from this stage
             List<Report> reports = new ArrayList<>();
@@ -55,4 +61,144 @@ public class BackendStage implements JasminBackend {
 
     }
 
+    public String generateJasmin(ClassUnit ollirClass) {
+        String result = "";
+        result += generateClassInfo(ollirClass);
+        result += generateMethods(ollirClass);
+        return result;
+    }
+
+    public String generateClassInfo(ClassUnit ollirClass){
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("; class with syntax accepted by jasmin 2.3");
+        builder.append("\n");
+        builder.append("\n");
+        builder.append(".class public ");
+        builder.append(ollirClass.getClassName());
+        builder.append("\n");
+        builder.append(".super ");
+        builder.append("java/lang/Object"); // super class?
+
+        builder.append(generateFields(ollirClass));
+
+        builder.append(generateConstructor(ollirClass));
+
+        return builder.toString();
+    }
+
+    public String generateFields(ClassUnit ollirClass){
+
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("\n");
+        builder.append("\n");
+
+        for(Field field : ollirClass.getFields()) {
+            builder.append(".field ");
+            builder.append(field.getFieldAccessModifier().toString().toLowerCase());
+            builder.append(" ");
+            builder.append(field.getFieldName());
+            builder.append(" ");
+            builder.append(types.get(field.getFieldType().getTypeOfElement())); // Está bem?
+        }
+
+        return builder.toString();
+    }
+
+    public String generateConstructor(ClassUnit ollirClass){
+
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("\n");
+        builder.append("\n");
+        builder.append(";");
+        builder.append("\n");
+        builder.append("; standard initializer");
+        builder.append("\n");
+        builder.append(".method public <init>()V");
+        builder.append("\n");
+        builder.append("\taload_0");
+        builder.append("\n");
+        builder.append("\n");
+        builder.append("\tinvokenonvirtual java/lang/Object/<init>()V");
+        builder.append("\n");
+        builder.append("\treturn");
+        builder.append("\n");
+        builder.append(".end method");
+
+        return builder.toString();
+    }
+
+    public String generateMethods(ClassUnit ollirClass){
+
+        StringBuilder builder = new StringBuilder();
+
+        for(Method method : ollirClass.getMethods()) {
+            if(method.isConstructMethod())
+                continue;
+
+            builder.append("\n");
+            builder.append("\n");
+            builder.append(".method ");
+            builder.append(method.getMethodAccessModifier().toString().toLowerCase());
+            builder.append(" ");
+
+            if(method.isStaticMethod())
+                builder.append("static ");
+            if(method.isFinalMethod())
+                builder.append("final ");
+
+            builder.append(method.getMethodName());
+            builder.append("(");
+            for(Element element: method.getParams()) {
+                builder.append(types.get(element.getType().getTypeOfElement()) + ";"); // Separação entre params?
+
+                // Tipo de array de strings?
+            }
+            builder.append(")V");
+
+            builder.append("\n");
+            builder.append("\t.limit stack 99");
+            builder.append("\n");
+            builder.append("\t.limit locals 99");
+
+            for(Instruction instruction : method.getInstructions()) {
+                builder.append("\nINST: " + instruction.getInstType());
+                String inst = generateOperation(instruction);
+                builder.append(inst);
+            }
+
+            builder.append("\n");
+            builder.append("\treturn");
+            builder.append("\n");
+            builder.append(".end method");
+        }
+
+        return builder.toString();
+    }
+
+    public String generateOperation(Instruction instruction){
+        String result = "";
+        System.out.println("INSTYPE: " + instruction.getInstType().toString());
+        switch (instruction.getInstType()) {
+            case ASSIGN:
+                result = generateAssign(instruction);
+                break;
+            default:
+                break;
+        }
+
+        return result;
+    }
+
+    public String generateAssign(Instruction instruction){
+        try {
+            System.out.println("SUC1: " + instruction.getSucc1().getNodeType());
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 }

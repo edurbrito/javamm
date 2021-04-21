@@ -201,7 +201,7 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
             if (checkLocalFunction(nodeMethodCall, reports))
                 return true;
 
-            if(this.symbolTableImp.hasSuperClass()){
+            if(this.symbolTableImp.hasSuperClass()) {
                 return true;
             }
 
