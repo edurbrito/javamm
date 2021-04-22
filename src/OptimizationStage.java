@@ -31,7 +31,8 @@ public class OptimizationStage implements JmmOptimization {
         // Convert the AST to a String containing the equivalent OLLIR code
         String ollirCode = ""; // Convert node ...
 
-        // More reports from this stage
+
+        // More reports from this stag
         List<Report> reports = new ArrayList<>();
 
         return new OllirResult(semanticsResult, ollirCode, reports);

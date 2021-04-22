@@ -10,7 +10,7 @@ public class SymbolTableImp implements SymbolTable {
     List<String> imports = new ArrayList();
     String className = "";
     String superClass = "";
-    HashMap<Symbol, Boolean> fields = new HashMap<>();   // Boolean is true if the variable has been assigned
+    HashMap<Symbol, Boolean> fields = new HashMap<>();   // Boolean is true if the variable has been assigned TODO nunca ira ser
     HashMap<String, MethodTable> methods = new HashMap<>();
 
     @Override
@@ -55,6 +55,13 @@ public class SymbolTableImp implements SymbolTable {
     @Override
     public List<Symbol> getLocalVariables(String signature) {
         return new ArrayList<>(methods.get(signature).getLocalVariables().keySet());
+    }
+
+    public Type getFieldType(String name){
+        for(Symbol s : getFields()){
+            if(s.getName().equals(name)) return s.getType();
+        }
+        return null;
     }
 
     public boolean hasImport(String _import){
