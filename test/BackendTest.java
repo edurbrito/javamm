@@ -37,7 +37,7 @@ public class BackendTest {
     @Test
     public void testClass1() {
 
-        var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/myclass3.ollir")), null, new ArrayList<>()));
+        var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/myclass1.ollir")), null, new ArrayList<>()));
         TestUtils.noErrors(result.getReports());
 
         //var result = TestUtils.backend(SpecsIo.getResource("fixtures/public/ollir/myclass1.ollir"));
