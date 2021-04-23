@@ -36,6 +36,22 @@ public class MethodTable {
         return localVariables;
     }
 
+    public Symbol getVariable(String variableName){
+
+        for(Symbol s : this.localVariables.keySet()){
+            if(s.getName().equals(variableName))
+                return s;
+        }
+
+        for(Symbol s : this.parameters){
+            if(s.getName().equals(variableName))
+                return s;
+        }
+
+        return null;
+    }
+
+
     public void addLocalVariable(Symbol variable) {
         this.localVariables.put(variable, false);
     }

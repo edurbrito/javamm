@@ -1,4 +1,5 @@
 import pt.up.fe.comp.jmm.JmmNode;
+import pt.up.fe.comp.jmm.analysis.table.Symbol;
 import pt.up.fe.comp.jmm.analysis.table.Type;
 import pt.up.fe.comp.jmm.ast.PreorderJmmVisitor;
 import pt.up.fe.comp.jmm.report.Report;
@@ -8,6 +9,7 @@ import java.util.List;
 public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     private SymbolTableImp symbolTableImp;
     private StringBuilder ollirCode;
+    private String methodName;
 
     public OllirVisitor(SymbolTableImp symbolTableImp) {
         super();
@@ -56,24 +58,26 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     }
 
     private String getReturnType(JmmNode node){
-        MethodTable methodTable=this.symbolTableImp.methods.get(node.get("name"));
+        MethodTable methodTable = this.symbolTableImp.methods.get(node.get("name"));
         return getTypeOllir(methodTable.returnType);
     }
 
     private String getArgs(JmmNode node){
-        StringBuilder result=new StringBuilder("\n");
+        StringBuilder result = new StringBuilder("\n");
         MethodTable methodTable=this.symbolTableImp.methods.get(node.get("name"));
         for (Symbol parameter:methodTable.parameters){
-            result.append(parameter.name+getTypeOllir(parameter.type()));
+            result.append(parameter.name+getTypeOllir(parameter.type())+",");
         }
+        result.deleteCharAt(result.lenght()-1);
 
         return result.toString();
     }
 
     private String dealWithMainMethod(JmmNode node) {
-        StringBuilder result=new StringBuilder("\n");
+        StringBuilder result = new StringBuilder("\n");
 
         result.append(".method public" + getReturnType(node) + "static main(" + getArgs(node) + ").V {");
+
         for (JmmNode child:node.getChildren()){
             result.append(dealWithChild(child));
         }
@@ -83,7 +87,9 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
 
     private String dealWithMethod(JmmNode node) {
-        StringBuilder result=new StringBuilder();
+        this.methodName = node.get("name");
+
+        StringBuilder result = new StringBuilder();
         result.append(".method public "+ node.get("name")+"("+getArgs(node)+").V {");
 
         for (JmmNode child:node.getChildren()){
@@ -106,6 +112,19 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         result.append(typeOllir + ";");
 
         return result.toString();
+    }
+
+    private String dealWithTwoPart(JmmNode node){
+        JmmNode leftChild = node.getChildren().get(0);
+        JmmNode rightChild = node.getChildren().get(0);
+
+        String objectName = leftChild.get("name");
+        Symbol classSym = this.symbolTableImp.getMethod(this.methodName).getVariable(objectName);
+        String className = classSym.getType().getName();
+
+        String callName = rightChild.getChildren().get(0).get("name");
+
+        // TODO
     }
 
     private String getTypeOllir(Type type) {
