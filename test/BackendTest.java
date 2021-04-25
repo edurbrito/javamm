@@ -27,7 +27,7 @@ public class BackendTest {
 
     @Test
     public void testHelloWorld() {
-        var result = TestUtils.backend(SpecsIo.getResource("fixtures/public/HelloWorld.jmm"));
+        var result = TestUtils.backend(SpecsIo.getResource("fixtures/public/HelloWorld.java"));
         TestUtils.noErrors(result.getReports());
 
         var output = result.run();
