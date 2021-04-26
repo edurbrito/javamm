@@ -22,6 +22,7 @@ import pt.up.fe.specs.util.SpecsIo;
  */
 
 public class OptimizationStage implements JmmOptimization {
+    public String codeOllir;
 
     @Override
     public OllirResult toOllir(JmmSemanticsResult semanticsResult) {
@@ -29,7 +30,10 @@ public class OptimizationStage implements JmmOptimization {
         JmmNode node = semanticsResult.getRootNode();
 
         // Convert the AST to a String containing the equivalent OLLIR code
-        String ollirCode = ""; // Convert node ...
+        OllirVisitor visitor = new OllirVisitor(( SymbolTableImp) semanticsResult.getSymbolTable());
+        visitor.visit(semanticsResult.getRootNode());
+        String ollirCode = visitor.getOllirCode();
+        this.codeOllir = ollirCode;
 
 
         // More reports from this stag

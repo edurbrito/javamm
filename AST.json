@@ -7,332 +7,61 @@
     },
     "children": [
       {
-        "kind": "Import",
-        "attributes": {
-          "col": "1",
-          "line": "1"
-        },
-        "children": [
-          {
-            "kind": "Library",
-            "attributes": {
-              "col": "8",
-              "line": "1",
-              "name": "ioPlus"
-            },
-            "children": []
-          }
-        ]
-      },
-      {
         "kind": "Class",
         "attributes": {
           "col": "1",
-          "extends": "Oi",
-          "line": "2",
-          "name": "HelloWorld"
+          "line": "1",
+          "name": "MultipleSequential"
         },
         "children": [
-          {
-            "kind": "Var",
-            "attributes": {
-              "col": "5",
-              "line": "3",
-              "name": "a"
-            },
-            "children": [
-              {
-                "kind": "Type",
-                "attributes": {
-                  "col": "5",
-                  "line": "3",
-                  "name": "int"
-                },
-                "children": []
-              }
-            ]
-          },
           {
             "kind": "MainMethod",
             "attributes": {
               "col": "9",
               "argName": "args",
-              "line": "4"
+              "line": "2"
             },
             "children": [
               {
                 "kind": "MethodBody",
                 "attributes": {
-                  "col": "6",
-                  "line": "5"
+                  "col": "3",
+                  "line": "3"
                 },
                 "children": [
                   {
-                    "kind": "Var",
+                    "kind": "While",
                     "attributes": {
-                      "col": "6",
-                      "line": "5",
-                      "name": "a"
+                      "col": "3",
+                      "line": "3"
                     },
                     "children": [
                       {
-                        "kind": "Type",
+                        "kind": "WhileBody",
                         "attributes": {
-                          "col": "6",
-                          "line": "5",
-                          "name": "HelloWorld"
+                          "col": "16",
+                          "line": "3"
                         },
                         "children": []
                       }
                     ]
                   },
                   {
-                    "kind": "TwoPartExpression",
+                    "kind": "While",
                     "attributes": {
-                      "col": "7",
-                      "line": "6"
+                      "col": "3",
+                      "line": "5"
                     },
                     "children": [
                       {
-                        "kind": "Identifier",
+                        "kind": "WhileBody",
                         "attributes": {
-                          "col": "7",
-                          "line": "6",
-                          "name": "a"
-                        },
-                        "children": []
-                      },
-                      {
-                        "kind": "DotExpression",
-                        "attributes": {
-                          "col": "7",
-                          "line": "6"
-                        },
-                        "children": [
-                          {
-                            "kind": "MethodCall",
-                            "attributes": {
-                              "col": "8",
-                              "line": "6",
-                              "name": "sum"
-                            },
-                            "children": []
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "TwoPartExpression",
-                    "attributes": {
-                      "col": "9",
-                      "line": "7"
-                    },
-                    "children": [
-                      {
-                        "kind": "Identifier",
-                        "attributes": {
-                          "col": "9",
-                          "line": "7",
-                          "name": "ioPlus"
-                        },
-                        "children": []
-                      },
-                      {
-                        "kind": "DotExpression",
-                        "attributes": {
-                          "col": "9",
-                          "line": "7"
-                        },
-                        "children": [
-                          {
-                            "kind": "MethodCall",
-                            "attributes": {
-                              "col": "10",
-                              "line": "7",
-                              "name": "printHelloWorld"
-                            },
-                            "children": []
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "kind": "Method",
-            "attributes": {
-              "col": "9",
-              "line": "10",
-              "name": "hello"
-            },
-            "children": [
-              {
-                "kind": "Type",
-                "attributes": {
-                  "col": "9",
-                  "line": "10",
-                  "name": "int"
-                },
-                "children": []
-              },
-              {
-                "kind": "MethodArguments",
-                "attributes": {
-                  "col": "19",
-                  "line": "10"
-                },
-                "children": [
-                  {
-                    "kind": "Argument",
-                    "attributes": {
-                      "col": "19",
-                      "line": "10",
-                      "name": "a"
-                    },
-                    "children": [
-                      {
-                        "kind": "Type",
-                        "attributes": {
-                          "col": "19",
-                          "line": "10",
-                          "name": "int"
+                          "col": "16",
+                          "line": "5"
                         },
                         "children": []
                       }
                     ]
-                  },
-                  {
-                    "kind": "Argument",
-                    "attributes": {
-                      "col": "26",
-                      "line": "10",
-                      "name": "b"
-                    },
-                    "children": [
-                      {
-                        "kind": "Type",
-                        "attributes": {
-                          "col": "26",
-                          "line": "10",
-                          "name": "int"
-                        },
-                        "children": []
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "kind": "MethodBody",
-                "attributes": {
-                  "col": "9",
-                  "line": "11"
-                },
-                "children": [
-                  {
-                    "kind": "Var",
-                    "attributes": {
-                      "col": "9",
-                      "line": "11",
-                      "name": "c"
-                    },
-                    "children": [
-                      {
-                        "kind": "Type",
-                        "attributes": {
-                          "col": "9",
-                          "line": "11",
-                          "name": "int"
-                        },
-                        "children": []
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "Var",
-                    "attributes": {
-                      "col": "9",
-                      "line": "12",
-                      "name": "d"
-                    },
-                    "children": [
-                      {
-                        "kind": "Type",
-                        "attributes": {
-                          "col": "9",
-                          "line": "12",
-                          "name": "boolean"
-                        },
-                        "children": []
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "EqualStatement",
-                    "attributes": {
-                      "col": "9",
-                      "line": "13"
-                    },
-                    "children": [
-                      {
-                        "kind": "Identifier",
-                        "attributes": {
-                          "col": "9",
-                          "line": "13",
-                          "name": "c"
-                        },
-                        "children": []
-                      },
-                      {
-                        "kind": "Sum",
-                        "attributes": {
-                          "col": "17",
-                          "line": "13"
-                        },
-                        "children": [
-                          {
-                            "kind": "Identifier",
-                            "attributes": {
-                              "col": "15",
-                              "line": "13",
-                              "name": "a"
-                            },
-                            "children": []
-                          },
-                          {
-                            "kind": "Identifier",
-                            "attributes": {
-                              "col": "18",
-                              "line": "13",
-                              "name": "b"
-                            },
-                            "children": []
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "kind": "Return",
-                "attributes": {
-                  "col": "9",
-                  "line": "15"
-                },
-                "children": [
-                  {
-                    "kind": "Integer",
-                    "attributes": {
-                      "col": "17",
-                      "line": "15",
-                      "value": "2"
-                    },
-                    "children": []
                   }
                 ]
               }
@@ -342,5 +71,20 @@
       }
     ]
   },
-  "reports": []
+  "reports": [
+    {
+      "type": "ERROR",
+      "stage": "SYNTATIC",
+      "line": 3,
+      "column": -1,
+      "message": "Detected error in while statement"
+    },
+    {
+      "type": "ERROR",
+      "stage": "SYNTATIC",
+      "line": 5,
+      "column": -1,
+      "message": "Detected error in while statement"
+    }
+  ]
 }

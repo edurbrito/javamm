@@ -2,15 +2,13 @@ import ioPlus;
 class HelloWorld extends Oi{
     int a;
 	public static void main(String[] args) {
-	    HelloWorld a;
-	    a.sum();
-		ioPlus.printHelloWorld();
+
+	    this.sum(1, 2);
 	}
 
-	public int hello(int a, int b){
+	public int sum(int a, int b){
         int c;
-        boolean d;
-        c = a + b;
+        c = a + b + b;
 
         return 2;
 	}

@@ -2,6 +2,7 @@
 import pt.up.fe.comp.jmm.JmmParser;
 import pt.up.fe.comp.jmm.JmmParserResult;
 import pt.up.fe.comp.jmm.analysis.JmmSemanticsResult;
+import pt.up.fe.comp.jmm.ollir.OllirResult;
 import pt.up.fe.comp.jmm.report.Report;
 import pt.up.fe.comp.jmm.report.ReportType;
 import pt.up.fe.comp.jmm.report.Stage;
@@ -83,6 +84,12 @@ public class jmm implements JmmParser {
 
             AnalysisStage analysisStage = new AnalysisStage();
             JmmSemanticsResult semanticsResult = analysisStage.semanticAnalysis(parserResult);
+
+            OptimizationStage optimizationStage = new OptimizationStage();
+
+            OllirResult res = optimizationStage.toOllir(semanticsResult);
+
+            System.out.println(optimizationStage.codeOllir);
 
             // for(Report report : semanticsResult.getReports()){
             //    System.out.println(report.toString());
