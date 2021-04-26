@@ -58,14 +58,30 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     public String getOllirCode(){return this.ollirCode.toString();}
 
     private String getReturnType(JmmNode node){
-        MethodTable methodTable = this.symbolTableImp.methods.get(node.get("name"));
+        MethodTable methodTable = null;
+        for (String i: this.symbolTableImp.methods.keySet()){
+            if (this.symbolTableImp.methods.get(i).getName().equals(node.get("name"))){
+                methodTable=this.symbolTableImp.methods.get(i);
+                break;
+            }
+        }
+
+        assert methodTable != null;
         return getTypeOllir(methodTable.returnType);
     }
 
     private String getArgs(JmmNode node){
         StringBuilder result = new StringBuilder("\n");
         System.out.println(this.symbolTableImp);
-        MethodTable methodTable = this.symbolTableImp.getMethod(node.get("name"));
+        MethodTable methodTable = null;
+        for (String i: this.symbolTableImp.methods.keySet()){
+            if (this.symbolTableImp.methods.get(i).getName().equals(node.get("name"))){
+                methodTable=this.symbolTableImp.methods.get(i);
+                break;
+            }
+        }
+
+        assert methodTable != null;
 
         for (Symbol parameter : methodTable.parameters){
             result.append(parameter.getName()+getTypeOllir(parameter.getType())+",");
