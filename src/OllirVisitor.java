@@ -195,7 +195,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         switch (arithmeticNode.getKind()){
             case "Sum"->{result.append(" + ");}
             case "Sub"->{result.append(" - ");}
-            case "Mul"->{result.append(" * ");}
+            case "Mult"->{result.append(" * ");}
             case "Div"->{result.append(" / ");}
         }
         result.append(right);

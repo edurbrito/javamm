@@ -2,11 +2,17 @@ import ioPlus;
 class HelloWorld extends Oi{
     int a;
 	public static void main(String[] args) {
-	    int c;
-	    int a;
-	    int b;
-	    a = 1;
-	    b = 2;
-	    c  = a + a + b;
+        int a1;
+        int a2;
+        int a3;
+        int a4;
+        int b;
+
+        a1 = 1;
+        a2 = 2;
+        a3 = 3;
+        a4 = 4;
+
+        b = a1 + a2 * a3 - a4;
 	}
 }
