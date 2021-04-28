@@ -197,23 +197,41 @@
                       {
                         "kind": "Sum",
                         "attributes": {
-                          "col": "15",
+                          "col": "19",
                           "line": "10"
                         },
                         "children": [
                           {
-                            "kind": "Identifier",
+                            "kind": "Sum",
                             "attributes": {
-                              "col": "13",
-                              "line": "10",
-                              "name": "a"
+                              "col": "15",
+                              "line": "10"
                             },
-                            "children": []
+                            "children": [
+                              {
+                                "kind": "Identifier",
+                                "attributes": {
+                                  "col": "13",
+                                  "line": "10",
+                                  "name": "a"
+                                },
+                                "children": []
+                              },
+                              {
+                                "kind": "Identifier",
+                                "attributes": {
+                                  "col": "17",
+                                  "line": "10",
+                                  "name": "a"
+                                },
+                                "children": []
+                              }
+                            ]
                           },
                           {
                             "kind": "Identifier",
                             "attributes": {
-                              "col": "16",
+                              "col": "20",
                               "line": "10",
                               "name": "b"
                             },

@@ -172,23 +172,26 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
 
         if(pre.equals("")){
+            System.out.println("OIAA");
             return left + " :=." + type + " " + right + "\n";
         }else{
             return pre + "\n" + left + " :=." + type + " " + right + "\n";
         }
+
     }
 
     private List<String> dealWithArithmetic(JmmNode arithmeticNode){
-        StringBuilder result = new StringBuilder("");
+        List<String> finalList = new ArrayList<>();
+        StringBuilder result = new StringBuilder();
         List<JmmNode> children = arithmeticNode.getChildren();
 
 
         String left, right, pre;
-        List<String> temps = dealWithTemp(children, "i32");
+        List<String> temps = dealWithTemp(children);
+        System.out.println("RES: " + temps);
         left = temps.get(0); right = temps.get(1); pre = temps.get(2);
-
-        result.append(pre);
         result.append(left);
+
         switch (arithmeticNode.getKind()){
             case "Sum"->{result.append(" + ");}
             case "Sub"->{result.append(" - ");}
@@ -197,24 +200,36 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         }
         result.append(right);
 
-        return result.toString();
+        finalList.add(pre);
+        finalList.add(result.toString());
+
+        return finalList;
     }
 
-    private List<String> dealWithTemp(List<JmmNode> children, String type){
+    private List<String> dealWithTemp(List<JmmNode> children){
 
-        StringBuilder pre = new StringBuilder("\n");
+        StringBuilder pre = new StringBuilder();
 
         String left = dealWithChild(children.get(0)), right = dealWithChild(children.get(1));
 
         if(left.equals("")){
-            left = "t1." + type;
-            pre.append(dealWithArithmetic(children.get(0), new TempVar("t")));
+            left = "t1.i32";
+            List<String> res = dealWithArithmetic(children.get(0));
+
+            pre.append(res.get(0) + "\n");
+            pre.append("t1.i32 :=.i32 ");
+            pre.append(res.get(1) + "\n");
         }
 
         if(right.equals("")){
-            right = "u1." + type;
-            pre.append(dealWithArithmetic(children.get(1), new TempVar("u")));
+            right = "u1.i32";
+            List<String> res = dealWithArithmetic(children.get(1));
+
+            pre.append(res.get(0) + "\n");
+            pre.append("u1.i32 :=.i32 ");
+            pre.append(res.get(1) + "\n");
         }
+
         List<String> res = new ArrayList<>();
         res.add(left);
         res.add(right);
