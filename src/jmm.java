@@ -87,9 +87,9 @@ public class jmm implements JmmParser {
 
             OptimizationStage optimizationStage = new OptimizationStage();
 
-            OllirResult res = optimizationStage.toOllir(semanticsResult);
+            String res = optimizationStage.exp(semanticsResult);
 
-            System.out.println(optimizationStage.codeOllir);
+            System.out.println(res);
 
             // for(Report report : semanticsResult.getReports()){
             //    System.out.println(report.toString());

@@ -7,59 +7,219 @@
     },
     "children": [
       {
+        "kind": "Import",
+        "attributes": {
+          "col": "1",
+          "line": "1"
+        },
+        "children": [
+          {
+            "kind": "Library",
+            "attributes": {
+              "col": "8",
+              "line": "1",
+              "name": "ioPlus"
+            },
+            "children": []
+          }
+        ]
+      },
+      {
         "kind": "Class",
         "attributes": {
           "col": "1",
-          "line": "1",
-          "name": "MultipleSequential"
+          "extends": "Oi",
+          "line": "2",
+          "name": "HelloWorld"
         },
         "children": [
+          {
+            "kind": "Var",
+            "attributes": {
+              "col": "5",
+              "line": "3",
+              "name": "a"
+            },
+            "children": [
+              {
+                "kind": "Type",
+                "attributes": {
+                  "col": "5",
+                  "line": "3",
+                  "name": "int"
+                },
+                "children": []
+              }
+            ]
+          },
           {
             "kind": "MainMethod",
             "attributes": {
               "col": "9",
               "argName": "args",
-              "line": "2"
+              "line": "4"
             },
             "children": [
               {
                 "kind": "MethodBody",
                 "attributes": {
-                  "col": "3",
-                  "line": "3"
+                  "col": "6",
+                  "line": "5"
                 },
                 "children": [
                   {
-                    "kind": "While",
+                    "kind": "Var",
                     "attributes": {
-                      "col": "3",
-                      "line": "3"
+                      "col": "6",
+                      "line": "5",
+                      "name": "c"
                     },
                     "children": [
                       {
-                        "kind": "WhileBody",
+                        "kind": "Type",
                         "attributes": {
-                          "col": "16",
-                          "line": "3"
+                          "col": "6",
+                          "line": "5",
+                          "name": "int"
                         },
                         "children": []
                       }
                     ]
                   },
                   {
-                    "kind": "While",
+                    "kind": "Var",
                     "attributes": {
-                      "col": "3",
-                      "line": "5"
+                      "col": "6",
+                      "line": "6",
+                      "name": "a"
                     },
                     "children": [
                       {
-                        "kind": "WhileBody",
+                        "kind": "Type",
                         "attributes": {
-                          "col": "16",
-                          "line": "5"
+                          "col": "6",
+                          "line": "6",
+                          "name": "int"
                         },
                         "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "Var",
+                    "attributes": {
+                      "col": "6",
+                      "line": "7",
+                      "name": "b"
+                    },
+                    "children": [
+                      {
+                        "kind": "Type",
+                        "attributes": {
+                          "col": "6",
+                          "line": "7",
+                          "name": "int"
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "6",
+                      "line": "8"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "6",
+                          "line": "8",
+                          "name": "a"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "Integer",
+                        "attributes": {
+                          "col": "11",
+                          "line": "8",
+                          "value": "1"
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "6",
+                      "line": "9"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "6",
+                          "line": "9",
+                          "name": "b"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "Integer",
+                        "attributes": {
+                          "col": "11",
+                          "line": "9",
+                          "value": "2"
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "6",
+                      "line": "10"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "6",
+                          "line": "10",
+                          "name": "c"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "Sum",
+                        "attributes": {
+                          "col": "15",
+                          "line": "10"
+                        },
+                        "children": [
+                          {
+                            "kind": "Identifier",
+                            "attributes": {
+                              "col": "13",
+                              "line": "10",
+                              "name": "a"
+                            },
+                            "children": []
+                          },
+                          {
+                            "kind": "Identifier",
+                            "attributes": {
+                              "col": "16",
+                              "line": "10",
+                              "name": "b"
+                            },
+                            "children": []
+                          }
+                        ]
                       }
                     ]
                   }
@@ -71,20 +231,5 @@
       }
     ]
   },
-  "reports": [
-    {
-      "type": "ERROR",
-      "stage": "SYNTATIC",
-      "line": 3,
-      "column": -1,
-      "message": "Detected error in while statement"
-    },
-    {
-      "type": "ERROR",
-      "stage": "SYNTATIC",
-      "line": 5,
-      "column": -1,
-      "message": "Detected error in while statement"
-    }
-  ]
+  "reports": []
 }

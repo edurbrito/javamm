@@ -42,6 +42,16 @@ public class SymbolTableImp implements SymbolTable {
         return methods.get(signature);
     }
 
+    public MethodTable getMethodByName(String name)
+    {
+        for(MethodTable methodTable : this.methods.values()){
+            if(methodTable.getName().equals(name))
+                return methodTable;
+        }
+        return null;
+    }
+
+
     @Override
     public Type getReturnType(String signature) {
         return methods.get(signature).getReturnType();

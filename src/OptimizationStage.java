@@ -42,6 +42,23 @@ public class OptimizationStage implements JmmOptimization {
         return new OllirResult(semanticsResult, ollirCode, reports);
     }
 
+    public String exp(JmmSemanticsResult semanticsResult) {
+
+        JmmNode node = semanticsResult.getRootNode();
+
+        // Convert the AST to a String containing the equivalent OLLIR code
+        OllirVisitor visitor = new OllirVisitor(( SymbolTableImp) semanticsResult.getSymbolTable());
+        visitor.visit(semanticsResult.getRootNode());
+        String ollirCode = visitor.getOllirCode();
+        this.codeOllir = ollirCode;
+
+
+        // More reports from this stag
+        List<Report> reports = new ArrayList<>();
+
+        return ollirCode;
+    }
+
     @Override
     public JmmSemanticsResult optimize(JmmSemanticsResult semanticsResult) {
         // THIS IS JUST FOR CHECKPOINT 3
