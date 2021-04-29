@@ -27,7 +27,7 @@ public class BackendTest {
 
     @Test
     public void testHelloWorld() {
-        var result = TestUtils.backend(SpecsIo.getResource("fixtures/public/HelloWorld.java"));
+        var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/HelloWorld.ollir")), null, new ArrayList<>()));
         TestUtils.noErrors(result.getReports());
 
         var output = result.run();
@@ -37,7 +37,7 @@ public class BackendTest {
     @Test
     public void testClass1() {
 
-        var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/HelloWorld.ollir")), null, new ArrayList<>()));
+        var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/myclass1.ollir")), null, new ArrayList<>()));
         TestUtils.noErrors(result.getReports());
 
         //var output = result.run();
@@ -48,28 +48,45 @@ public class BackendTest {
 
     @Test
     public void testClass2() {
-        var result = TestUtils.backend(SpecsIo.getResource("fixtures/public/ollir/myclass2.ollir"));
+        var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/myclass2.ollir")), null, new ArrayList<>()));
         TestUtils.noErrors(result.getReports());
 
-        var output = result.run();
-        assertEquals("Hello, World!", output.trim());
+        //var output = result.run();
+        //assertEquals("Hello, World!", output.trim());
+
+        System.out.println("Jasmin Code: \n" + result.getJasminCode());
     }
 
     @Test
     public void testClass3() {
-        var result = TestUtils.backend(SpecsIo.getResource("fixtures/public/ollir/myclass3.ollir"));
+        var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/myclass3.ollir")), null, new ArrayList<>()));
         TestUtils.noErrors(result.getReports());
 
-        var output = result.run();
-        assertEquals("Hello, World!", output.trim());
+        //var output = result.run();
+        //assertEquals("Hello, World!", output.trim());
+
+        System.out.println("Jasmin Code: \n" + result.getJasminCode());
     }
 
     @Test
     public void testClass4() {
-        var result = TestUtils.backend(SpecsIo.getResource("fixtures/public/ollir/myclass4.ollir"));
+        var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/myclass4.ollir")), null, new ArrayList<>()));
         TestUtils.noErrors(result.getReports());
 
-        var output = result.run();
-        assertEquals("Hello, World!", output.trim());
+        //var output = result.run();
+        //assertEquals("Hello, World!", output.trim());
+
+        System.out.println("Jasmin Code: \n" + result.getJasminCode());
+    }
+
+    @Test
+    public void testFac() {
+        var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/Fac.ollir")), null, new ArrayList<>()));
+        TestUtils.noErrors(result.getReports());
+
+        //var output = result.run();
+        //assertEquals("Hello, World!", output.trim());
+
+        System.out.println("Jasmin Code: \n" + result.getJasminCode());
     }
 }

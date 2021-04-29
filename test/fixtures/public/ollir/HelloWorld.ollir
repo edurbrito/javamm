@@ -1,14 +1,10 @@
-/*getstatic java/lang/System.out Ljava/io/PrintStream;
-ldc"Hello World!"
-invokevirtual java/io/PrintStream.println(Ljava/lang/String;)*/
-
 HelloWorld {
 	.construct HelloWorld().V{
 		invokespecial(this, "<init>").V;
 	}
 
 	.method public static main(args.array.String).V {
-	    //getstatic
-        //invokestatic(java/io/PrintStream, "println", 2.i32).V;
+	    t2.String :=.String ldc("Hello, World!").String;
+        invokestatic(io, "println", t2.String).V;
 	}
 }

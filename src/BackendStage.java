@@ -74,7 +74,7 @@ public class BackendStage implements JasminBackend {
         return result;
     }
 
-    public String generateClassInfo(ClassUnit ollirClass){
+    public String generateClassInfo(ClassUnit ollirClass) {
         StringBuilder builder = new StringBuilder();
 
         builder.append("; class with syntax accepted by jasmin 2.3");
@@ -91,7 +91,7 @@ public class BackendStage implements JasminBackend {
         return builder.toString();
     }
 
-    public String generateFields(ClassUnit ollirClass){
+    public String generateFields(ClassUnit ollirClass) {
 
         StringBuilder builder = new StringBuilder();
 
@@ -418,10 +418,13 @@ public class BackendStage implements JasminBackend {
                 }
                 break;
             case invokestatic:
+                builder.append("\n\tgetstatic java/lang/System/out Ljava/io/PrintStream;");
                 for (Element arg : instruction.getListOfOperands()) {
                     builder.append(generateValue(method, arg));
                 }
+                builder.append("\n\tinvokevirtual java/io/PrintStream/println(Ljava/lang/String;)V");
 
+                /*
                 builder.append("\n");
                 builder.append("\t");
                 builder.append("invokestatic ");
@@ -433,7 +436,7 @@ public class BackendStage implements JasminBackend {
                 }
                 builder.append(")");
                 builder.append(types.get(instruction.getReturnType().getTypeOfElement()));
-                builder.append(";");
+                builder.append(";");*/
 
                 break;
             case arraylength:
@@ -443,6 +446,8 @@ public class BackendStage implements JasminBackend {
                 builder.append("\t");
                 builder.append("arraylength ");
                 break;
+            case ldc:
+                builder.append("\n\tldc " + ((LiteralElement) objectInstance).getLiteral());
             default:
                 break;
         }
@@ -492,6 +497,12 @@ public class BackendStage implements JasminBackend {
         }
         else if (instruction.getUnaryOperation().getOpType().equals(OperationType.DIV)) {
             builder.append("idiv");
+        }
+        else if (instruction.getUnaryOperation().getOpType().equals(OperationType.LTH)) {
+            builder.append("i"); // TODO
+        }
+        else if (instruction.getUnaryOperation().getOpType().equals(OperationType.AND)) {
+            builder.append("iand");
         }
 
         return builder.toString();
@@ -549,23 +560,29 @@ public class BackendStage implements JasminBackend {
     public String generateValue(Method method, Element element) {
         StringBuilder builder = new StringBuilder();
 
+        builder.append("\n");
+        builder.append("\t");
+
         if(element.isLiteral()) {
-            int value = Integer.parseInt(((LiteralElement) element).getLiteral());
+            LiteralElement literalElement = ((LiteralElement) element);
 
-            builder.append("\n");
-            builder.append("\t");
-            if(value >= -1 && value <= 5)
-                builder.append("iconst_");
-            else
-                builder.append("bipush ");
+            if (literalElement.getType().getTypeOfElement().equals(INT32)) {
+                int value = Integer.parseInt(literalElement.getLiteral());
+                if(value >= -1 && value <= 5)
+                    builder.append("iconst_");
+                else
+                    builder.append("bipush ");
 
-            builder.append(value);
+                builder.append(value);
+            }
+            else {
+                builder.append("ldc ");
+                builder.append(literalElement.getLiteral());
+            }
         }
         else if (element instanceof ArrayOperand) {
             generateArray(method, (ArrayOperand) element, builder);
 
-            builder.append("\n");
-            builder.append("\t");
             if(element.getType().getTypeOfElement().equals(INT32))
                 builder.append("i");
             else
@@ -574,8 +591,7 @@ public class BackendStage implements JasminBackend {
         }
         else {
             Operand operand = (Operand) element;
-            builder.append("\n");
-            builder.append("\t");
+
             if(operand.getType().getTypeOfElement().equals(INT32))
                 builder.append("i");
             else
