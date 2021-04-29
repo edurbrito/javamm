@@ -32,20 +32,23 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             case "EqualStatement"-> {return dealWithEqualStatement(child);}
             case "Identifier" ->{ return dealWithIdentifier(child);}
             case "Integer" ->{ return dealWithInteger(child);}
-            //case "AllocationExpression"->{return dealWithAllocationExpression(child);}
+            case "AllocationExpression"->{return dealWithAllocationExpression(child);}
         }
         return "";
     }
 
+    private String dealWithAllocationExpression(JmmNode child) {
+        return "new ("+child.getChildren().get(0).get("name")+")"+"."+"Faltameter aqui .type";
+    }
 
 
     private boolean dealWithClass(JmmNode node, List<Report> reports) {
 
         //class constructor
         ollirCode.append(node.get("name") + " {\n");
-        ollirCode.append("\t.construct "+node.get("name")+"().V {\n");
-        ollirCode.append("\t\t"+"invokespecial(this, \"<init>\").V;\n");
-        ollirCode.append("\t"+"}\n");
+        ollirCode.append(".construct "+node.get("name")+"().V {\n");
+        ollirCode.append(""+"invokespecial(this, \"<init>\").V;\n");
+        ollirCode.append(""+"}\n");
 
         for (JmmNode child:node.getChildren()){
             switch (child.getKind()){
@@ -54,7 +57,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 case "Var"->{ollirCode.append(dealWithVar(child));}
             }
         }
-        ollirCode.append("}");
+        ollirCode.append("}\n");
 
         return true;
     }
@@ -106,7 +109,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         for (JmmNode child:methodBody.getChildren()){
             result.append(dealWithChild(child));
         }
-        result.append("}");
+        result.append("}\n");
         return result.toString();
     }
 
@@ -121,7 +124,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             result.append(dealWithChild(child));
         }
 
-        result.append("}");
+        result.append("}\n");
         return result.toString();
     }
 
@@ -141,10 +144,16 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
     private String dealWithTwoPart(JmmNode node){
         JmmNode leftChild = node.getChildren().get(0);
-        JmmNode rightChild = node.getChildren().get(0);
+        JmmNode rightChild = node.getChildren().get(1);
 
         String objectName = leftChild.get("name");
         Symbol classSym = this.symbolTableImp.getMethod(this.methodName).getVariable(objectName);
+        if (classSym==null){
+            if (this.symbolTableImp.getImports().contains(objectName)){
+                JmmNode methodCall = rightChild.getChildren().get(0);
+                return "invokestatic(" + objectName + "," + methodCall.get("name") + "," + dealWithIdentifier(methodCall.getChildren().get(0)) + ").V;";//TODO deal with multiple parameters
+            }
+        }
         String className = classSym.getType().getName();
 
         String callName = rightChild.getChildren().get(0).get("name");
