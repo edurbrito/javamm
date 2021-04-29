@@ -33,6 +33,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             case "Identifier" ->{ return dealWithIdentifier(child);}
             case "Integer" ->{ return dealWithInteger(child);}
             case "AllocationExpression"->{return dealWithAllocationExpression(child);}
+            case "MethodBody"->{return dealWithMethodBody(child);}
         }
         return "";
     }
@@ -99,6 +100,14 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         return result.toString();
     }
 
+    private String dealWithMethodBody(JmmNode node){
+        StringBuilder result = new StringBuilder("\n");
+        for (JmmNode child:node.getChildren()){
+            result.append(dealWithChild(child));
+        }
+        return result.toString();
+    }
+
     private String dealWithMainMethod(JmmNode node) {
         this.methodName = "main";
         StringBuilder result = new StringBuilder("\n");
@@ -106,9 +115,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         result.append(".method public static main(" + node.get("argName") + ".array.String).V {");
 
-        for (JmmNode child:methodBody.getChildren()){
-            result.append(dealWithChild(child));
-        }
+        result.append(dealWithMethodBody(methodBody));
+
         result.append("}\n");
         return result.toString();
     }
