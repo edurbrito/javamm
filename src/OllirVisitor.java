@@ -32,6 +32,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             case "EqualStatement"-> {return dealWithEqualStatement(child);}
             case "Identifier" ->{ return dealWithIdentifier(child);}
             case "Integer" ->{ return dealWithInteger(child);}
+            //case "Var"->{ollirCode.append(dealWithVar(child));}
             //case "AllocationExpression"->{return dealWithAllocationExpression(child);}
         }
         return "";
@@ -43,16 +44,12 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         //class constructor
         ollirCode.append(node.get("name") + " {\n");
-        ollirCode.append("\t.construct "+node.get("name")+"().V {\n");
-        ollirCode.append("\t\t"+"invokespecial(this, \"<init>\").V;\n");
-        ollirCode.append("\t"+"}\n");
+        ollirCode.append(".construct "+node.get("name")+"().V {\n");
+        ollirCode.append("invokespecial(this, \"<init>\").V;\n");
+        ollirCode.append("}\n");
 
         for (JmmNode child:node.getChildren()){
-            switch (child.getKind()){
-                case "Method"->{ollirCode.append(dealWithMethod(child));}
-                case "MainMethod"->{ollirCode.append(dealWithMainMethod(child));}
-                case "Var"->{ollirCode.append(dealWithVar(child));}
-            }
+            dealWithChild(child);
         }
         ollirCode.append("}");
 
@@ -101,7 +98,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         StringBuilder result = new StringBuilder("\n");
         JmmNode methodBody = node.getChildren().get(0);
 
-        result.append(".method public static main(" + node.get("argName") + ".array.String).V {");
+        result.append(".method public static main(" + node.get("argName") + ".array.String).V {\n");
 
         for (JmmNode child:methodBody.getChildren()){
             result.append(dealWithChild(child));

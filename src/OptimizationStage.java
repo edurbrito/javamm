@@ -50,6 +50,20 @@ public class OptimizationStage implements JmmOptimization {
         OllirVisitor visitor = new OllirVisitor(( SymbolTableImp) semanticsResult.getSymbolTable());
         visitor.visit(semanticsResult.getRootNode());
         String ollirCode = visitor.getOllirCode();
+
+        //formating string
+        StringBuilder temp=new StringBuilder();
+        int count=0;
+        for(String i:ollirCode.split("\n")){
+            temp.append("\t".repeat(count)+i+"\n");
+            if (i.contains("{"))
+                count++;
+            if (i.contains("}"))
+                count--;
+        }
+        ollirCode=temp.toString();
+
+
         this.codeOllir = ollirCode;
 
 
