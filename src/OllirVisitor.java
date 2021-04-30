@@ -219,17 +219,22 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         String left, right, pre = "";
         left = dealWithChild(children.get(0));
-
         right = dealWithChild(children.get(1));
+
         if(right.equals("")){
-            List<String> res =  dealWithArithmetic(children.get(1));
+            List<String> res;
+            if(children.get(0).getKind().equals("Not") || children.get(0).getKind().equals("And")){
+                res =  dealWithBoolOp(children.get(1));
+            }else {
+                res = dealWithArithmetic(children.get(1));
+            }
+
             pre = res.get(0);
             right = res.get(1);
         }
 
 
         if(pre.equals("")){
-            System.out.println("OIAA");
             return left + " :=." + type + " " + right + "\n";
         }else{
             return pre + "\n" + left + " :=." + type + " " + right + "\n";
@@ -237,23 +242,21 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
     }
 
-    private List<String> dealWithArithmetic(JmmNode arithmeticNode){
+    private List<String> dealWithBoolOp(JmmNode booleanNode) {
+
         List<String> finalList = new ArrayList<>();
         StringBuilder result = new StringBuilder();
-        List<JmmNode> children = arithmeticNode.getChildren();
+        List<JmmNode> children = booleanNode.getChildren();
 
 
         String left, right, pre;
-        List<String> temps = dealWithTemp(children);
-        System.out.println("RES: " + temps);
+        List<String> temps = dealWithTemp(children, "i32");
         left = temps.get(0); right = temps.get(1); pre = temps.get(2);
         result.append(left);
 
-        switch (arithmeticNode.getKind()){
-            case "Sum"->{result.append(" + ");}
-            case "Sub"->{result.append(" - ");}
-            case "Mult"->{result.append(" * ");}
-            case "Div"->{result.append(" / ");}
+        switch (booleanNode.getKind()){
+            case "Not"->{result.append(" !.bool ");}
+            case "And"->{result.append(" && ");}
         }
         result.append(right);
 
@@ -263,27 +266,65 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         return finalList;
     }
 
-    private List<String> dealWithTemp(List<JmmNode> children){
+    private List<String> dealWithArithmetic(JmmNode arithmeticNode){
+        List<String> finalList = new ArrayList<>();
+        StringBuilder result = new StringBuilder();
+        List<JmmNode> children = arithmeticNode.getChildren();
+
+
+        String left, right, pre;
+        List<String> temps = dealWithTemp(children, "bool");
+        left = temps.get(0); right = temps.get(1); pre = temps.get(2);
+        result.append(left);
+
+        switch (arithmeticNode.getKind()){
+            case "Sum"->{result.append(" + ");}
+            case "Sub"->{result.append(" - ");}
+            case "Mult"->{result.append(" * ");}
+            case "Div"->{result.append(" / ");}
+            case "LessThan"->{result.append(" <.i32 ");}
+        }
+        result.append(right);
+
+        finalList.add(pre);
+        finalList.add(result.toString());
+
+        return finalList;
+    }
+
+    private List<String> dealWithTemp(List<JmmNode> children, String type){
 
         StringBuilder pre = new StringBuilder();
 
         String left = dealWithChild(children.get(0)), right = dealWithChild(children.get(1));
 
         if(left.equals("")){
-            left = "t1.i32";
-            List<String> res = dealWithArithmetic(children.get(0));
 
+            List<String> res;
+            if(type.equals("i32")){
+                res = dealWithArithmetic(children.get(0));
+            }else{
+                res = dealWithBoolOp(children.get(0));
+            }
+
+            left = "t1." + type;
             pre.append(res.get(0) + "\n");
-            pre.append("t1.i32 :=.i32 ");
+            pre.append("t1." + type + ":=" + type + " ");
             pre.append(res.get(1) + "\n");
         }
 
         if(right.equals("")){
-            right = "u1.i32";
-            List<String> res = dealWithArithmetic(children.get(1));
+            right = "u1." + type;
+
+            List<String> res;
+            if(type.equals("i32")){
+                res = dealWithArithmetic(children.get(1));
+            }else{
+                res = dealWithBoolOp(children.get(1));
+            }
 
             pre.append(res.get(0) + "\n");
-            pre.append("u1.i32 :=.i32 ");
+            pre.append("u1." + type + ":=" + type + " ");
             pre.append(res.get(1) + "\n");
         }
 
@@ -297,8 +338,6 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         return res;
     }
-
-
 
 
 
