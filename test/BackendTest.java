@@ -32,6 +32,8 @@ public class BackendTest {
 
         var output = result.run();
         assertEquals("Hello, World!", output.trim());
+
+        System.out.println("Jasmin Code: \n" + result.getJasminCode());
     }
 
     @Test
@@ -39,9 +41,6 @@ public class BackendTest {
 
         var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/myclass1.ollir")), null, new ArrayList<>()));
         TestUtils.noErrors(result.getReports());
-
-        //var output = result.run();
-        //assertEquals("Hello, World!", output.trim());
 
         System.out.println("Jasmin Code: \n" + result.getJasminCode());
     }
@@ -51,9 +50,6 @@ public class BackendTest {
         var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/myclass2.ollir")), null, new ArrayList<>()));
         TestUtils.noErrors(result.getReports());
 
-        //var output = result.run();
-        //assertEquals("Hello, World!", output.trim());
-
         System.out.println("Jasmin Code: \n" + result.getJasminCode());
     }
 
@@ -61,9 +57,6 @@ public class BackendTest {
     public void testClass3() {
         var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/myclass3.ollir")), null, new ArrayList<>()));
         TestUtils.noErrors(result.getReports());
-
-        //var output = result.run();
-        //assertEquals("Hello, World!", output.trim());
 
         System.out.println("Jasmin Code: \n" + result.getJasminCode());
     }
@@ -73,9 +66,6 @@ public class BackendTest {
         var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/myclass4.ollir")), null, new ArrayList<>()));
         TestUtils.noErrors(result.getReports());
 
-        //var output = result.run();
-        //assertEquals("Hello, World!", output.trim());
-
         System.out.println("Jasmin Code: \n" + result.getJasminCode());
     }
 
@@ -83,9 +73,6 @@ public class BackendTest {
     public void testFac() {
         var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/Fac.ollir")), null, new ArrayList<>()));
         TestUtils.noErrors(result.getReports());
-
-        //var output = result.run();
-        //assertEquals("Hello, World!", output.trim());
 
         System.out.println("Jasmin Code: \n" + result.getJasminCode());
     }

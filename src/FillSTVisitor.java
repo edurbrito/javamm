@@ -44,7 +44,7 @@ public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
         int i = 0;
         JmmNode current = children.get(i);
 
-        while (current.getKind().equals("Var")) { // TODO: should we check if this is repeated declaration of the same variable?
+        while (current.getKind().equals("Var")) {
             this.symbolTableImp.addField(getSymbol(current));
             i++;
             if (i == children.size())
