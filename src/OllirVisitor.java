@@ -58,7 +58,11 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         ollirCode.append(""+"}\n");
 
         for (JmmNode child:node.getChildren()){
-            dealWithChild(child);
+            switch (child.getKind()){
+                case "Method"->{ollirCode.append(dealWithMethod(child));}
+                case "MainMethod"->{ollirCode.append(dealWithMainMethod(child));}
+                case "Var"->{ollirCode.append(dealWithVar(child));}
+            }
         }
         ollirCode.append("}\n");
 
@@ -173,7 +177,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                     result.append(",");
                     result.append(dealWithChild(child));
                 }
-                    result.append(").V;\n");
+                result.append(").V;\n");
             }
             return result.toString();
         }
