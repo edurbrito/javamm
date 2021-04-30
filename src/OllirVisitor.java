@@ -11,7 +11,7 @@ import java.util.List;
 public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     private SymbolTableImp symbolTableImp;
     private StringBuilder ollirCode = new StringBuilder("\n");
-    private String methodName;
+    private String methodName, methodKey;
 
     public OllirVisitor(SymbolTableImp symbolTableImp) {
         super();
@@ -34,6 +34,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             case "Integer" ->{ return dealWithInteger(child);}
             case "AllocationExpression"->{return dealWithAllocationExpression(child);}
             case "MethodBody"->{return dealWithMethodBody(child);}
+            case "Return"->{return dealWithReturn(child);}
         }
         return "";
     }
@@ -70,38 +71,36 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     }
 
 
-
-    private String getReturnType(JmmNode node){
-        MethodTable methodTable = null;
-        for (String i: this.symbolTableImp.methods.keySet()){
-            if (this.symbolTableImp.methods.get(i).getName().equals(node.get("name"))){
-                methodTable=this.symbolTableImp.methods.get(i);
-                break;
-            }
-        }
-
-        assert methodTable != null;
-        return getTypeOllir(methodTable.returnType);
-    }
-
-
     private String getArgs(JmmNode node){
-        StringBuilder result = new StringBuilder("\n");
-        System.out.println(this.symbolTableImp);
-        MethodTable methodTable = null;
-        for (String i: this.symbolTableImp.methods.keySet()){
-            if (this.symbolTableImp.methods.get(i).getName().equals(node.get("name"))){
-                methodTable=this.symbolTableImp.methods.get(i);
-                break;
+        StringBuilder methodKey=new StringBuilder(this.methodName);
+        for (JmmNode child:node.getChildren()) {
+            if (child.getKind().equals("MethodArguments")) {
+                for (JmmNode child1 : child.getChildren())
+                    if (child1.getKind().equals("Argument")) {
+                        for (JmmNode child2 : child1.getChildren()) {
+                            if (child2.getKind().equals("Type"))
+                                methodKey.append(child2.get("name"));
+                        }
+                    }
+
             }
         }
+        this.methodKey = methodKey.toString();
+
+
+        StringBuilder result = new StringBuilder();
+        //System.out.println(this.symbolTableImp);
+        MethodTable methodTable = null;
+
+        methodTable=this.symbolTableImp.methods.get(this.methodKey);
 
         assert methodTable != null;
 
         for (Symbol parameter : methodTable.parameters){
-            result.append(parameter.getName()+getTypeOllir(parameter.getType())+",");
+            result.append(parameter.getName()+"."+getTypeOllir(parameter.getType())+",");
         }
-        result.deleteCharAt(result.length()-1);
+        if (result.length()>0)
+            result.deleteCharAt(result.length()-1);
 
         return result.toString();
     }
@@ -223,6 +222,13 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         String left, right, pre = "";
         left = dealWithChild(children.get(0));
+        /*if (children.get(0).getKind().equals("Identifier")){
+            List<Symbol> classVariables = symbolTableImp.getFields();
+            for (Symbol i : classVariables) {
+                if (i.getName().equals(children.get(0).get("name")))
+                    return "putfield(this,"+left+","
+            }
+        }*/
 
         right = dealWithChild(children.get(1));
         if(right.equals("")){
@@ -302,10 +308,16 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         return res;
     }
 
+    private String dealWithReturn(JmmNode node){
+        StringBuilder result=new StringBuilder();
+        result.append("ret.");
+        result.append(getTypeOllir(symbolTableImp.methods.get(this.methodKey).returnType));
+        result.append(" ");
+        for (JmmNode child:node.getChildren())
+            result.append(dealWithChild(child));
 
-
-
-
+        return result.toString();
+    }
 
 
     private String dealWithIdentifier(JmmNode child) {

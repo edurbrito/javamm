@@ -201,16 +201,16 @@
                         "attributes": {
                           "col": "9",
                           "line": "13",
-                          "name": "a2"
+                          "name": "a"
                         },
                         "children": []
                       },
                       {
-                        "kind": "Integer",
+                        "kind": "Identifier",
                         "attributes": {
-                          "col": "15",
+                          "col": "13",
                           "line": "13",
-                          "value": "2"
+                          "name": "a1"
                         },
                         "children": []
                       }
@@ -228,7 +228,7 @@
                         "attributes": {
                           "col": "9",
                           "line": "14",
-                          "name": "a3"
+                          "name": "a2"
                         },
                         "children": []
                       },
@@ -237,7 +237,7 @@
                         "attributes": {
                           "col": "15",
                           "line": "14",
-                          "value": "3"
+                          "value": "2"
                         },
                         "children": []
                       }
@@ -255,7 +255,7 @@
                         "attributes": {
                           "col": "9",
                           "line": "15",
-                          "name": "a4"
+                          "name": "a3"
                         },
                         "children": []
                       },
@@ -264,6 +264,33 @@
                         "attributes": {
                           "col": "15",
                           "line": "15",
+                          "value": "3"
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "9",
+                      "line": "16"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "9",
+                          "line": "16",
+                          "name": "a4"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "Integer",
+                        "attributes": {
+                          "col": "15",
+                          "line": "16",
                           "value": "4"
                         },
                         "children": []
@@ -274,14 +301,14 @@
                     "kind": "EqualStatement",
                     "attributes": {
                       "col": "9",
-                      "line": "17"
+                      "line": "18"
                     },
                     "children": [
                       {
                         "kind": "Identifier",
                         "attributes": {
                           "col": "9",
-                          "line": "17",
+                          "line": "18",
                           "name": "b"
                         },
                         "children": []
@@ -290,21 +317,21 @@
                         "kind": "Sub",
                         "attributes": {
                           "col": "28",
-                          "line": "17"
+                          "line": "18"
                         },
                         "children": [
                           {
                             "kind": "Sum",
                             "attributes": {
                               "col": "18",
-                              "line": "17"
+                              "line": "18"
                             },
                             "children": [
                               {
                                 "kind": "Identifier",
                                 "attributes": {
                                   "col": "16",
-                                  "line": "17",
+                                  "line": "18",
                                   "name": "a1"
                                 },
                                 "children": []
@@ -313,14 +340,14 @@
                                 "kind": "Mult",
                                 "attributes": {
                                   "col": "23",
-                                  "line": "17"
+                                  "line": "18"
                                 },
                                 "children": [
                                   {
                                     "kind": "Identifier",
                                     "attributes": {
                                       "col": "21",
-                                      "line": "17",
+                                      "line": "18",
                                       "name": "a2"
                                     },
                                     "children": []
@@ -329,7 +356,7 @@
                                     "kind": "Identifier",
                                     "attributes": {
                                       "col": "26",
-                                      "line": "17",
+                                      "line": "18",
                                       "name": "a3"
                                     },
                                     "children": []
@@ -342,7 +369,7 @@
                             "kind": "Identifier",
                             "attributes": {
                               "col": "30",
-                              "line": "17",
+                              "line": "18",
                               "name": "a4"
                             },
                             "children": []
@@ -350,6 +377,144 @@
                         ]
                       }
                     ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "Method",
+            "attributes": {
+              "col": "9",
+              "line": "21",
+              "name": "f1"
+            },
+            "children": [
+              {
+                "kind": "Type",
+                "attributes": {
+                  "col": "9",
+                  "line": "21",
+                  "name": "int"
+                },
+                "children": []
+              },
+              {
+                "kind": "MethodArguments",
+                "attributes": {
+                  "col": "16",
+                  "line": "21"
+                },
+                "children": [
+                  {
+                    "kind": "Argument",
+                    "attributes": {
+                      "col": "16",
+                      "line": "21",
+                      "name": "a"
+                    },
+                    "children": [
+                      {
+                        "kind": "Type",
+                        "attributes": {
+                          "col": "16",
+                          "line": "21",
+                          "name": "int"
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "Argument",
+                    "attributes": {
+                      "col": "23",
+                      "line": "21",
+                      "name": "b"
+                    },
+                    "children": [
+                      {
+                        "kind": "Type",
+                        "attributes": {
+                          "col": "23",
+                          "line": "21",
+                          "name": "int"
+                        },
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "MethodBody",
+                "attributes": {
+                  "col": "13",
+                  "line": "22"
+                },
+                "children": [
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "13",
+                      "line": "22"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "13",
+                          "line": "22",
+                          "name": "a"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "Sum",
+                        "attributes": {
+                          "col": "21",
+                          "line": "22"
+                        },
+                        "children": [
+                          {
+                            "kind": "Identifier",
+                            "attributes": {
+                              "col": "19",
+                              "line": "22",
+                              "name": "a"
+                            },
+                            "children": []
+                          },
+                          {
+                            "kind": "Identifier",
+                            "attributes": {
+                              "col": "22",
+                              "line": "22",
+                              "name": "b"
+                            },
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "Return",
+                "attributes": {
+                  "col": "13",
+                  "line": "23"
+                },
+                "children": [
+                  {
+                    "kind": "Identifier",
+                    "attributes": {
+                      "col": "21",
+                      "line": "23",
+                      "name": "a"
+                    },
+                    "children": []
                   }
                 ]
               }
