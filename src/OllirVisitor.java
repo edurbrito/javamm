@@ -210,25 +210,27 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             }
             result.append(").V;\n");
         }
-        //result.append("putfield(this,");
+
         return result.toString();
     }
 
     private String dealWithEqualStatement(JmmNode equalNode){
         List<JmmNode> children = equalNode.getChildren();
+        boolean putfield=false;
 
         // Get OLLIR type of operation
         String type = getTypeOllir(getIdentifierType(children.get(0)));
 
         String left, right, pre = "";
         left = dealWithChild(children.get(0));
-        /*if (children.get(0).getKind().equals("Identifier")){
+        if (children.get(0).getKind().equals("Identifier")){
             List<Symbol> classVariables = symbolTableImp.getFields();
             for (Symbol i : classVariables) {
-                if (i.getName().equals(children.get(0).get("name")))
-                    return "putfield(this,"+left+","
+                if (i.getName().equals(children.get(0).get("name"))) {
+                    putfield = true;
+                }
             }
-        }*/
+        }
 
         right = dealWithChild(children.get(1));
         if(right.equals("")){
@@ -238,11 +240,11 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         }
 
 
-        if(pre.equals("")){
-            System.out.println("OIAA");
-            return left + " :=." + type + " " + right + "\n";
-        }else{
+        if(!putfield){
+            //System.out.println("OIAA");
             return pre + "\n" + left + " :=." + type + " " + right + "\n";
+        }else{
+            return pre + "\n"+"putfield("+left+","+right+").V;\n";
         }
 
     }
