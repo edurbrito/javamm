@@ -32,12 +32,21 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             case "EqualStatement"-> {return dealWithEqualStatement(child);}
             case "Identifier" ->{ return dealWithIdentifier(child);}
             case "Integer" ->{ return dealWithInteger(child);}
-            //case "Var"->{ollirCode.append(dealWithVar(child));}
-            //case "AllocationExpression"->{return dealWithAllocationExpression(child);}
+            case "AllocationExpression"->{return dealWithAllocationExpression(child);}
+            case "MethodBody"->{return dealWithMethodBody(child);}
         }
         return "";
     }
 
+    private String dealWithAllocationExpression(JmmNode child) {
+        StringBuilder result=new StringBuilder();
+        result.append("new ("+child.getChildren().get(0).get("name")+")"+".");
+        if (child.getChildren().get(0).getKind().equals("Object"))
+            result.append(child.getChildren().get(0).get("name"));
+        else
+            result.append(child.getChildren().get(0).getKind());
+        return result.toString();
+    }
 
 
     private boolean dealWithClass(JmmNode node, List<Report> reports) {
@@ -45,13 +54,13 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         //class constructor
         ollirCode.append(node.get("name") + " {\n");
         ollirCode.append(".construct "+node.get("name")+"().V {\n");
-        ollirCode.append("invokespecial(this, \"<init>\").V;\n");
-        ollirCode.append("}\n");
+        ollirCode.append(""+"invokespecial(this, \"<init>\").V;\n");
+        ollirCode.append(""+"}\n");
 
         for (JmmNode child:node.getChildren()){
             dealWithChild(child);
         }
-        ollirCode.append("}");
+        ollirCode.append("}\n");
 
         return true;
     }
@@ -93,6 +102,14 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         return result.toString();
     }
 
+    private String dealWithMethodBody(JmmNode node){
+        StringBuilder result = new StringBuilder("\n");
+        for (JmmNode child:node.getChildren()){
+            result.append(dealWithChild(child));
+        }
+        return result.toString();
+    }
+
     private String dealWithMainMethod(JmmNode node) {
         this.methodName = "main";
         StringBuilder result = new StringBuilder("\n");
@@ -100,10 +117,9 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         result.append(".method public static main(" + node.get("argName") + ".array.String).V {\n");
 
-        for (JmmNode child:methodBody.getChildren()){
-            result.append(dealWithChild(child));
-        }
-        result.append("}");
+        result.append(dealWithMethodBody(methodBody));
+
+        result.append("}\n");
         return result.toString();
     }
 
@@ -118,7 +134,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             result.append(dealWithChild(child));
         }
 
-        result.append("}");
+        result.append("}\n");
         return result.toString();
     }
 
@@ -137,18 +153,62 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     }
 
     private String dealWithTwoPart(JmmNode node){
+
+        StringBuilder result=new StringBuilder();
+
         JmmNode leftChild = node.getChildren().get(0);
-        JmmNode rightChild = node.getChildren().get(0);
+        JmmNode rightChild = node.getChildren().get(1);
+
+        if (leftChild.getKind().equals("This"))
+            return dealWithThisExpression(node);
 
         String objectName = leftChild.get("name");
         Symbol classSym = this.symbolTableImp.getMethod(this.methodName).getVariable(objectName);
+        if (classSym==null) {
+            if (this.symbolTableImp.getImports().contains(objectName)) {
+                JmmNode methodCall = rightChild.getChildren().get(0);
+                List<JmmNode> identifiers = methodCall.getChildren();
+                result.append("invokestatic(" + objectName + "," + methodCall.get("name"));
+                for (JmmNode child : identifiers) {
+                    result.append(",");
+                    result.append(dealWithChild(child));
+                }
+                    result.append(").V;\n");
+            }
+            return result.toString();
+        }
         String className = classSym.getType().getName();
 
         String callName = rightChild.getChildren().get(0).get("name");
 
-        String res = "invokevirtual(" + objectName + "." + className + ",\"" + callName + "\").V";
+        result.append("invokevirtual(" + objectName + "." + className + ",\"" + callName + "\"");
 
-        return res;
+        for (JmmNode callArgs:rightChild.getChildren().get(0).getChildren()){
+            result.append(",");
+            result.append(dealWithChild(callArgs));
+        }
+        result.append(").V;\n");
+
+        return result.toString();
+    }
+
+    private String dealWithThisExpression(JmmNode TwoPartNode) {
+        StringBuilder result=new StringBuilder();
+        JmmNode rightChild = TwoPartNode.getChildren().get(1);
+        if (rightChild.getChildren().get(0).getKind().equals("MethodCall")) {
+            JmmNode methodCall = rightChild.getChildren().get(0);
+
+            result.append("invokevirtual(this,");
+            result.append("\""+methodCall.get("name") + "\"");
+
+            for (JmmNode callArgs : methodCall.getChildren()) {
+                result.append(",");
+                result.append(dealWithChild(callArgs));
+            }
+            result.append(").V;\n");
+        }
+        //result.append("putfield(this,");
+        return result.toString();
     }
 
     private String dealWithEqualStatement(JmmNode equalNode){

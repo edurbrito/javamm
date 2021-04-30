@@ -3,7 +3,7 @@ class Simple {
 
     public int add(int a, int b){
         int c;
-        c = a + this.constInstr();
+        //c = a + this.constInstr();
         return c;
     }
 
@@ -16,7 +16,8 @@ class Simple {
         b = 10;
         s = new Simple();
         d = s.add(a,b);
-        io.println(c);
+        //io.println(c);//todo:não devia morrer no semantic analysis porque esta variavel nao existe
+        io.println(a,3);
     }
 
     public int constInstr(){
