@@ -32,11 +32,13 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             case "EqualStatement"-> {return dealWithEqualStatement(child);}
             case "Identifier" ->{ return dealWithIdentifier(child);}
             case "Integer" ->{ return dealWithInteger(child);}
+            case "Boolean"->{ return dealWithBoolean(child);}
             case "AllocationExpression"->{return dealWithAllocationExpression(child);}
             case "MethodBody"->{return dealWithMethodBody(child);}
         }
         return "";
     }
+
 
     private String dealWithAllocationExpression(JmmNode child) {
         StringBuilder result=new StringBuilder();
@@ -222,19 +224,25 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         String type = getTypeOllir(getIdentifierType(children.get(0)));
 
         String left, right, pre = "";
+
+        // Gets the OLLIR code for each child
         left = dealWithChild(children.get(0));
         right = dealWithChild(children.get(1));
 
+        // Checks if the right child is a compost operation (arithmetic or boolean)
         if(right.equals("")){
             List<String> res;
-            if(children.get(0).getKind().equals("Not") || children.get(0).getKind().equals("And")){
+            String rightNodeKind = children.get(1).getKind();
+
+            // Boolean operation
+            if(rightNodeKind.equals("Not") || rightNodeKind.equals("And")){
                 res =  dealWithBoolOp(children.get(1));
-            }else {
+            }else { // Arithmetic operation
                 res = dealWithArithmetic(children.get(1));
             }
 
-            pre = res.get(0);
-            right = res.get(1);
+            pre = res.get(0);           // the OLLIR code needed before the operation
+            right = res.get(1);         // the right side of the op
         }
 
 
@@ -253,16 +261,20 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         List<JmmNode> children = booleanNode.getChildren();
 
 
-        String left, right, pre;
-        List<String> temps = dealWithTemp(children, "i32");
+        String left, right, pre;        // the left side, right side (of the operation) and what precedes it
+        List<String> temps = dealWithTemp(children, "bool");    // Checks if temporary variables are needed
         left = temps.get(0); right = temps.get(1); pre = temps.get(2);
         result.append(left);
 
         switch (booleanNode.getKind()){
-            case "Not"->{result.append(" !.bool ");}
-            case "And"->{result.append(" && ");}
+            case "Not"->{
+                result.append(" !.bool ");
+                result.append(left);
+            }
+            case "And"->{
+                result.append(" && ");
+                result.append(right);}
         }
-        result.append(right);
 
         finalList.add(pre);
         finalList.add(result.toString());
@@ -271,13 +283,15 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     }
 
     private List<String> dealWithArithmetic(JmmNode arithmeticNode){
+
+
         List<String> finalList = new ArrayList<>();
         StringBuilder result = new StringBuilder();
         List<JmmNode> children = arithmeticNode.getChildren();
 
 
-        String left, right, pre;
-        List<String> temps = dealWithTemp(children, "bool");
+        String left, right, pre;            // the left side, right side (of the operation) and what precedes it
+        List<String> temps = dealWithTemp(children, "i32");         // Checks if temporary variables are needed
         left = temps.get(0); right = temps.get(1); pre = temps.get(2);
         result.append(left);
 
@@ -288,6 +302,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             case "Div"->{result.append(" / ");}
             case "LessThan"->{result.append(" <.i32 ");}
         }
+
         result.append(right);
 
         finalList.add(pre);
@@ -300,12 +315,13 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         StringBuilder pre = new StringBuilder();
 
-        String left = dealWithChild(children.get(0)), right = dealWithChild(children.get(1));
+        String left = dealWithChild(children.get(0)), right = "";
 
+        // Checks if temporary variables are needed
         if(left.equals("")){
 
             List<String> res;
-            if(type.equals("i32")){
+            if(type.equals("i32")){         // it uses recursion to determine the ollir code of the operands
                 res = dealWithArithmetic(children.get(0));
             }else{
                 res = dealWithBoolOp(children.get(0));
@@ -313,11 +329,11 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
             left = "t1." + type;
             pre.append(res.get(0) + "\n");
-            pre.append("t1." + type + ":=" + type + " ");
+            pre.append("t1." + type + " :=." + type + " ");
             pre.append(res.get(1) + "\n");
         }
 
-        if(right.equals("")){
+        if(children.size() > 1 && (right = dealWithChild(children.get(1))).equals("")){
             right = "u1." + type;
 
             List<String> res;
@@ -328,7 +344,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             }
 
             pre.append(res.get(0) + "\n");
-            pre.append("u1." + type + ":=" + type + " ");
+            pre.append("u1." + type + ":=." + type + " ");
             pre.append(res.get(1) + "\n");
         }
 
@@ -343,10 +359,6 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         return res;
     }
 
-
-
-
-
     private String dealWithIdentifier(JmmNode child) {
         String identifierName = child.get("name");
 
@@ -359,7 +371,13 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     }
 
 
+    /**
+     * Returns the ollir type of integer and boolean
+     * @param type information about the variable type
+     * @return  the ollir type, in a string
+     */
     private String getTypeOllir(Type type) {
+
         StringBuilder result = new StringBuilder();
         if(type.isArray()) result.append("array.");
 
@@ -402,6 +420,11 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         }
 
         return null;
+    }
+
+
+    private String dealWithBoolean(JmmNode child) {
+        return child.get("value") + ".bool";
     }
 
 

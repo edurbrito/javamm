@@ -5,6 +5,7 @@ class HelloWorld extends Oi{
         int a;
         boolean b;
 
-        a = 1 + 1;
+        b = true;
+        b = 1 < 3;
 	}
 }

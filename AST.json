@@ -117,32 +117,77 @@
                         "attributes": {
                           "col": "9",
                           "line": "8",
-                          "name": "a"
+                          "name": "b"
                         },
                         "children": []
                       },
                       {
-                        "kind": "Sum",
+                        "kind": "Boolean",
                         "attributes": {
                           "col": "17",
-                          "line": "8"
+                          "line": "8",
+                          "value": "true"
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "9",
+                      "line": "9"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "9",
+                          "line": "9",
+                          "name": "b"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "LessThan",
+                        "attributes": {
+                          "col": "21",
+                          "line": "9"
                         },
                         "children": [
                           {
-                            "kind": "Integer",
+                            "kind": "LessThan",
                             "attributes": {
-                              "col": "15",
-                              "line": "8",
-                              "value": "1"
+                              "col": "17",
+                              "line": "9"
                             },
-                            "children": []
+                            "children": [
+                              {
+                                "kind": "Integer",
+                                "attributes": {
+                                  "col": "15",
+                                  "line": "9",
+                                  "value": "1"
+                                },
+                                "children": []
+                              },
+                              {
+                                "kind": "Integer",
+                                "attributes": {
+                                  "col": "19",
+                                  "line": "9",
+                                  "value": "2"
+                                },
+                                "children": []
+                              }
+                            ]
                           },
                           {
                             "kind": "Integer",
                             "attributes": {
-                              "col": "18",
-                              "line": "8",
-                              "value": "1"
+                              "col": "22",
+                              "line": "9",
+                              "value": "3"
                             },
                             "children": []
                           }
