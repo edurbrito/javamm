@@ -98,280 +98,10 @@
                         "kind": "Type",
                         "attributes": {
                           "col": "9",
-<<<<<<< HEAD
-                          "line": "9",
-                          "name": "int"
-                        },
-                        "children": []
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "EqualStatement",
-                    "attributes": {
-                      "col": "9",
-                      "line": "12"
-                    },
-                    "children": [
-                      {
-                        "kind": "Identifier",
-                        "attributes": {
-                          "col": "9",
-                          "line": "12",
-                          "name": "a1"
-                        },
-                        "children": []
-                      },
-                      {
-                        "kind": "Integer",
-                        "attributes": {
-                          "col": "15",
-                          "line": "12",
-                          "value": "1"
-                        },
-                        "children": []
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "EqualStatement",
-                    "attributes": {
-                      "col": "9",
-                      "line": "13"
-                    },
-                    "children": [
-                      {
-                        "kind": "Identifier",
-                        "attributes": {
-                          "col": "9",
-                          "line": "13",
-                          "name": "a"
-                        },
-                        "children": []
-                      },
-                      {
-                        "kind": "Identifier",
-                        "attributes": {
-                          "col": "13",
-                          "line": "13",
-                          "name": "a1"
-                        },
-                        "children": []
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "EqualStatement",
-                    "attributes": {
-                      "col": "9",
-                      "line": "14"
-                    },
-                    "children": [
-                      {
-                        "kind": "Identifier",
-                        "attributes": {
-                          "col": "9",
-                          "line": "14",
-                          "name": "a2"
-                        },
-                        "children": []
-                      },
-                      {
-                        "kind": "Integer",
-                        "attributes": {
-                          "col": "15",
-                          "line": "14",
-                          "value": "2"
-=======
                           "line": "6",
                           "name": "boolean"
->>>>>>> booleans
                         },
                         "children": []
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "EqualStatement",
-                    "attributes": {
-                      "col": "9",
-                      "line": "8"
-                    },
-                    "children": [
-                      {
-                        "kind": "Identifier",
-                        "attributes": {
-                          "col": "9",
-<<<<<<< HEAD
-                          "line": "15",
-                          "name": "a3"
-=======
-                          "line": "8",
-                          "name": "b"
->>>>>>> booleans
-                        },
-                        "children": []
-                      },
-                      {
-                        "kind": "Boolean",
-                        "attributes": {
-<<<<<<< HEAD
-                          "col": "15",
-                          "line": "15",
-                          "value": "3"
-                        },
-                        "children": []
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "EqualStatement",
-                    "attributes": {
-                      "col": "9",
-                      "line": "16"
-                    },
-                    "children": [
-                      {
-                        "kind": "Identifier",
-                        "attributes": {
-                          "col": "9",
-                          "line": "16",
-                          "name": "a4"
-                        },
-                        "children": []
-                      },
-                      {
-                        "kind": "Integer",
-                        "attributes": {
-                          "col": "15",
-                          "line": "16",
-                          "value": "4"
-=======
-                          "col": "17",
-                          "line": "8",
-                          "value": "true"
->>>>>>> booleans
-                        },
-                        "children": []
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "EqualStatement",
-                    "attributes": {
-                      "col": "9",
-<<<<<<< HEAD
-                      "line": "18"
-=======
-                      "line": "9"
->>>>>>> booleans
-                    },
-                    "children": [
-                      {
-                        "kind": "Identifier",
-                        "attributes": {
-                          "col": "9",
-<<<<<<< HEAD
-                          "line": "18",
-=======
-                          "line": "9",
->>>>>>> booleans
-                          "name": "b"
-                        },
-                        "children": []
-                      },
-                      {
-                        "kind": "LessThan",
-                        "attributes": {
-<<<<<<< HEAD
-                          "col": "28",
-                          "line": "18"
-=======
-                          "col": "21",
-                          "line": "9"
->>>>>>> booleans
-                        },
-                        "children": [
-                          {
-                            "kind": "LessThan",
-                            "attributes": {
-<<<<<<< HEAD
-                              "col": "18",
-                              "line": "18"
-=======
-                              "col": "17",
-                              "line": "9"
->>>>>>> booleans
-                            },
-                            "children": [
-                              {
-                                "kind": "Integer",
-                                "attributes": {
-<<<<<<< HEAD
-                                  "col": "16",
-                                  "line": "18",
-                                  "name": "a1"
-=======
-                                  "col": "15",
-                                  "line": "9",
-                                  "value": "1"
->>>>>>> booleans
-                                },
-                                "children": []
-                              },
-                              {
-                                "kind": "Integer",
-                                "attributes": {
-<<<<<<< HEAD
-                                  "col": "23",
-                                  "line": "18"
-                                },
-                                "children": [
-                                  {
-                                    "kind": "Identifier",
-                                    "attributes": {
-                                      "col": "21",
-                                      "line": "18",
-                                      "name": "a2"
-                                    },
-                                    "children": []
-                                  },
-                                  {
-                                    "kind": "Identifier",
-                                    "attributes": {
-                                      "col": "26",
-                                      "line": "18",
-                                      "name": "a3"
-                                    },
-                                    "children": []
-                                  }
-                                ]
-=======
-                                  "col": "19",
-                                  "line": "9",
-                                  "value": "2"
-                                },
-                                "children": []
->>>>>>> booleans
-                              }
-                            ]
-                          },
-                          {
-                            "kind": "Integer",
-                            "attributes": {
-<<<<<<< HEAD
-                              "col": "30",
-                              "line": "18",
-                              "name": "a4"
-=======
-                              "col": "22",
-                              "line": "9",
-                              "value": "3"
->>>>>>> booleans
-                            },
-                            "children": []
-                          }
-                        ]
                       }
                     ]
                   }
@@ -383,7 +113,7 @@
             "kind": "Method",
             "attributes": {
               "col": "9",
-              "line": "21",
+              "line": "9",
               "name": "f1"
             },
             "children": [
@@ -391,7 +121,7 @@
                 "kind": "Type",
                 "attributes": {
                   "col": "9",
-                  "line": "21",
+                  "line": "9",
                   "name": "int"
                 },
                 "children": []
@@ -400,14 +130,14 @@
                 "kind": "MethodArguments",
                 "attributes": {
                   "col": "16",
-                  "line": "21"
+                  "line": "9"
                 },
                 "children": [
                   {
                     "kind": "Argument",
                     "attributes": {
                       "col": "16",
-                      "line": "21",
+                      "line": "9",
                       "name": "a"
                     },
                     "children": [
@@ -415,7 +145,7 @@
                         "kind": "Type",
                         "attributes": {
                           "col": "16",
-                          "line": "21",
+                          "line": "9",
                           "name": "int"
                         },
                         "children": []
@@ -426,7 +156,7 @@
                     "kind": "Argument",
                     "attributes": {
                       "col": "23",
-                      "line": "21",
+                      "line": "9",
                       "name": "b"
                     },
                     "children": [
@@ -434,7 +164,7 @@
                         "kind": "Type",
                         "attributes": {
                           "col": "23",
-                          "line": "21",
+                          "line": "9",
                           "name": "int"
                         },
                         "children": []
@@ -447,21 +177,21 @@
                 "kind": "MethodBody",
                 "attributes": {
                   "col": "13",
-                  "line": "22"
+                  "line": "10"
                 },
                 "children": [
                   {
                     "kind": "EqualStatement",
                     "attributes": {
                       "col": "13",
-                      "line": "22"
+                      "line": "10"
                     },
                     "children": [
                       {
                         "kind": "Identifier",
                         "attributes": {
                           "col": "13",
-                          "line": "22",
+                          "line": "10",
                           "name": "a"
                         },
                         "children": []
@@ -470,14 +200,14 @@
                         "kind": "Sum",
                         "attributes": {
                           "col": "21",
-                          "line": "22"
+                          "line": "10"
                         },
                         "children": [
                           {
                             "kind": "Identifier",
                             "attributes": {
                               "col": "19",
-                              "line": "22",
+                              "line": "10",
                               "name": "a"
                             },
                             "children": []
@@ -486,7 +216,7 @@
                             "kind": "Identifier",
                             "attributes": {
                               "col": "22",
-                              "line": "22",
+                              "line": "10",
                               "name": "b"
                             },
                             "children": []
@@ -501,14 +231,14 @@
                 "kind": "Return",
                 "attributes": {
                   "col": "13",
-                  "line": "23"
+                  "line": "11"
                 },
                 "children": [
                   {
                     "kind": "Identifier",
                     "attributes": {
                       "col": "21",
-                      "line": "23",
+                      "line": "11",
                       "name": "a"
                     },
                     "children": []
