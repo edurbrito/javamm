@@ -69,13 +69,6 @@ public class SemanticErrors {
     }
 
     @Test
-    public void VarNotInit() {
-        JmmSemanticsResult res = TestUtils.analyse("test/fixtures/public/fail/semantic/varNotInit.jmm");
-        TestUtils.mustFail(res.getReports());
-        assertEquals(1, TestUtils.getNumErrors(res.getReports()));
-    }
-
-    @Test
     public void MissType() {
         JmmSemanticsResult res = TestUtils.analyse("test/fixtures/public/fail/semantic/extra/miss_type.jmm");
         TestUtils.mustFail(res.getReports());

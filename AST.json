@@ -3,158 +3,63 @@
     "kind": "Program",
     "attributes": {
       "col": "1",
-      "line": "5"
+      "line": "1"
     },
     "children": [
       {
         "kind": "Class",
         "attributes": {
           "col": "1",
-          "line": "5",
-          "name": "VarNotInit"
+          "line": "1",
+          "name": "MultipleSequential"
         },
         "children": [
           {
             "kind": "MainMethod",
             "attributes": {
-              "col": "12",
-              "argName": "a",
-              "line": "6"
+              "col": "9",
+              "argName": "args",
+              "line": "2"
             },
             "children": [
               {
                 "kind": "MethodBody",
                 "attributes": {
-                  "col": "9",
-                  "line": "7"
+                  "col": "3",
+                  "line": "3"
                 },
                 "children": [
                   {
-                    "kind": "Var",
+                    "kind": "While",
                     "attributes": {
-                      "col": "9",
-                      "line": "7",
-                      "name": "i"
+                      "col": "3",
+                      "line": "3"
                     },
                     "children": [
                       {
-                        "kind": "Type",
+                        "kind": "WhileBody",
                         "attributes": {
-                          "col": "9",
-                          "line": "7",
-                          "name": "int"
+                          "col": "16",
+                          "line": "3"
                         },
                         "children": []
                       }
                     ]
                   },
                   {
-                    "kind": "Var",
+                    "kind": "While",
                     "attributes": {
-                      "col": "9",
-                      "line": "8",
-                      "name": "j"
+                      "col": "3",
+                      "line": "5"
                     },
                     "children": [
                       {
-                        "kind": "Type",
+                        "kind": "WhileBody",
                         "attributes": {
-                          "col": "9",
-                          "line": "8",
-                          "name": "int"
+                          "col": "16",
+                          "line": "5"
                         },
                         "children": []
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "Var",
-                    "attributes": {
-                      "col": "9",
-                      "line": "9",
-                      "name": "k"
-                    },
-                    "children": [
-                      {
-                        "kind": "Type",
-                        "attributes": {
-                          "col": "9",
-                          "line": "9",
-                          "name": "int"
-                        },
-                        "children": []
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "EqualStatement",
-                    "attributes": {
-                      "col": "9",
-                      "line": "10"
-                    },
-                    "children": [
-                      {
-                        "kind": "Identifier",
-                        "attributes": {
-                          "col": "9",
-                          "line": "10",
-                          "name": "k"
-                        },
-                        "children": []
-                      },
-                      {
-                        "kind": "Integer",
-                        "attributes": {
-                          "col": "14",
-                          "line": "10",
-                          "value": "2"
-                        },
-                        "children": []
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "EqualStatement",
-                    "attributes": {
-                      "col": "9",
-                      "line": "11"
-                    },
-                    "children": [
-                      {
-                        "kind": "Identifier",
-                        "attributes": {
-                          "col": "9",
-                          "line": "11",
-                          "name": "i"
-                        },
-                        "children": []
-                      },
-                      {
-                        "kind": "Sum",
-                        "attributes": {
-                          "col": "15",
-                          "line": "11"
-                        },
-                        "children": [
-                          {
-                            "kind": "Identifier",
-                            "attributes": {
-                              "col": "14",
-                              "line": "11",
-                              "name": "j"
-                            },
-                            "children": []
-                          },
-                          {
-                            "kind": "Identifier",
-                            "attributes": {
-                              "col": "16",
-                              "line": "11",
-                              "name": "k"
-                            },
-                            "children": []
-                          }
-                        ]
                       }
                     ]
                   }
@@ -166,5 +71,20 @@
       }
     ]
   },
-  "reports": []
+  "reports": [
+    {
+      "type": "ERROR",
+      "stage": "SYNTATIC",
+      "line": 3,
+      "column": -1,
+      "message": "Detected error in while statement"
+    },
+    {
+      "type": "ERROR",
+      "stage": "SYNTATIC",
+      "line": 5,
+      "column": -1,
+      "message": "Detected error in while statement"
+    }
+  ]
 }

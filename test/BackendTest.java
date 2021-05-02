@@ -30,10 +30,11 @@ public class BackendTest {
         var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/HelloWorld.ollir")), null, new ArrayList<>()));
         TestUtils.noErrors(result.getReports());
 
+        System.out.println("Jasmin Code: \n" + result.getJasminCode());
+
         var output = result.run();
         assertEquals("Hello, World!", output.trim());
 
-        System.out.println("Jasmin Code: \n" + result.getJasminCode());
     }
 
     @Test
