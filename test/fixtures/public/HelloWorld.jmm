@@ -1,6 +1,6 @@
 import io;
 class HelloWorld{
 	public static void main(String[] args) {
-		io.println("Hello, World");
+		io.println(12345);
 	}
 }
