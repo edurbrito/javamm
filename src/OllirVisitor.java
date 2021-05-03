@@ -186,6 +186,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             if (this.symbolTableImp.getImports().contains(objectName)) {
                 JmmNode methodCall = rightChild.getChildren().get(0);
                 List<JmmNode> identifiers = methodCall.getChildren();
+                result=new StringBuilder();
                 result.append("invokestatic(" + objectName + ", \"" + methodCall.get("name")+"\"");
                 for (JmmNode child : identifiers) {
                     result.append(",");
@@ -202,6 +203,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         String callName = rightChild.getChildren().get(0).get("name");
 
+        result=new StringBuilder();
         result.append("invokevirtual(" + objectName + "." + className + ",\"" + callName + "\"");
 
         StringBuilder key=new StringBuilder(rightChild.getChildren().get(0).get("name"));
