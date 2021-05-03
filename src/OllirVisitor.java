@@ -12,6 +12,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     private SymbolTableImp symbolTableImp;
     private StringBuilder ollirCode = new StringBuilder("\n");
     private String methodName, methodKey;
+    private int tempsCount=1;
 
     public OllirVisitor(SymbolTableImp symbolTableImp) {
         super();
@@ -168,14 +169,17 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
     private String dealWithTwoPart(JmmNode node){
 
-        StringBuilder result=new StringBuilder();
+        StringBuilder result=new StringBuilder("t"+this.tempsCount);
 
         JmmNode leftChild = node.getChildren().get(0);
         JmmNode rightChild = node.getChildren().get(1);
 
-        if (leftChild.getKind().equals("This"))
-            return dealWithThisExpression(node);
-
+        if (leftChild.getKind().equals("This")) {
+            String expressionResult = dealWithThisExpression(node);
+            String type = ("." + expressionResult.split("\\.")[expressionResult.split("\\.").length - 1]);
+            result.append(type+" := "+ type+ " "+expressionResult+";"+"\n");
+            return result.toString();
+        }
         String objectName = leftChild.get("name");
         Symbol classSym = this.symbolTableImp.getMethod(this.methodKey).getVariable(objectName);
         if (classSym==null) {
@@ -243,7 +247,6 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             }
             result.append(")");
             result.append("."+getTypeOllir(symbolTableImp.methods.get(key.toString()).returnType));
-            result.append(";\n");
         }
 
         return result.toString();
@@ -361,6 +364,10 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         String left, right, pre;            // the left side, right side (of the operation) and what precedes it
         List<String> temps = dealWithTemp(children, "i32");         // Checks if temporary variables are needed
         left = temps.get(0); right = temps.get(1); pre = temps.get(2);
+        if (right.contains(":=")) {
+            pre=right;
+            right=right.split("\\.")[0]+"."+right.split("\\.")[right.split("\\.").length-1].replace("\n","").replace(";","");//temp variable
+        }
         result.append(left);
 
         switch (arithmeticNode.getKind()){
