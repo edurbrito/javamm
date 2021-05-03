@@ -30,6 +30,7 @@ public class OptimizeTest {
 
     }
 
+    /*
     @Test
     public void arithmetic() {
         //SpecsIo.getResource(
@@ -39,4 +40,6 @@ public class OptimizeTest {
         result.getOllirClass().show();
 
     }
+    */
+
 }

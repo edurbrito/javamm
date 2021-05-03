@@ -34,3 +34,5 @@ gradlew.bat
 hs_err_pid*
 
 *.dot
+
+AST.json
