@@ -3,21 +3,20 @@ class Simple {
 
     public int add(int a, int b){
         int c;
-        //c = a + this.constInstr();
+        c = a+this.constInstr();
         return c;
     }
 
     public static void main(String[] args){
         int a;
         int b;
-        int d;
+        int c;
         Simple s;
         a = 20;
         b = 10;
         s = new Simple();
-        d = s.add(a,b);
-        //io.println(c);
-        io.println(a,3);
+        c = s.add(a,b);
+        io.println(c);
     }
 
     public int constInstr(){
@@ -30,9 +29,7 @@ class Simple {
         c = 400;
         c = 1000;
         c = 100474650;
-		c = 10;
+        c = 10;
         return c;
     }
-
-
 }

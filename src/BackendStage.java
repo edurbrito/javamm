@@ -232,7 +232,7 @@ public class BackendStage implements JasminBackend {
                 builder.append("a");
             builder.append("store");
             int reg = OllirAccesser.getVarTable(method).get(operand.getName()).getVirtualReg();
-            if(reg <= 4)
+            if(reg < 4)
                 builder.append("_");
             else
                 builder.append(" ");
@@ -255,7 +255,7 @@ public class BackendStage implements JasminBackend {
         else {
             Operand operand = (Operand) first_element;
             int reg = OllirAccesser.getVarTable(method).get(operand.getName()).getVirtualReg();
-            if(reg <= 4)
+            if(reg < 4)
                 builder.append("_");
             else
                 builder.append(" ");
@@ -286,7 +286,7 @@ public class BackendStage implements JasminBackend {
         else {
             Operand operand = (Operand) first_element;
             int reg = OllirAccesser.getVarTable(method).get(operand.getName()).getVirtualReg();
-            if(reg <= 4)
+            if(reg < 4)
                 builder.append("_");
             else
                 builder.append(" ");
@@ -350,7 +350,7 @@ public class BackendStage implements JasminBackend {
                 else {
                     Operand operand = (Operand) objectInstance;
                     int reg = OllirAccesser.getVarTable(method).get(operand.getName()).getVirtualReg();
-                    if(reg <= 4)
+                    if(reg < 4)
                         builder.append("_");
                     else
                         builder.append(" ");
@@ -610,7 +610,7 @@ public class BackendStage implements JasminBackend {
                 builder.append("a");
             builder.append("load");
             int reg = OllirAccesser.getVarTable(method).get(operand.getName()).getVirtualReg();
-            if(reg <= 4)
+            if(reg < 4)
                 builder.append("_");
             else
                 builder.append(" ");
@@ -624,7 +624,7 @@ public class BackendStage implements JasminBackend {
         builder.append("\t");
         builder.append("aload");
         int reg = OllirAccesser.getVarTable(method).get(operand.getName()).getVirtualReg();
-        if(reg <= 4)
+        if(reg < 4)
             builder.append("_");
         else
             builder.append(" ");
@@ -647,7 +647,7 @@ public class BackendStage implements JasminBackend {
                 Operand index_operand = (Operand) index;
                 builder.append("iload");
                 reg = OllirAccesser.getVarTable(method).get(index_operand.getName()).getVirtualReg();
-                if(reg <= 4)
+                if(reg < 4)
                     builder.append("_");
                 else
                     builder.append(" ");

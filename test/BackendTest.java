@@ -38,6 +38,18 @@ public class BackendTest {
     }
 
     @Test
+    public void testSimple() {
+        var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/Simple.ollir")), null, new ArrayList<>()));
+        TestUtils.noErrors(result.getReports());
+
+        System.out.println("Jasmin Code: \n" + result.getJasminCode());
+
+        var output = result.run();
+        assertEquals("30", output.trim());
+
+    }
+
+    @Test
     public void testClass1() {
 
         var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/myclass1.ollir")), null, new ArrayList<>()));
