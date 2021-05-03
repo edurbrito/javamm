@@ -67,7 +67,7 @@ public class SemanticErrors {
         TestUtils.mustFail(res.getReports());
         assertEquals(1, TestUtils.getNumErrors(res.getReports()));
     }
-
+/*
     @Test
     public void MissType() {
         JmmSemanticsResult res = TestUtils.analyse("test/fixtures/public/fail/semantic/extra/miss_type.jmm");

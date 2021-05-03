@@ -15,13 +15,28 @@
 import org.junit.Test;
 
 import pt.up.fe.comp.TestUtils;
+import pt.up.fe.comp.jmm.analysis.JmmSemanticsResult;
 import pt.up.fe.specs.util.SpecsIo;
 
 public class OptimizeTest {
 
-    // @Test
+    @Test
     public void testHelloWorld() {
-        var result = TestUtils.optimize(SpecsIo.getResource("fixtures/public/HelloWorld.jmm"));
-        TestUtils.noErrors(result.getReports());
+        //SpecsIo.getResource(
+        var result = TestUtils.optimize("test/fixtures/public/HelloWorld.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+
+    }
+
+    @Test
+    public void arithmetic() {
+        //SpecsIo.getResource(
+        var result = TestUtils.optimize("test/fixtures/public/Arithmetic.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+
     }
 }

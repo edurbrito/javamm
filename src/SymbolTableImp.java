@@ -10,7 +10,7 @@ public class SymbolTableImp implements SymbolTable {
     List<String> imports = new ArrayList();
     String className = "";
     String superClass = "";
-    HashMap<Symbol, Boolean> fields = new HashMap<>();   // Boolean is true if the variable has been assigned
+    HashMap<Symbol, Boolean> fields = new HashMap<>();   // Boolean is true if the variable has been assigned TODO nunca ira ser
     HashMap<String, MethodTable> methods = new HashMap<>();
 
     @Override
@@ -42,6 +42,16 @@ public class SymbolTableImp implements SymbolTable {
         return methods.get(signature);
     }
 
+    public MethodTable getMethodByName(String name)
+    {
+        for(MethodTable methodTable : this.methods.values()){
+            if(methodTable.getName().equals(name))
+                return methodTable;
+        }
+        return null;
+    }
+
+
     @Override
     public Type getReturnType(String signature) {
         return methods.get(signature).getReturnType();
@@ -49,12 +59,32 @@ public class SymbolTableImp implements SymbolTable {
 
     @Override
     public List<Symbol> getParameters(String signature) {
-        return new ArrayList<>(methods.get(signature).getParameters());
+        List<Parameter> parameters = methods.get(signature).getParameters();
+        List<Symbol> symbolsPar = new ArrayList<>();
+
+        for(Parameter p : parameters){
+            symbolsPar.add(p.getSymbol());
+        }
+        return symbolsPar;
     }
+
+    public List<Parameter> getParametersWithOrder(String signature) {
+       return this.methods.get(signature).getParameters();
+    }
+
+
+
 
     @Override
     public List<Symbol> getLocalVariables(String signature) {
         return new ArrayList<>(methods.get(signature).getLocalVariables().keySet());
+    }
+
+    public Type getFieldType(String name){
+        for(Symbol s : getFields()){
+            if(s.getName().equals(name)) return s.getType();
+        }
+        return null;
     }
 
     public boolean hasImport(String _import){

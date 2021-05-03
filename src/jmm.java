@@ -2,6 +2,7 @@
 import pt.up.fe.comp.jmm.JmmParser;
 import pt.up.fe.comp.jmm.JmmParserResult;
 import pt.up.fe.comp.jmm.analysis.JmmSemanticsResult;
+import pt.up.fe.comp.jmm.ollir.OllirResult;
 import pt.up.fe.comp.jmm.report.Report;
 import pt.up.fe.comp.jmm.report.ReportType;
 import pt.up.fe.comp.jmm.report.Stage;
@@ -80,9 +81,22 @@ public class jmm implements JmmParser {
             jmm main = new jmm();
 
             JmmParserResult parserResult = main.parse(fileName);
+            if(parserResult.getReports().size() > 0){
+                throw new Exception("There were syntatical errors");
+            }
 
             AnalysisStage analysisStage = new AnalysisStage();
+
             JmmSemanticsResult semanticsResult = analysisStage.semanticAnalysis(parserResult);
+            if(semanticsResult.getReports().size() > 0){
+                throw new Exception("There were semantic errors");
+            }
+
+            OptimizationStage optimizationStage = new OptimizationStage();
+
+            OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+
+            System.out.println(ollirResult);
 
             // for(Report report : semanticsResult.getReports()){
             //    System.out.println(report.toString());

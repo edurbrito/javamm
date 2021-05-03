@@ -7,17 +7,17 @@ import java.util.List;
 public class MethodTable {
     String name;
     String signature;
-    List<Symbol> parameters;
+    List<Parameter> parameters;
     HashMap<Symbol, Boolean> localVariables = new HashMap<>();   // Boolean is true if the variable has been assigned
     Type returnType;
 
-    public MethodTable(String name, Type returnType, List<Symbol> parameters) {
+    public MethodTable(String name, Type returnType, List<Parameter> parameters) {
         this.name = name;
         this.returnType = returnType;
         this.parameters = parameters;
         StringBuilder sigBuilder = new StringBuilder(this.name);
-        for (Symbol parameter : parameters) {
-            sigBuilder.append(parameter.getType().getName());
+        for (Parameter parameter : parameters) {
+            sigBuilder.append(parameter.getSymbol().getType().getName());
         }
         this.signature = sigBuilder.toString();
     }
@@ -28,12 +28,36 @@ public class MethodTable {
         return signature;
     }
 
-    public List<Symbol> getParameters() {
+    public List<Parameter> getParameters() {
         return this.parameters;
+    }
+
+    public Parameter getParameter(String name){
+        for(Parameter p : this.parameters){
+            if(p.getSymbol().getName().equals(name)){
+                return p;
+            }
+        }
+        return null;
     }
 
     public HashMap<Symbol, Boolean> getLocalVariables() {
         return localVariables;
+    }
+
+    public Symbol getVariable(String variableName){
+
+        for(Symbol s : this.localVariables.keySet()){
+            if(s.getName().equals(variableName))
+                return s;
+        }
+
+        for(Parameter s : this.parameters){
+            if(s.getSymbol().getName().equals(variableName))
+                return s.getSymbol();
+        }
+
+        return null;
     }
 
     public Boolean addLocalVariable(Symbol variable) {
