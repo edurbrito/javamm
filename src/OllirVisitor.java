@@ -289,6 +289,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         String left, right, pre = "";
         left = dealWithChild(children.get(0));
         right = dealWithChild(children.get(1));
+        boolean arithm = false;
 
         // Checks if the right child is a compost operation (arithmetic or boolean)
         if(right.equals("")){
@@ -300,6 +301,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 res =  dealWithBoolOp(children.get(1));
             }else { // Arithmetic operation
                 res = dealWithArithmetic(children.get(1));
+                arithm = true;
             }
 
             pre = res.get(0);           // the OLLIR code needed before the operation
@@ -311,11 +313,11 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         if(pre.equals("")){
             if (putfield)
                 return "putfield(this," + left + "," + right + ").V;\n";
-            return left + " :=." + type + " " + right + ";" + "\n";
+            return left + " :=." + type + " " + right + (!arithm ? ";": "") + "\n";
         }else{
             if (putfield)
                 return pre + '\n' + "putfield(this," + left + "," + right + ").V;\n";
-            return pre + "\n" + left + " :=." + type + " " + right  + "\n";
+            return pre + "\n" + left + " :=." + type + " " + right + (!arithm ? ";": "") + "\n";
         }
     }
 
