@@ -174,7 +174,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             if (this.symbolTableImp.getImports().contains(objectName)) {
                 JmmNode methodCall = rightChild.getChildren().get(0);
                 List<JmmNode> identifiers = methodCall.getChildren();
-                result.append("invokestatic(" + objectName + "," + methodCall.get("name"));
+                result.append("invokestatic(" + objectName + ", \"" + methodCall.get("name")+"\"");
                 for (JmmNode child : identifiers) {
                     result.append(",");
                     //String to_append=dealWithChild(child);
@@ -196,7 +196,9 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             result.append(",");
             result.append(dealWithChild(callArgs));
         }
-        result.append(").V;\n");
+        result.append(")");
+        result.append(getTypeOllir(symbolTableImp.methods.get(methodKey).returnType));
+        result.append(";\n");
 
         return result.toString();
     }
@@ -214,7 +216,9 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 result.append(",");
                 result.append(dealWithChild(callArgs));
             }
-            result.append(").V;\n");
+            result.append(")");
+            result.append(getTypeOllir(symbolTableImp.methods.get(methodKey).returnType));
+            result.append(";\n");
         }
 
         return result.toString();
@@ -264,11 +268,11 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         
         if(pre.equals("")){
-            return left + " :=." + type + " " + right + "\n";
-        }else if(!putfield){
+            return left + " :=." + type + " " + right + ";" + "\n";
+        }else if(putfield){
             return pre + "\n" + "putfield(" + left + "," + right + ").V;\n";
         }else{
-            return pre + "\n" + left + " :=." + type + " " + right + "\n";
+            return pre + "\n" + left + " :=." + type + " " + right  + "\n";
         }
     }
 
@@ -321,7 +325,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             case "LessThan"->{result.append(" <.i32 ");}
         }
 
-        result.append(right);
+        result.append(right + ";");
 
         finalList.add(pre);
         finalList.add(result.toString());
@@ -362,7 +366,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             }
 
             pre.append(res.get(0) + "\n");
-            pre.append("u1." + type + ":=." + type + " ");
+            pre.append("u1." + type + " :=." + type + " ");
             pre.append(res.get(1) + "\n");
         }
 
@@ -384,7 +388,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         result.append(" ");
         for (JmmNode child:node.getChildren())
             result.append(dealWithChild(child));
-
+        result.append(";\n");
         return result.toString();
     }
 
@@ -420,6 +424,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         if(type.getName().equals("int")) typeOllir = "i32";
         else if(type.getName().equals("boolean")) typeOllir = "bool";
+        else if(type.getName().equals("void")) typeOllir = "V";
         else typeOllir = type.getName();
 
         result.append(typeOllir);

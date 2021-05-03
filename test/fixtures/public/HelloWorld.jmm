@@ -1,6 +1,6 @@
-import ioPlus;
-class HelloWorld extends Oi{
-	public static void main(String[] args) {
-
-	}
+import io;
+class HelloWorld{
+    public static void main(String[] args) {
+        io.println(12345);
+    }
 }

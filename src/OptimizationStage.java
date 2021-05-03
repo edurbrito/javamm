@@ -45,6 +45,7 @@ public class OptimizationStage implements JmmOptimization {
                 count--;
         }
         ollirCode = temp.toString();
+        System.out.println(ollirCode);
 
 
 
