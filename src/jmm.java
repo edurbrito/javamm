@@ -81,9 +81,16 @@ public class jmm implements JmmParser {
             jmm main = new jmm();
 
             JmmParserResult parserResult = main.parse(fileName);
+            if(parserResult.getReports().size() > 0){
+                throw new Exception("There were syntatical errors");
+            }
 
             AnalysisStage analysisStage = new AnalysisStage();
+
             JmmSemanticsResult semanticsResult = analysisStage.semanticAnalysis(parserResult);
+            if(semanticsResult.getReports().size() > 0){
+                throw new Exception("There were semantic errors");
+            }
 
             OptimizationStage optimizationStage = new OptimizationStage();
 
