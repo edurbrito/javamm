@@ -117,6 +117,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
     private String dealWithMainMethod(JmmNode node) {
         this.methodName = "main";
+        this.methodKey = "main";
         StringBuilder result = new StringBuilder("\n");
         JmmNode methodBody = node.getChildren().get(0);
 
@@ -425,14 +426,14 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             return null;
 
         // Searching the symbols of the local variables to see if any has the name we're looking for
-        HashMap<Symbol, Boolean> localVariables = symbolTableImp.getMethodByName(this.methodName).getLocalVariables();
+        HashMap<Symbol, Boolean> localVariables = symbolTableImp.getMethod(this.methodKey).getLocalVariables();
         for (Symbol i : localVariables.keySet()) {
             if (i.getName().equals(node.get("name")))
                 return i.getType();
         }
 
         // Searching the symbols in the function parameters
-        List<Symbol> parameters = symbolTableImp.getMethodByName(this.methodName).getParameters();
+        List<Symbol> parameters = symbolTableImp.getMethod(this.methodKey).getParameters();
         for (Symbol i : parameters) {
             if (i.getName().equals(node.get("name")))
                 return i.getType();
