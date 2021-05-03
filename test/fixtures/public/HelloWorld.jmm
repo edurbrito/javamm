@@ -16,10 +16,11 @@ class HelloWorld extends Oi{
         a4 = 4;
 
         b = a1 + a2 * a3 - a4;
+        ioPlus.println(b,3+4+5);
 	}
 
 	public int f1(int a, int b) {
-            a = a + b;
+            a = a + b + 2 + 0;
             return a;
     }
 }

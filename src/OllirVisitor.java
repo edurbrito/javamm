@@ -174,6 +174,9 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 result.append("invokestatic(" + objectName + "," + methodCall.get("name"));
                 for (JmmNode child : identifiers) {
                     result.append(",");
+                    //String to_append=dealWithChild(child);
+                    //if (to_append.equals(""))
+                    //    to_append=dealWithArithmetic(child).get(0)+dealWithArithmetic(child).get(1);
                     result.append(dealWithChild(child));
                 }
                 result.append(").V;\n");
@@ -257,7 +260,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         String left, right, pre;
         List<String> temps = dealWithTemp(children);
-        System.out.println("RES: " + temps);
+        //System.out.println("RES: " + temps);
         left = temps.get(0); right = temps.get(1); pre = temps.get(2);
         result.append(left);
 
