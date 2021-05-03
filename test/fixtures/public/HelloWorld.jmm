@@ -1,28 +1,6 @@
 import ioPlus;
 class HelloWorld extends Oi{
-    int a;
 	public static void main(String[] args) {
-        int a;
-        int a1;
-        int a2;
-        int a3;
-        int a4;
 
-        boolean b;
-
-
-        a1 = 1;
-        a=a1;
-        a2 = 2;
-        a3 = 3;
-        a4 = 4;
-
-        b = a1 + a2 * a3 - a4;
-        ioPlus.println(b,3+4+5);
 	}
-
-	public int f1(int a, int b) {
-            a = a + b + 2 + 0;
-            return a;
-    }
 }

@@ -392,7 +392,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     private String dealWithIdentifier(JmmNode child) {
         String identifierName = child.get("name");
         String pre = "";
-        Parameter parameter = this.symbolTableImp.getMethodByName(this.methodName).getParameter(identifierName);
+        Parameter parameter = this.symbolTableImp.getMethod(this.methodKey).getParameter(identifierName);
 
         if(parameter != null)
             pre =  "$" + Integer.toString(parameter.getOrder()) + ".";
@@ -441,7 +441,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         }
 
         // Searching the symbols in the function parameters
-        List<Parameter> parameters = symbolTableImp.getMethodByName(this.methodKey).getParameters();
+        List<Parameter> parameters = symbolTableImp.getMethod(this.methodKey).getParameters();
         for (Parameter i : parameters) {
             if (i.getSymbol().getName().equals(node.get("name")))
                 return i.getSymbol().getType();
