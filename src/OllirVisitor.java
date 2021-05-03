@@ -26,16 +26,16 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
     private String dealWithChild(JmmNode child){
         switch (child.getKind()){
-            case "Method"->{return dealWithMethod(child);}
-            case "MainMethod"->{return dealWithMainMethod(child);}
-            case "TwoPartExpression"->{return dealWithTwoPart(child);}
-            case "EqualStatement"-> {return dealWithEqualStatement(child);}
-            case "Identifier" ->{ return dealWithIdentifier(child);}
-            case "Integer" ->{ return dealWithInteger(child);}
-            case "Boolean"->{ return dealWithBoolean(child);}
-            case "AllocationExpression"->{return dealWithAllocationExpression(child);}
-            case "MethodBody"->{return dealWithMethodBody(child);}
-            case "Return"->{return dealWithReturn(child);}
+            case "Method": {return dealWithMethod(child);}
+            case "MainMethod": {return dealWithMainMethod(child);}
+            case "TwoPartExpression":{return dealWithTwoPart(child);}
+            case "EqualStatement": {return dealWithEqualStatement(child);}
+            case "Identifier" :{ return dealWithIdentifier(child);}
+            case "Integer" :{ return dealWithInteger(child);}
+            case "Boolean":{ return dealWithBoolean(child);}
+            case "AllocationExpression":{return dealWithAllocationExpression(child);}
+            case "MethodBody":{return dealWithMethodBody(child);}
+            case "Return":{return dealWithReturn(child);}
         }
         return "";
     }
@@ -62,9 +62,9 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         for (JmmNode child:node.getChildren()){
             switch (child.getKind()){
-                case "Method"->{ollirCode.append(dealWithMethod(child));}
-                case "MainMethod"->{ollirCode.append(dealWithMainMethod(child));}
-                case "Var"->{ollirCode.append(dealWithVar(child));}
+                case "Method":{ollirCode.append(dealWithMethod(child)); break;}
+                case "MainMethod":{ollirCode.append(dealWithMainMethod(child)); break;}
+                case "Var":{ollirCode.append(dealWithVar(child)); break;}
             }
         }
         ollirCode.append("}\n");
@@ -289,13 +289,16 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         result.append(left);
 
         switch (booleanNode.getKind()){
-            case "Not"->{
+            case "Not":{
                 result.append(" !.bool ");
                 result.append(left);
+                break;
             }
-            case "And"->{
+            case "And":{
                 result.append(" && ");
-                result.append(right);}
+                result.append(right);
+                break;
+            }
         }
 
         finalList.add(pre);
@@ -318,11 +321,11 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         result.append(left);
 
         switch (arithmeticNode.getKind()){
-            case "Sum"->{result.append(" + ");}
-            case "Sub"->{result.append(" - ");}
-            case "Mult"->{result.append(" * ");}
-            case "Div"->{result.append(" / ");}
-            case "LessThan"->{result.append(" <.i32 ");}
+            case "Sum":{result.append(" + "); break;}
+            case "Sub":{result.append(" - "); break;}
+            case "Mult":{result.append(" * "); break;}
+            case "Div":{result.append(" / "); break;}
+            case "LessThan":{result.append(" <.i32 "); break;}
         }
 
         result.append(right + ";");
@@ -373,7 +376,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         List<String> res = new ArrayList<>();
         res.add(left);
         res.add(right);
-        if(pre.isEmpty())
+        if(pre.length() == 0)
             res.add("");
         else
             res.add(pre.toString());
