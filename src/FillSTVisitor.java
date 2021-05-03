@@ -56,9 +56,9 @@ public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
 
     private Boolean dealWithMain(JmmNode node, Boolean bool) {
 
-        List<Symbol> parameters = new ArrayList<>();
+        List<Parameter> parameters = new ArrayList<>();
 
-        parameters.add(new Symbol(new Type("string", true), node.get("argName"))); // String [] args
+        parameters.add(new Parameter( 0, new Symbol(new Type("string", true), node.get("argName")))); // String [] args
 
         MethodTable methodTable = new MethodTable("main", new Type("void", false), parameters); // public static void main
 
@@ -72,12 +72,12 @@ public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
     public Boolean dealWithMethod(JmmNode node, Boolean bool) {
         List<JmmNode> children = node.getChildren();
 
-        List<Symbol> parameters = getParameters(children.get(1));
+        List<Parameter> parameters = getParameters(children.get(1));
 
         MethodTable methodTable = new MethodTable(node.get("name"), getType(children.get(0)), parameters);
 
-        for(Symbol s: parameters)
-            methodTable.addLocalVariable(s, true);
+        for(Parameter s: parameters)        // TODO: What is this?
+            methodTable.addLocalVariable(s.getSymbol(), true);
 
         methodSignature = methodTable.getSignature();
 
@@ -118,13 +118,15 @@ public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
         return false;
     }
 
-    private List<Symbol> getParameters(JmmNode node) {
+    private List<Parameter> getParameters(JmmNode node) {
         List<JmmNode> children = node.getChildren();
-        List<Symbol> symbolSet = new ArrayList<>();
+        List<Parameter> symbolSet = new ArrayList<>();
 
+        int i = 1;
         for (JmmNode argument : children) {
             if (argument.getKind().equals("Argument")) {
-                symbolSet.add(getSymbol(argument));
+
+                symbolSet.add(new Parameter(i++, getSymbol(argument)));
             }
         }
 

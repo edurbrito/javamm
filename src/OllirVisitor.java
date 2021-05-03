@@ -98,8 +98,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         assert methodTable != null;
 
-        for (Symbol parameter : methodTable.parameters){
-            result.append(parameter.getName()+"."+getTypeOllir(parameter.getType())+",");
+        for (Parameter parameter : methodTable.parameters){
+            result.append(parameter.getSymbol().getName() + "." + getTypeOllir(parameter.getSymbol().getType()) + ",");
         }
         if (result.length()>0)
             result.deleteCharAt(result.length()-1);
@@ -227,8 +227,6 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         // Get OLLIR type of operation
         String type = getTypeOllir(getIdentifierType(children.get(0)));
 
-        String left, right, pre = "";
-        left = dealWithChild(children.get(0));
         if (children.get(0).getKind().equals("Identifier")){
             List<Symbol> classVariables = symbolTableImp.getFields();
             for (Symbol i : classVariables) {
@@ -236,9 +234,14 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                     putfield = true;
                 }
             }
+
+
         }
 
-        // Gets the OLLIR code for each child
+
+
+
+        String left, right, pre = "";
         left = dealWithChild(children.get(0));
         right = dealWithChild(children.get(1));
 
@@ -247,8 +250,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             List<String> res;
             String rightNodeKind = children.get(1).getKind();
 
-            // Boolean operation
-            if(rightNodeKind.equals("Not") || rightNodeKind.equals("And")){
+
+            if(rightNodeKind.equals("Not") || rightNodeKind.equals("And")){     // Boolean operation
                 res =  dealWithBoolOp(children.get(1));
             }else { // Arithmetic operation
                 res = dealWithArithmetic(children.get(1));
@@ -388,8 +391,13 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
     private String dealWithIdentifier(JmmNode child) {
         String identifierName = child.get("name");
+        String pre = "";
+        Parameter parameter = this.symbolTableImp.getMethodByName(this.methodName).getParameter(identifierName);
 
-        return identifierName + "." + getTypeOllir(getIdentifierType(child));
+        if(parameter != null)
+            pre =  "$" + Integer.toString(parameter.getOrder()) + ".";
+
+        return pre + identifierName + "." + getTypeOllir(getIdentifierType(child));
     }
 
     private String dealWithInteger(JmmNode child) {
@@ -433,10 +441,10 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         }
 
         // Searching the symbols in the function parameters
-        List<Symbol> parameters = symbolTableImp.getMethod(this.methodKey).getParameters();
-        for (Symbol i : parameters) {
-            if (i.getName().equals(node.get("name")))
-                return i.getType();
+        List<Parameter> parameters = symbolTableImp.getMethodByName(this.methodKey).getParameters();
+        for (Parameter i : parameters) {
+            if (i.getSymbol().getName().equals(node.get("name")))
+                return i.getSymbol().getType();
         }
 
         // Searching the symbols of the class variables to see if any has the name we're looking for

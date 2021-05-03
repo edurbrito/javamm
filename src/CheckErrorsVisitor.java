@@ -47,15 +47,17 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
 
     private Boolean dealWithMethod(JmmNode node, List<Report> reports) {
         List<JmmNode> arguments = node.getChildren().get(1).getChildren();
-        List<Symbol> symbols = new ArrayList<>();
+        List<Parameter> parameters = new ArrayList<>();
 
+        int i = 0;
         for (JmmNode argument : arguments) {
             if (argument.getKind().equals("Argument")) {
-                symbols.add(new Symbol(new Type(argument.getChildren().get(0).get("name"), argument.getNumChildren() > 0), null));
+                Symbol symbol = new Symbol(new Type(argument.getChildren().get(0).get("name"), argument.getNumChildren() > 0), null);
+                parameters.add(new Parameter(i++, symbol));
             }
         }
 
-        this.methodSignature = (new MethodTable(node.get("name"), null, symbols)).getSignature();
+        this.methodSignature = (new MethodTable(node.get("name"), null, parameters)).getSignature();
         return true;
     }
 
@@ -263,8 +265,8 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
 
             // Verify if parameters are of the correct type
             for (int i = 0; i < overload.getParameters().size(); i++) {
-                if (!overload.getParameters().get(i).getType().equals(getNodeType(children.get(i)))) {
-                    Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(nodeMethodCall.get("line")), Integer.parseInt(nodeMethodCall.get("col")), "Wrong object type in parameter " + i + ". Expecting " + overload.getParameters().get(i).getType() + " but got " + getNodeType(children.get(i)));
+                if (!overload.getParameters().get(i).getSymbol().getType().equals(getNodeType(children.get(i)))) {
+                    Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(nodeMethodCall.get("line")), Integer.parseInt(nodeMethodCall.get("col")), "Wrong object type in parameter " + i + ". Expecting " + overload.getParameters().get(i).getSymbol().getType() + " but got " + getNodeType(children.get(i)));
                     reports.add(report);
                     continue;
                 }
@@ -386,10 +388,10 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
         }
 
         // Searching the symbols in the function parameters
-        List<Symbol> parameters = symbolTableImp.getMethod(methodSignature).getParameters();
-        for (Symbol i : parameters) {
-            if (i.getName().equals(node.get("name")))
-                return i.getType();
+        List<Parameter> parameters = symbolTableImp.getMethod(methodSignature).getParameters();
+        for (Parameter i : parameters) {
+            if (i.getSymbol().getName().equals(node.get("name")))
+                return i.getSymbol().getType();
         }
 
         // Searching the symbols of the class variables to see if any has the name we're looking for
@@ -409,13 +411,14 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
 
         List<JmmNode> arguments = nodeMethodCall.getChildren();
 
-        List<Symbol> symbols = new ArrayList<>();
+        List<Parameter> parameters = new ArrayList<>();
 
+        int i = 1;
         for (JmmNode argument : arguments) {
-            symbols.add(new Symbol(getNodeType(argument), null));
+            parameters.add(new Parameter(i++, new Symbol(getNodeType(argument), null)));
         }
 
-        return (new MethodTable(nodeMethodCall.get("name"), null, symbols)).getSignature();
+        return (new MethodTable(nodeMethodCall.get("name"), null, parameters)).getSignature();
     }
 
     private boolean verifyNotNull(JmmNode node, List<Report> reports, Type leftChild, Type rightChild) {

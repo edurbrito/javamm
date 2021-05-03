@@ -59,8 +59,21 @@ public class SymbolTableImp implements SymbolTable {
 
     @Override
     public List<Symbol> getParameters(String signature) {
-        return new ArrayList<>(methods.get(signature).getParameters());
+        List<Parameter> parameters = methods.get(signature).getParameters();
+        List<Symbol> symbolsPar = new ArrayList<>();
+
+        for(Parameter p : parameters){
+            symbolsPar.add(p.getSymbol());
+        }
+        return symbolsPar;
     }
+
+    public List<Parameter> getParametersWithOrder(String signature) {
+       return this.methods.get(signature).getParameters();
+    }
+
+
+
 
     @Override
     public List<Symbol> getLocalVariables(String signature) {
