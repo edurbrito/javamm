@@ -1,21 +1,6 @@
-import ioPlus;
-class HelloWorld extends Oi{
-    int a;
+import io;
+class HelloWorld{
 	public static void main(String[] args) {
-	    HelloWorld a;
-	    a.sum();
-		ioPlus.printHelloWorld();
+		io.println(12345);
 	}
-
-	public int hello(int a, int b){
-
-        if(this.alwaysTrue()){
-
-        }else{
-
-        }
-
-        return 2;
-	}
-
 }

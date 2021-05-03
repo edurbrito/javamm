@@ -4,14 +4,13 @@ import pt.up.fe.comp.jmm.analysis.table.Type;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 public class SymbolTableImp implements SymbolTable {
     List<String> imports = new ArrayList();
     String className = "";
     String superClass = "";
-    HashMap<Symbol, String> fields = new HashMap<>();   // String is the value of the variable
+    HashMap<Symbol, Boolean> fields = new HashMap<>();   // Boolean is true if the variable has been assigned TODO nunca ira ser
     HashMap<String, MethodTable> methods = new HashMap<>();
 
     @Override
@@ -39,30 +38,60 @@ public class SymbolTableImp implements SymbolTable {
         return new ArrayList<>(methods.keySet());
     }
 
-    public MethodTable getMethod(String methodName) {
-        return methods.get(methodName);
+    public MethodTable getMethod(String signature) {
+        return methods.get(signature);
+    }
+
+    public MethodTable getMethodByName(String name)
+    {
+        for(MethodTable methodTable : this.methods.values()){
+            if(methodTable.getName().equals(name))
+                return methodTable;
+        }
+        return null;
+    }
+
+
+    @Override
+    public Type getReturnType(String signature) {
+        return methods.get(signature).getReturnType();
     }
 
     @Override
-    public Type getReturnType(String methodName) {
-        return methods.get(methodName).getReturnType();
+    public List<Symbol> getParameters(String signature) {
+        List<Parameter> parameters = methods.get(signature).getParameters();
+        List<Symbol> symbolsPar = new ArrayList<>();
+
+        for(Parameter p : parameters){
+            symbolsPar.add(p.getSymbol());
+        }
+        return symbolsPar;
     }
 
-    @Override
-    public List<Symbol> getParameters(String methodName) {
-        return new ArrayList<>(methods.get(methodName).getParameters());
+    public List<Parameter> getParametersWithOrder(String signature) {
+       return this.methods.get(signature).getParameters();
     }
 
+
+
+
     @Override
-    public List<Symbol> getLocalVariables(String methodName) {
-        return new ArrayList<>(methods.get(methodName).getLocalVariables().keySet());
+    public List<Symbol> getLocalVariables(String signature) {
+        return new ArrayList<>(methods.get(signature).getLocalVariables().keySet());
+    }
+
+    public Type getFieldType(String name){
+        for(Symbol s : getFields()){
+            if(s.getName().equals(name)) return s.getType();
+        }
+        return null;
     }
 
     public boolean hasImport(String _import){
         return this.imports.contains(_import);
     }
 
-    public boolean hasSuperClass(){return this.superClass != "";}
+    public boolean hasSuperClass(){return !this.superClass.equals("");}
 
     public void addImport(String _import) {
         this.imports.add(_import);
@@ -77,46 +106,51 @@ public class SymbolTableImp implements SymbolTable {
     }
 
     public void addField(Type type, String name) {
-        fields.put(new Symbol(type, name), "");
+        fields.put(new Symbol(type, name), false);
     }
 
-    public void addField(Symbol symbol) {
-        fields.put(symbol, "");
+    public Boolean addField(Symbol var) {
+        // Check if a field with the same name is already declared
+        for (Symbol symbol : fields.keySet()) {
+            if (symbol.getName().equals(var.getName()))
+                return false;
+        }
+        fields.put(var, false);
+        return true;
     }
 
-    public void addField(Type type, String name, String value) {
-        fields.put(new Symbol(type, name), value);
-    }
-
-    public void addFieldValue(String name, String value) {
+    public void assignField(String name) {
         for (Symbol symbol : fields.keySet()) {
             if (symbol.getName().equals(name))
-                fields.put(symbol, value);
+                fields.put(symbol, true);
         }
     }
 
-    public void addMethod(String methodName, MethodTable methodTable) {
-        this.methods.put(methodName, methodTable);
+    public void addMethod(String methodSignature, MethodTable methodTable) {
+        this.methods.put(methodSignature, methodTable);
     }
 
-    public void addMethod(String methodName, Type returnType, List<Symbol> parameters) {
-        methods.put(methodName, new MethodTable(returnType, parameters));
+    public void assignMethodVariable(String methodSignature, String variableName) {
+        methods.get(methodSignature).assignVariable(variableName);
     }
 
-    public void addMethodParameter(String methodName, Symbol parameter) {
-        methods.get(methodName).addParameter(parameter);
-    }
+    public boolean isAssigned(String methodSignature, String identifier) {
+        // Searching the symbols of the local variables to see if the variable is initialized
+        HashMap<Symbol, Boolean> localVariables = getMethod(methodSignature).getLocalVariables();
+        for (Symbol i : localVariables.keySet()) {
+            if (i.getName().equals(identifier) && localVariables.get(i)) {
+                return true;
+            }
+        }
 
-    public void addMethodVariable(String methodName, Symbol variable) {
-        methods.get(methodName).addLocalVariable(variable);
-    }
+        // Searching the symbols of the class variables to see if the variable is initialized
+        for (Symbol i : fields.keySet()) {
+            if (i.getName().equals(identifier) && fields.get(i)) {
+                return true;
+            }
+        }
 
-    public void addMethodVariable(String methodName, Symbol variable, String value) {
-        methods.get(methodName).addLocalVariable(variable, value);
-    }
-
-    public void assignMethodVariable(String methodName, String variableName, String value) {
-        methods.get(methodName).assignVariable(variableName, value);
+        return false;
     }
 
     @Override

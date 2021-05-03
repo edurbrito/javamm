@@ -30,7 +30,7 @@ class test2 extends classA {
     }
 
     public int foo(){
-        classA objA;
+        test2 objA;
         classA objA2;
         test2 objt2;
 

@@ -6,7 +6,6 @@ import pt.up.fe.comp.jmm.analysis.JmmSemanticsResult;
 import pt.up.fe.comp.jmm.ollir.JmmOptimization;
 import pt.up.fe.comp.jmm.ollir.OllirResult;
 import pt.up.fe.comp.jmm.report.Report;
-import pt.up.fe.specs.util.SpecsIo;
 
 /**
  * Copyright 2021 SPeCS.
@@ -22,6 +21,7 @@ import pt.up.fe.specs.util.SpecsIo;
  */
 
 public class OptimizationStage implements JmmOptimization {
+    public String codeOllir;
 
     @Override
     public OllirResult toOllir(JmmSemanticsResult semanticsResult) {
@@ -29,12 +29,49 @@ public class OptimizationStage implements JmmOptimization {
         JmmNode node = semanticsResult.getRootNode();
 
         // Convert the AST to a String containing the equivalent OLLIR code
-        String ollirCode = ""; // Convert node ...
+        OllirVisitor visitor = new OllirVisitor(( SymbolTableImp) semanticsResult.getSymbolTable());
+        visitor.visit(node);
+        String ollirCode = visitor.getOllirCode();
 
-        // More reports from this stage
+        //formating string
+        StringBuilder temp = new StringBuilder();
+        int count = 0;
+        for(String i:ollirCode.split("\n")){
+            temp.append("\t".repeat(count)+i+"\n");
+            if (i.contains("{"))
+                count++;
+            if (i.contains("}"))
+                count--;
+        }
+        ollirCode = temp.toString();
+        System.out.println(ollirCode);
+
+
+
+
+        // More reports from this stag
         List<Report> reports = new ArrayList<>();
 
         return new OllirResult(semanticsResult, ollirCode, reports);
+    }
+
+    public String exp(JmmSemanticsResult semanticsResult) {
+
+        JmmNode node = semanticsResult.getRootNode();
+
+        // Convert the AST to a String containing the equivalent OLLIR code
+        OllirVisitor visitor = new OllirVisitor(( SymbolTableImp) semanticsResult.getSymbolTable());
+        visitor.visit(semanticsResult.getRootNode());
+        String ollirCode = visitor.getOllirCode();
+
+
+        this.codeOllir = ollirCode;
+
+
+        // More reports from this stag
+        List<Report> reports = new ArrayList<>();
+
+        return ollirCode;
     }
 
     @Override

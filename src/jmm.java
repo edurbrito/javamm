@@ -2,6 +2,8 @@
 import pt.up.fe.comp.jmm.JmmParser;
 import pt.up.fe.comp.jmm.JmmParserResult;
 import pt.up.fe.comp.jmm.analysis.JmmSemanticsResult;
+import pt.up.fe.comp.jmm.jasmin.JasminResult;
+import pt.up.fe.comp.jmm.ollir.OllirResult;
 import pt.up.fe.comp.jmm.report.Report;
 import pt.up.fe.comp.jmm.report.ReportType;
 import pt.up.fe.comp.jmm.report.Stage;
@@ -36,7 +38,7 @@ public class jmm implements JmmParser {
         } catch (Exception e) {
             // printUsage(e,true);
             ArrayList<Report> reports = new ArrayList<Report>();
-            if(e instanceof ParseException)
+            if (e instanceof ParseException)
                 reports.add(new Report(ReportType.ERROR, Stage.SYNTATIC, ((ParseException) e).currentToken.beginLine, "Detected generic error: " + e.getMessage()));
             else
                 reports.add(new Report(ReportType.ERROR, Stage.SYNTATIC, e.getStackTrace()[0].getLineNumber(), "Detected generic error: " + e.getMessage()));
@@ -80,15 +82,27 @@ public class jmm implements JmmParser {
             jmm main = new jmm();
 
             JmmParserResult parserResult = main.parse(fileName);
+            if(parserResult.getReports().size() > 0){
+                throw new Exception("There were syntatical errors");
+            }
 
             AnalysisStage analysisStage = new AnalysisStage();
-            JmmSemanticsResult semanticsResult = analysisStage.semanticAnalysis(parserResult);
 
-            // for(Report report : semanticsResult.getReports()){
-            //    System.out.println(report.toString());
-            // }
+            JmmSemanticsResult semanticsResult = analysisStage.semanticAnalysis(parserResult);
+            if(semanticsResult.getReports().size() > 0){
+                throw new Exception("There were semantic errors");
+            }
+
+            OptimizationStage optimizationStage = new OptimizationStage();
+            OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+
+            BackendStage backendStage = new BackendStage();
+            JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+            jasminResult.run();
 
         } catch (Exception e) {
+            e.printStackTrace();
             printUsage(e,false);
             return;
         }

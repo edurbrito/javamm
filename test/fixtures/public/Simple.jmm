@@ -3,7 +3,7 @@ class Simple {
 
     public int add(int a, int b){
         int c;
-        c = a + this.constInstr();
+        c = a+this.constInstr();
         return c;
     }
 
@@ -29,9 +29,7 @@ class Simple {
         c = 400;
         c = 1000;
         c = 100474650;
-		c = 10;
+        c = 10;
         return c;
     }
-
-
 }

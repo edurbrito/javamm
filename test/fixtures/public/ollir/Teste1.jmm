@@ -1,0 +1,11 @@
+class Fac {
+    public int compFac(int num){
+        int num_aux;
+
+        return num_aux;
+    }
+    public static void main(String[] args){
+        Fac a;
+        a.compFac(new Fac());
+    }
+}
