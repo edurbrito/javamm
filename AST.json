@@ -178,6 +178,61 @@
                           "col": "9",
                           "line": "9"
                         },
+                        "children": [
+                          {
+                            "kind": "EqualStatement",
+                            "attributes": {
+                              "col": "13",
+                              "line": "10"
+                            },
+                            "children": [
+                              {
+                                "kind": "Identifier",
+                                "attributes": {
+                                  "col": "13",
+                                  "line": "10",
+                                  "name": "a"
+                                },
+                                "children": []
+                              },
+                              {
+                                "kind": "Integer",
+                                "attributes": {
+                                  "col": "18",
+                                  "line": "10",
+                                  "value": "1"
+                                },
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "9",
+                      "line": "12"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "9",
+                          "line": "12",
+                          "name": "a"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "Integer",
+                        "attributes": {
+                          "col": "14",
+                          "line": "12",
+                          "value": "1"
+                        },
                         "children": []
                       }
                     ]

@@ -7,6 +7,7 @@ import pt.up.fe.comp.jmm.report.Report;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.StringJoiner;
 
 public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     private SymbolTableImp symbolTableImp;
@@ -16,7 +17,6 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
     public OllirVisitor(SymbolTableImp symbolTableImp) {
         super();
-
 
         this.symbolTableImp = symbolTableImp;
 
@@ -37,8 +37,55 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             case "AllocationExpression":{return dealWithAllocationExpression(child);}
             case "MethodBody":{return dealWithMethodBody(child);}
             case "Return":{return dealWithReturn(child);}
+            case "IfElse":{return dealWithIfElse(child);}
         }
         return "";
+    }
+
+    private String dealWithIfElse(JmmNode ifElse) {
+
+        // IfElse Condition
+        JmmNode ifCondition = ifElse.getChildren().get(0);
+        JmmNode op = ifCondition.getChildren().get(0);
+        List<String> cond;
+        StringJoiner res = new StringJoiner("\n");
+
+        if(op.getKind().equals("LessThan")){
+            cond = dealWithArithmetic(op);
+        }else {
+            cond = dealWithBoolOp(op);
+        }
+
+        String pre = cond.get(0), inCond = cond.get(1);
+
+        res.add(pre);
+
+        res.add("if ( " + inCond.replace("<", ">=") + " ) goto else;");
+
+        // IfElse Body
+        JmmNode ifBody = ifElse.getChildren().get(1);
+
+        for(JmmNode bodyExp : ifBody.getChildren()){
+            res.add(dealWithChild(bodyExp));
+        }
+        res.add("goto endif;");
+
+        // IfElse else
+        res.add("else:");
+    
+        JmmNode ifElseBody = ifElse.getChildren().get(2);
+        for(JmmNode bodyExp : ifElseBody.getChildren()){
+            res.add(dealWithChild(bodyExp));
+        }
+
+        res.add("endif:\n");
+
+
+        return res.toString();
+    }
+
+    private String processCond(String cond){
+        return cond.replace("<", ">=");
     }
 
 
@@ -70,8 +117,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         for (JmmNode child:node.getChildren()){
             switch (child.getKind()){
-                case "Method":{ollirCode.append(dealWithMethod(child)); break;}
-                case "MainMethod":{ollirCode.append(dealWithMainMethod(child)); break;}
+                case "Method": {ollirCode.append(dealWithMethod(child)); break;}
+                case "MainMethod": {ollirCode.append(dealWithMainMethod(child)); break;}
             }
         }
         ollirCode.append("}\n");
@@ -261,6 +308,49 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         // Get OLLIR type of operation
         String type = getTypeOllir(getIdentifierType(children.get(0)));
 
+        putfield = isPutfield(children);
+
+        String left, right, pre = "";
+        left = dealWithChild(children.get(0));
+        right = dealWithChild(children.get(1));
+        boolean arithm = false;
+
+        // Checks if the right child is a compost operation (arithmetic or boolean)
+        if(right.equals("")){
+            List<String> res;
+            String rightNodeKind = children.get(1).getKind();
+
+
+            if(rightNodeKind.equals("Not") || rightNodeKind.equals("And")){     // Boolean operation
+                res =  dealWithBoolOp(children.get(1));
+            }else { // Arithmetic operation
+                res = dealWithArithmetic(children.get(1));
+                arithm = true;
+            }
+
+            pre = res.get(0);           // the OLLIR code needed before the operation
+            right = res.get(1);         // the right side of the op
+        }
+
+        return getEqualOllir(putfield, type, left, right, pre, arithm);
+    }
+
+
+
+    private String getEqualOllir(boolean putfield, String type, String left, String right, String pre, boolean arithm) {
+        if(pre.equals("")){
+            if (putfield)
+                return "putfield(this," + left + "," + right + ").V;\n";
+            return left + " :=." + type + " " + right  + ";\n";
+        }else{
+            if (putfield)
+                return pre + '\n' + "putfield(this," + left + "," + right + ").V;\n";
+            return pre + "\n" + left + " :=." + type + " " + right + ";\n";
+        }
+    }
+
+    private boolean isPutfield(List<JmmNode> children) {
+        boolean putfield = false;
         if (children.get(0).getKind().equals("Identifier")){
             JmmNode identifierNode = children.get(0);
 
@@ -287,43 +377,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             }
 
         }
-
-
-
-
-        String left, right, pre = "";
-        left = dealWithChild(children.get(0));
-        right = dealWithChild(children.get(1));
-        boolean arithm = false;
-
-        // Checks if the right child is a compost operation (arithmetic or boolean)
-        if(right.equals("")){
-            List<String> res;
-            String rightNodeKind = children.get(1).getKind();
-
-
-            if(rightNodeKind.equals("Not") || rightNodeKind.equals("And")){     // Boolean operation
-                res =  dealWithBoolOp(children.get(1));
-            }else { // Arithmetic operation
-                res = dealWithArithmetic(children.get(1));
-                arithm = true;
-            }
-
-            pre = res.get(0);           // the OLLIR code needed before the operation
-            right = res.get(1);         // the right side of the op
-        }
-
-
-
-        if(pre.equals("")){
-            if (putfield)
-                return "putfield(this," + left + "," + right + ").V;\n";
-            return left + " :=." + type + " " + right + (!arithm ? ";": "") + "\n";
-        }else{
-            if (putfield)
-                return pre + '\n' + "putfield(this," + left + "," + right + ").V;\n";
-            return pre + "\n" + left + " :=." + type + " " + right + (!arithm ? ";": "") + "\n";
-        }
+        return putfield;
     }
 
     private List<String> dealWithBoolOp(JmmNode booleanNode) {
@@ -382,7 +436,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             case "LessThan":{result.append(" <.i32 "); break;}
         }
 
-        result.append(right + ";");
+        result.append(right);
 
         finalList.add(pre);
         finalList.add(result.toString());
@@ -409,7 +463,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             left = "t1." + type;
             pre.append(res.get(0) + "\n");
             pre.append("t1." + type + " :=." + type + " ");
-            pre.append(res.get(1) + "\n");
+            pre.append(res.get(1) + ";\n");
         }
 
         if(children.size() > 1 && (right = dealWithChild(children.get(1))).equals("")){
@@ -424,7 +478,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
             pre.append(res.get(0) + "\n");
             pre.append("u1." + type + " :=." + type + " ");
-            pre.append(res.get(1) + "\n");
+            pre.append(res.get(1) + ";\n");
         }
 
         List<String> res = new ArrayList<>();

@@ -20,6 +20,7 @@ import pt.up.fe.specs.util.SpecsIo;
 
 public class OptimizeTest {
 
+
     @Test
     public void testHelloWorld() { //test basic println
         //SpecsIo.getResource(
