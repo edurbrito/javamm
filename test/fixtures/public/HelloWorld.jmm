@@ -1,6 +1,13 @@
 import io;
 class HelloWorld{
 	public static void main(String[] args) {
-		io.println(12345);
+		int a;
+		a = 2;
+
+		if (a < 2){
+		    a = 3;
+		}else {
+
+		}
 	}
 }

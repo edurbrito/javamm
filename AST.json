@@ -1,1 +1,194 @@
-{}
+{
+  "rootNode": {
+    "kind": "Program",
+    "attributes": {
+      "col": "1",
+      "line": "1"
+    },
+    "children": [
+      {
+        "kind": "Import",
+        "attributes": {
+          "col": "1",
+          "line": "1"
+        },
+        "children": [
+          {
+            "kind": "Library",
+            "attributes": {
+              "col": "8",
+              "line": "1",
+              "name": "io"
+            },
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "Class",
+        "attributes": {
+          "col": "1",
+          "line": "2",
+          "name": "HelloWorld"
+        },
+        "children": [
+          {
+            "kind": "MainMethod",
+            "attributes": {
+              "col": "9",
+              "argName": "args",
+              "line": "3"
+            },
+            "children": [
+              {
+                "kind": "MethodBody",
+                "attributes": {
+                  "col": "3",
+                  "line": "4"
+                },
+                "children": [
+                  {
+                    "kind": "Var",
+                    "attributes": {
+                      "col": "3",
+                      "line": "4",
+                      "name": "a"
+                    },
+                    "children": [
+                      {
+                        "kind": "Type",
+                        "attributes": {
+                          "col": "3",
+                          "line": "4",
+                          "name": "int"
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "3",
+                      "line": "5"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "3",
+                          "line": "5",
+                          "name": "a"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "Integer",
+                        "attributes": {
+                          "col": "8",
+                          "line": "5",
+                          "value": "2"
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "IfElse",
+                    "attributes": {
+                      "col": "3",
+                      "line": "7"
+                    },
+                    "children": [
+                      {
+                        "kind": "IfCondition",
+                        "attributes": {
+                          "col": "7",
+                          "line": "7"
+                        },
+                        "children": [
+                          {
+                            "kind": "LessThan",
+                            "attributes": {
+                              "col": "11",
+                              "line": "7"
+                            },
+                            "children": [
+                              {
+                                "kind": "Identifier",
+                                "attributes": {
+                                  "col": "9",
+                                  "line": "7",
+                                  "name": "a"
+                                },
+                                "children": []
+                              },
+                              {
+                                "kind": "Integer",
+                                "attributes": {
+                                  "col": "12",
+                                  "line": "7",
+                                  "value": "2"
+                                },
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "IfBody",
+                        "attributes": {
+                          "col": "13",
+                          "line": "7"
+                        },
+                        "children": [
+                          {
+                            "kind": "EqualStatement",
+                            "attributes": {
+                              "col": "7",
+                              "line": "8"
+                            },
+                            "children": [
+                              {
+                                "kind": "Identifier",
+                                "attributes": {
+                                  "col": "7",
+                                  "line": "8",
+                                  "name": "a"
+                                },
+                                "children": []
+                              },
+                              {
+                                "kind": "Integer",
+                                "attributes": {
+                                  "col": "12",
+                                  "line": "8",
+                                  "value": "3"
+                                },
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "ElseBody",
+                        "attributes": {
+                          "col": "9",
+                          "line": "9"
+                        },
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "reports": []
+}
