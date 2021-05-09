@@ -1,14 +1,8 @@
 import io;
 class HelloWorld{
 	public static void main(String[] args) {
-		int a;
-		a = 2;
-
-		if (a < 2){
-		    a = 3;
-		}else {
-            a = 1;
-		}
-        a = 1;
+		int[] a;
+		a = new int[5];
+		a[0] = 1;
 	}
 }

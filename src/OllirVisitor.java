@@ -90,16 +90,31 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
 
     private String dealWithAllocationExpression(JmmNode child) {
-        StringBuilder result=new StringBuilder();
-        result.append("new ("+child.getChildren().get(0).get("name")+")"+".");
+        StringBuilder result = new StringBuilder();
+
         if (child.getChildren().get(0).getKind().equals("Object")) {
+            result.append("new (" + child.getChildren().get(0).get("name") + ")" + ".");
             result.append(child.getChildren().get(0).get("name")+";\n");
-            result.append("invokespecial("+child.getParent().getChildren().get(0).get("name")+"."+child.getChildren().get(0).get("name")+",\"<init>\").V");
+            result.append("invokespecial(" + child.getParent().getChildren().get(0).get("name") + "." + child.getChildren().get(0).get("name") + ",\"<init>\").V");
         }
-        else
-            result.append(child.getChildren().get(0).getKind());
+        else {
+            JmmNode lengthNode = child.getChildren().get(0).getChildren().get(0); // Get the nodes that are responsible for the array length
+            String length;
+            if(!lengthNode.getKind().equals("Integer")) {
+                List<String> tempRes = dealWithArithmetic(lengthNode);
+                result.append(tempRes.get(0));
+                length = tempRes.get(1);
+            }else {
+                length = dealWithInteger(lengthNode);
+            }
+
+            result.append("new (array," + length + ")" + ".array.i32");
+
+        }
         return result.toString();
     }
+
+
 
 
     private boolean dealWithClass(JmmNode node, List<Report> reports) {
@@ -332,12 +347,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             right = res.get(1);         // the right side of the op
         }
 
-        return getEqualOllir(putfield, type, left, right, pre, arithm);
-    }
 
-
-
-    private String getEqualOllir(boolean putfield, String type, String left, String right, String pre, boolean arithm) {
         if(pre.equals("")){
             if (putfield)
                 return "putfield(this," + left + "," + right + ").V;\n";
@@ -348,6 +358,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             return pre + "\n" + left + " :=." + type + " " + right + ";\n";
         }
     }
+
 
     private boolean isPutfield(List<JmmNode> children) {
         boolean putfield = false;
@@ -417,6 +428,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         List<String> finalList = new ArrayList<>();
         StringBuilder result = new StringBuilder();
         List<JmmNode> children = arithmeticNode.getChildren();
+
 
 
         String left, right, pre;            // the left side, right side (of the operation) and what precedes it

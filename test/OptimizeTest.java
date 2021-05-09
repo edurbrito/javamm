@@ -20,7 +20,7 @@ import pt.up.fe.specs.util.SpecsIo;
 
 public class OptimizeTest {
 
-
+/*
     @Test
     public void testHelloWorld() { //test basic println
         //SpecsIo.getResource(
@@ -30,7 +30,7 @@ public class OptimizeTest {
         result.getOllirClass().show();
 
     }
-
+*/
 
     @Test
     public void arithmetic() {//test arithmetic
@@ -61,6 +61,14 @@ public class OptimizeTest {
         result.getOllirClass().show();
 
     }
+    @Test
+    public void ifs() {//test class variables
 
+        var result = TestUtils.optimize("test/fixtures/public/ifs.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+
+    }
 
 }
