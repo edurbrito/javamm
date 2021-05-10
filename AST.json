@@ -1,1 +1,90 @@
-{}
+{
+  "rootNode": {
+    "kind": "Program",
+    "attributes": {
+      "col": "1",
+      "line": "1"
+    },
+    "children": [
+      {
+        "kind": "Class",
+        "attributes": {
+          "col": "1",
+          "line": "1",
+          "name": "MultipleSequential"
+        },
+        "children": [
+          {
+            "kind": "MainMethod",
+            "attributes": {
+              "col": "9",
+              "argName": "args",
+              "line": "2"
+            },
+            "children": [
+              {
+                "kind": "MethodBody",
+                "attributes": {
+                  "col": "3",
+                  "line": "3"
+                },
+                "children": [
+                  {
+                    "kind": "While",
+                    "attributes": {
+                      "col": "3",
+                      "line": "3"
+                    },
+                    "children": [
+                      {
+                        "kind": "WhileBody",
+                        "attributes": {
+                          "col": "16",
+                          "line": "3"
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "While",
+                    "attributes": {
+                      "col": "3",
+                      "line": "5"
+                    },
+                    "children": [
+                      {
+                        "kind": "WhileBody",
+                        "attributes": {
+                          "col": "16",
+                          "line": "5"
+                        },
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "reports": [
+    {
+      "type": "ERROR",
+      "stage": "SYNTATIC",
+      "line": 3,
+      "column": -1,
+      "message": "Detected error in while statement"
+    },
+    {
+      "type": "ERROR",
+      "stage": "SYNTATIC",
+      "line": 5,
+      "column": -1,
+      "message": "Detected error in while statement"
+    }
+  ]
+}

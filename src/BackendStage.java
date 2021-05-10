@@ -148,7 +148,7 @@ public class BackendStage implements JasminBackend {
             builder.append("\t.limit locals 99");
 
             for(Instruction instruction : method.getInstructions()) {
-                String inst = generateOperation(method, instruction);
+                String inst = generateOperation(method, instruction, false);
                 builder.append(inst);
             }
 
@@ -167,7 +167,7 @@ public class BackendStage implements JasminBackend {
         return builder.toString();
     }
 
-    public String generateOperation(Method method, Instruction instruction) {
+    public String generateOperation(Method method, Instruction instruction, boolean rhs) {
         StringBuilder builder = new StringBuilder();
         switch (instruction.getInstType()) {
             case ASSIGN:
@@ -189,7 +189,7 @@ public class BackendStage implements JasminBackend {
                 builder.append(generateBinaryOperation(method, (BinaryOpInstruction) instruction));
                 break;
             case NOPER:
-                builder.append(generateSingleOperation(method, (SingleOpInstruction) instruction));
+                builder.append(generateSingleOperation(method, (SingleOpInstruction) instruction, rhs));
                 break;
             case RETURN:
                 builder.append(generateReturnOperation(method, (ReturnInstruction) instruction));
@@ -208,10 +208,13 @@ public class BackendStage implements JasminBackend {
 
         Instruction rhs = instruction.getRhs();
 
-        if (dest instanceof ArrayOperand)
+        boolean darray = false;
+        if (dest instanceof ArrayOperand){
             builder.append(generateDest(method, dest));
+            darray = true;
+        }
 
-        builder.append(generateOperation(method, rhs));
+        builder.append(generateOperation(method, rhs, darray));
 
         if (dest instanceof ArrayOperand) {
             builder.append("\n");
@@ -329,16 +332,41 @@ public class BackendStage implements JasminBackend {
                     for (Element arg : instruction.getListOfOperands()) {
                         builder.append(generateValue(method, arg));
                     }
-                    builder.append("\n");
-                    builder.append("\t");
-                    builder.append("newarray ");
-                    // if(((ArrayType) instruction.getReturnType()).getTypeOfElements().equals(INT32)) TODO OTHER CLASSES
-                    builder.append("int");
 
                     builder.append("\n");
                     builder.append("\t");
-                    builder.append("astore_");
-                    builder.append(OllirAccesser.getVarTable(method).get(operand.getName()).getVirtualReg());
+                    int dimensions = instruction.getNumOperands() - 1;
+                    if(dimensions == 1) {
+                        if(((ArrayType) instruction.getReturnType()).getTypeOfElements().equals(INT32)) {
+                            builder.append("newarray int");
+                        }
+                        else {
+                            builder.append("anewarray ");
+                            builder.append(((ClassType) instruction.getReturnType()).getName());
+                        }
+                    }
+                    else {
+                        builder.append("multianewarray ");
+
+                        for(int i = 0; i < dimensions; i++)
+                            builder.append("[");
+                        if(((ArrayType) instruction.getReturnType()).getTypeOfElements().equals(INT32))
+                            builder.append("I");
+                        else
+                            builder.append(((ClassType) instruction.getReturnType()).getName());
+
+                        builder.append(" ").append(dimensions);
+                    }
+
+                    builder.append("\n");
+                    builder.append("\t");
+                    builder.append("astore");
+                    int reg = OllirAccesser.getVarTable(method).get(operand.getName()).getVirtualReg();
+                    if(reg < 4)
+                        builder.append("_");
+                    else
+                        builder.append(" ");
+                    builder.append(reg);
                 }
                 break;
             case invokevirtual:
@@ -516,12 +544,13 @@ public class BackendStage implements JasminBackend {
         return builder.toString();
     }
 
-    public String generateSingleOperation(Method method, SingleOpInstruction instruction) {
+    public String generateSingleOperation(Method method, SingleOpInstruction instruction, boolean rhs) {
         StringBuilder builder = new StringBuilder();
 
         Element element = instruction.getSingleOperand();
 
-        builder.append("\n");
+        if (!rhs)
+            builder.append("\n");
 
         builder.append(generateValue(method, element));
 
@@ -558,8 +587,10 @@ public class BackendStage implements JasminBackend {
 
     public String generateDest(Method method, Element element) {
         StringBuilder builder = new StringBuilder();
-
         builder.append("\n");
+        builder.append("\t");
+        builder.append("\n");
+        builder.append("\t");
         generateArray(method, (ArrayOperand) element, builder);
 
         return builder.toString();
@@ -595,6 +626,9 @@ public class BackendStage implements JasminBackend {
         else if (element instanceof ArrayOperand) {
             generateArray(method, (ArrayOperand) element, builder);
 
+            builder.append("\n");
+            builder.append("\t");
+
             if(element.getType().getTypeOfElement().equals(INT32) || element.getType().getTypeOfElement().equals(BOOLEAN))
                 builder.append("i");
             else
@@ -621,7 +655,6 @@ public class BackendStage implements JasminBackend {
     }
 
     private void generateArray(Method method, ArrayOperand operand, StringBuilder builder) {
-        builder.append("\t");
         builder.append("aload");
         int reg = OllirAccesser.getVarTable(method).get(operand.getName()).getVirtualReg();
         if(reg < 4)
