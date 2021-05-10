@@ -142,10 +142,14 @@ public class BackendStage implements JasminBackend {
             builder.append(")");
             builder.append(getType(method.getReturnType()));
 
+            int limit = method.getParams().size() + (method.getVarTable().size() - method.getParams().size());
+            if (!method.isStaticMethod() && !method.getVarTable().containsKey("this"))
+                limit += 1;
+
             builder.append("\n");
-            builder.append("\t.limit stack 99");
+            builder.append("\t.limit stack ").append(limit);
             builder.append("\n");
-            builder.append("\t.limit locals 99");
+            builder.append("\t.limit locals ").append(limit);
 
             for(Instruction instruction : method.getInstructions()) {
                 String inst = generateOperation(method, instruction, false);
@@ -193,6 +197,12 @@ public class BackendStage implements JasminBackend {
                 break;
             case RETURN:
                 builder.append(generateReturnOperation(method, (ReturnInstruction) instruction));
+                break;
+            case BRANCH:
+                builder.append(generateBranchOperation(method, (CondBranchInstruction) instruction));
+                break;
+            case GOTO:
+                builder.append(generateGoToOperation((GotoInstruction) instruction));
                 break;
             default:
                 break;
@@ -459,7 +469,7 @@ public class BackendStage implements JasminBackend {
                 builder.append("arraylength ");
                 break;
             case ldc:
-                builder.append("\n\tldc " + ((LiteralElement) objectInstance).getLiteral());
+                builder.append("\n\tldc ").append(((LiteralElement) objectInstance).getLiteral());
                 break;
             default:
                 break;
@@ -582,6 +592,82 @@ public class BackendStage implements JasminBackend {
         }
 
         builder.append("return");
+        return builder.toString();
+    }
+
+    public String generateBranchOperation(Method method, CondBranchInstruction instruction) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("\n");
+        builder.append("\t");
+        Element leftOperand = instruction.getLeftOperand();
+        builder.append(generateValue(method, leftOperand));
+        Element rightOperand = instruction.getRightOperand();
+        Operation operation = instruction.getCondOperation();
+
+        if (rightOperand == null) {
+            builder.append("\n");
+            builder.append("\t");
+            builder.append("if");
+        }
+        else if(operation.getOpType().equals(OperationType.ANDB)) {
+            builder.append("\n");
+            builder.append("\t");
+            builder.append("ifeq");
+            builder.append(" ");
+            builder.append(instruction.getLabel());
+            builder.append(generateValue(method, rightOperand));
+            builder.append("\n");
+            builder.append("\t");
+            builder.append("if");
+        }
+        else {
+            builder.append(generateValue(method, rightOperand));
+
+            builder.append("\n");
+            builder.append("\t");
+            builder.append("if_icmp");
+        }
+
+
+        switch (operation.getOpType()) {
+            case EQ:
+            case ANDB:
+                builder.append("eq");
+                break;
+            case NEQ:
+                builder.append("ne");
+                break;
+            case LTH:
+                builder.append("lt");
+                break;
+            case GTH:
+                builder.append("gt");
+                break;
+            case LTE:
+                builder.append("le");
+                break;
+            case GTE:
+                builder.append("ge");
+                break;
+            default:
+                break;
+        }
+
+        builder.append(" ");
+        builder.append(instruction.getLabel());
+
+        return builder.toString();
+    }
+
+    public String generateGoToOperation(GotoInstruction instruction) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("\n");
+        builder.append("\t");
+        builder.append("goto ");
+        builder.append(instruction.getLabel());
+
         return builder.toString();
     }
 
