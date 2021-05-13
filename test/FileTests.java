@@ -35,6 +35,15 @@ public class FileTests {
     }
 
     @Test
+    public void Array4() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/Array4.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+    }
+
+    @Test
     public void Custom() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/Custom.jmm");
         assertEquals("Program",res.getRootNode().getKind());

@@ -7,29 +7,11 @@
     },
     "children": [
       {
-        "kind": "Import",
-        "attributes": {
-          "col": "1",
-          "line": "1"
-        },
-        "children": [
-          {
-            "kind": "Library",
-            "attributes": {
-              "col": "8",
-              "line": "1",
-              "name": "io"
-            },
-            "children": []
-          }
-        ]
-      },
-      {
         "kind": "Class",
         "attributes": {
           "col": "1",
-          "line": "2",
-          "name": "HelloWorld"
+          "line": "1",
+          "name": "Array4"
         },
         "children": [
           {
@@ -37,21 +19,21 @@
             "attributes": {
               "col": "9",
               "argName": "args",
-              "line": "3"
+              "line": "2"
             },
             "children": [
               {
                 "kind": "MethodBody",
                 "attributes": {
                   "col": "3",
-                  "line": "4"
+                  "line": "3"
                 },
                 "children": [
                   {
                     "kind": "Var",
                     "attributes": {
                       "col": "3",
-                      "line": "4",
+                      "line": "3",
                       "name": "a"
                     },
                     "children": [
@@ -59,7 +41,7 @@
                         "kind": "Type",
                         "attributes": {
                           "col": "3",
-                          "line": "4",
+                          "line": "3",
                           "name": "int"
                         },
                         "children": [
@@ -67,9 +49,54 @@
                             "kind": "Array",
                             "attributes": {
                               "col": "6",
-                              "line": "4"
+                              "line": "3"
                             },
                             "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "3",
+                      "line": "4"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "3",
+                          "line": "4",
+                          "name": "a"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "AllocationExpression",
+                        "attributes": {
+                          "col": "7",
+                          "line": "4"
+                        },
+                        "children": [
+                          {
+                            "kind": "AccessToArray",
+                            "attributes": {
+                              "col": "14",
+                              "line": "4"
+                            },
+                            "children": [
+                              {
+                                "kind": "Integer",
+                                "attributes": {
+                                  "col": "16",
+                                  "line": "4",
+                                  "value": "5"
+                                },
+                                "children": []
+                              }
+                            ]
                           }
                         ]
                       }
@@ -89,64 +116,19 @@
                           "line": "5",
                           "name": "a"
                         },
-                        "children": []
-                      },
-                      {
-                        "kind": "AllocationExpression",
-                        "attributes": {
-                          "col": "7",
-                          "line": "5"
-                        },
                         "children": [
                           {
                             "kind": "AccessToArray",
                             "attributes": {
-                              "col": "14",
+                              "col": "4",
                               "line": "5"
                             },
                             "children": [
                               {
                                 "kind": "Integer",
                                 "attributes": {
-                                  "col": "16",
-                                  "line": "5",
-                                  "value": "5"
-                                },
-                                "children": []
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "EqualStatement",
-                    "attributes": {
-                      "col": "3",
-                      "line": "6"
-                    },
-                    "children": [
-                      {
-                        "kind": "Identifier",
-                        "attributes": {
-                          "col": "3",
-                          "line": "6",
-                          "name": "a"
-                        },
-                        "children": [
-                          {
-                            "kind": "AccessToArray",
-                            "attributes": {
-                              "col": "4",
-                              "line": "6"
-                            },
-                            "children": [
-                              {
-                                "kind": "Integer",
-                                "attributes": {
                                   "col": "6",
-                                  "line": "6",
+                                  "line": "5",
                                   "value": "0"
                                 },
                                 "children": []
@@ -159,7 +141,7 @@
                         "kind": "Integer",
                         "attributes": {
                           "col": "11",
-                          "line": "6",
+                          "line": "5",
                           "value": "1"
                         },
                         "children": []
