@@ -34,12 +34,13 @@ public class AnalysisStage implements JmmAnalysis {
         SymbolTableImp symbolTable = new SymbolTableImp();
 
         System.out.println("Dump tree with FillSTVisitor");
+        List<Report> reports = new ArrayList<>();
+
         FillSTVisitor vis = new FillSTVisitor(symbolTable);
-        System.out.println(vis.visit(node, true));
+        System.out.println(vis.visit(node, reports));
 
         System.out.println("Starting with CheckErrorsVisitor");
         CheckErrorsVisitor errorsVisitor = new CheckErrorsVisitor(symbolTable);
-        List<Report> reports = new ArrayList<>();
 
         errorsVisitor.visit(node, reports);
 

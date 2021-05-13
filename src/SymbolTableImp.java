@@ -109,8 +109,14 @@ public class SymbolTableImp implements SymbolTable {
         fields.put(new Symbol(type, name), false);
     }
 
-    public void addField(Symbol symbol) {
-        fields.put(symbol, false);
+    public Boolean addField(Symbol var) {
+        // Check if a field with the same name is already declared
+        for (Symbol symbol : fields.keySet()) {
+            if (symbol.getName().equals(var.getName()))
+                return false;
+        }
+        fields.put(var, false);
+        return true;
     }
 
     public void assignField(String name) {

@@ -61,12 +61,12 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
         return true;
     }
 
-    private Boolean dealWithVar(JmmNode node, List<Report> reports){
+    private Boolean dealWithVar(JmmNode node, List<Report> reports) {
         JmmNode typeChild = node.getChildren().get(0);
         String name = typeChild.get("name");
 
-        if(!name.equals("int") && !name.equals("boolean")){
-            if(!name.equals(symbolTableImp.getClassName()) && symbolTableImp.imports.isEmpty()){
+        if(!name.equals("int") && !name.equals("boolean")) {
+            if(!name.equals(symbolTableImp.getClassName()) && symbolTableImp.imports.isEmpty()) {
                 reports.add(new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")),  "Variable type " + name + " does not exist."));
             }
         }
@@ -203,7 +203,7 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
             if (checkLocalFunction(nodeMethodCall, reports))
                 return true;
 
-            if(this.symbolTableImp.hasSuperClass()){
+            if(this.symbolTableImp.hasSuperClass()) {
                 return true;
             }
 

@@ -2,19 +2,26 @@ myClass {
 	.construct myClass().V{
 		invokespecial(this, "<init>").V;
 	}
+
+    .method public static main(args.array.String).V {
+	    t2.String :=.String ldc("Hello, World!").String;
+        invokestatic(io, "println", t2.String).V;
+	}
 	
-	.methodpublic sum(A.array.i32).i32 {
+	.method public sum(A.array.i32).i32 {
 		sum.i32 :=.i32 0.i32;
 		i.i32 :=.i32 0.i32;
 		
-		Loop:
-			t1.i32 :=.i32 arraylength($1.A.array.i32).i32;
-			if (i.i32 >=.i32 t1.i32) goto End;
-			t2.i32 :=.i32 $1.A[i.i32].i32;
-			sum.i32 :=.i32 sum.i32 +.i32 t2.i32;
-			i.i32 :=.i32 i.i32 +.i32 1.i32;
-			goto Loop;
-		End:
-			ret.i32 sum.i32;
+		//Loop:
+        // t1.i32 :=.i32 arraylength($1.A.array.i32).i32;
+        // if (i.i32 >=.i32 t1.i32) goto End;
+        // t2.i32 :=.i32 $1.A[i.i32].i32;
+        // $1.A[i.i32].i32 :=.i32 2.i32;
+        // sum.i32 :=.i32 sum.i32 +.i32 t2.i32;
+        // i.i32 :=.i32 i.i32 +.i32 1.i32;
+        //goto Loop;
+		//End:
+
+		ret.i32 sum.i32;
 	}
 }

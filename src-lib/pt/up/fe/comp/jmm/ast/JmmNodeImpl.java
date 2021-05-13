@@ -50,7 +50,7 @@ public class JmmNodeImpl implements JmmNode {
     public String get(String attribute) {
         var value = this.attributes.get(attribute);
 
-        SpecsCheck.checkNotNull(value, () -> "Node " + toString() + " does not contain attribute '" + attribute + "'");
+        SpecsCheck.checkNotNull(value, () -> "Node " + this + " does not contain attribute '" + attribute + "'");
 
         return value;
     }
@@ -109,7 +109,7 @@ public class JmmNodeImpl implements JmmNode {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(JmmNode.class, new JmmDeserializer())
                 .registerTypeAdapter(JmmNodeImpl.class, new JmmDeserializer())
-                .excludeFieldsWithoutExposeAnnotation()
+                // .excludeFieldsWithoutExposeAnnotation()
                 .create();
         return gson.fromJson(source, JmmNodeImpl.class);
     }

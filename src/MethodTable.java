@@ -60,9 +60,14 @@ public class MethodTable {
         return null;
     }
 
-
-    public void addLocalVariable(Symbol variable) {
-        this.localVariables.put(variable, false);
+    public Boolean addLocalVariable(Symbol variable) {
+        // Check if a variable with the same name is already declared
+        for (Symbol symbol : localVariables.keySet()) {
+            if (symbol.getName().equals(variable.getName()))
+                return false;
+        }
+        localVariables.put(variable, false);
+        return true;
     }
 
     public void addLocalVariable(Symbol variable, Boolean assign) {

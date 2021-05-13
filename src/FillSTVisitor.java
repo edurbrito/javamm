@@ -2,12 +2,15 @@ import pt.up.fe.comp.jmm.JmmNode;
 import pt.up.fe.comp.jmm.analysis.table.Symbol;
 import pt.up.fe.comp.jmm.ast.PreorderJmmVisitor;
 import pt.up.fe.comp.jmm.analysis.table.Type;
+import pt.up.fe.comp.jmm.report.Report;
+import pt.up.fe.comp.jmm.report.ReportType;
+import pt.up.fe.comp.jmm.report.Stage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
+public class FillSTVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     private SymbolTableImp symbolTableImp;
     private String methodSignature;
 
@@ -24,28 +27,31 @@ public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
         addVisit("EqualStatement", this::dealWithAssignment);
     }
 
-    public Boolean dealWithImports(JmmNode node, Boolean bool) {
+    public Boolean dealWithImports(JmmNode node, List<Report> reports) {
         this.symbolTableImp.addImport(node.get("name"));
         return true;
     }
 
-    public Boolean dealWithClass(JmmNode node, Boolean bool) {
+    public Boolean dealWithClass(JmmNode node, List<Report> reports) {
         this.symbolTableImp.setClassName(node.get("name"));
 
         if(node.getAttributes().contains("extends"))
             this.symbolTableImp.setSuperClass(node.get("extends"));
 
-        fillClassVar(node);
+        fillClassVar(node, reports);
         return true;
     }
 
-    private void fillClassVar(JmmNode node) {
+    private void fillClassVar(JmmNode node, List<Report> reports) {
         List<JmmNode> children = node.getChildren();
         int i = 0;
         JmmNode current = children.get(i);
 
-        while (current.getKind().equals("Var")) { // TODO: should we check if this is repeated declaration of the same variable?
-            this.symbolTableImp.addField(getSymbol(current));
+        while (current.getKind().equals("Var")) {
+            Boolean unique = this.symbolTableImp.addField(getSymbol(current));
+            if (!unique) {
+                reports.add(new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")),  "Variable " + getSymbol(current).getName() + " has already been declared."));
+            }
             i++;
             if (i == children.size())
                 break;
@@ -54,7 +60,7 @@ public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
         }
     }
 
-    private Boolean dealWithMain(JmmNode node, Boolean bool) {
+    private Boolean dealWithMain(JmmNode node, List<Report> reports) {
 
         List<Parameter> parameters = new ArrayList<>();
 
@@ -69,7 +75,7 @@ public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
         return true;
     }
 
-    public Boolean dealWithMethod(JmmNode node, Boolean bool) {
+    public Boolean dealWithMethod(JmmNode node, List<Report> reports) {
         List<JmmNode> children = node.getChildren();
 
         List<Parameter> parameters = getParameters(children.get(1));
@@ -86,16 +92,16 @@ public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
         return true;
     }
 
-    public Boolean dealWithMethodBody(JmmNode node, Boolean bool){
+    public Boolean dealWithMethodBody(JmmNode node, List<Report> reports){
         List<JmmNode> children = node.getChildren();
 
         if(!children.isEmpty())
-            fillMethodVar(node, symbolTableImp.getMethod(this.methodSignature));
+            fillMethodVar(node, symbolTableImp.getMethod(this.methodSignature), reports);
 
         return true;
     }
 
-    public Boolean dealWithAssignment(JmmNode node, Boolean bool) {
+    public Boolean dealWithAssignment(JmmNode node, List<Report> reports) {
         String identifier = node.getChildren().get(0).get("name");
 
         // Searching the symbols of the local variables to see if any has the name we're looking for
@@ -133,13 +139,16 @@ public class FillSTVisitor extends PreorderJmmVisitor<Boolean, Boolean> {
         return symbolSet;
     }
 
-    private void fillMethodVar(JmmNode node, MethodTable methodTable) {
+    private void fillMethodVar(JmmNode node, MethodTable methodTable, List<Report> reports) {
         List<JmmNode> children = node.getChildren();
         int i = 0;
         JmmNode current = children.get(i);
 
         while (current.getKind().equals("Var")) {
-            methodTable.addLocalVariable(getSymbol(current));
+            Boolean unique = methodTable.addLocalVariable(getSymbol(current));
+            if (!unique) {
+                reports.add(new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")),  "Variable " + getSymbol(current).getName() + " has already been declared."));
+            }
             i++;
             if (i == children.size())
                 break;

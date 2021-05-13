@@ -1,0 +1,26 @@
+HelloWorld {
+    .field private a.String;
+
+	.construct HelloWorld().V{
+		invokespecial(this, "<init>").V;
+	    t3.String :=.String ldc("Hello, World!").String;
+		putfield(this, a.String, t3.String).V;
+	}
+
+	.method public static main(args.array.String).V {
+	    h.HelloWorld :=.HelloWorld new(HelloWorld).HelloWorld;
+	    invokespecial(h.HelloWorld,"<init>").V;
+	    t1.String :=.String invokevirtual(h.HelloWorld, "toString").String;
+        invokestatic(io, "println", t1.String).V;
+	}
+
+	.method public toString().String {
+	    t2.String :=.String invokevirtual(this,"getString").String;
+	    ret.String t2.String;
+	}
+
+	.method public getString().String {
+	    t1.String :=.String getfield(this, a.String).String;
+	    ret.String t1.String;
+	}
+}

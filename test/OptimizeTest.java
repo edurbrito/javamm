@@ -21,7 +21,7 @@ import pt.up.fe.specs.util.SpecsIo;
 public class OptimizeTest {
 
     @Test
-    public void testHelloWorld() {
+    public void testHelloWorld() { //test basic println
         //SpecsIo.getResource(
         var result = TestUtils.optimize("test/fixtures/public/HelloWorld.jmm");
         //TestUtils.noErrors(result.getReports());
@@ -30,8 +30,9 @@ public class OptimizeTest {
 
     }
 
+
     @Test
-    public void arithmetic() {
+    public void arithmetic() {//test arithmetic
         //SpecsIo.getResource(
         var result = TestUtils.optimize("test/fixtures/public/Arithmetic.jmm");
         //TestUtils.noErrors(result.getReports());
@@ -39,4 +40,26 @@ public class OptimizeTest {
         result.getOllirClass().show();
 
     }
+
+    @Test
+    public void simple() {//test create class and invoque methods
+
+        var result = TestUtils.optimize("test/fixtures/public/Simple.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+
+    }
+
+    @Test
+    public void globals() {//test class variables
+
+        var result = TestUtils.optimize("test/fixtures/public/global_access.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+
+    }
+
+
 }
