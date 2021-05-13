@@ -72,6 +72,17 @@ public class OptimizeTest {
     }
 
     @Test
+    public void array3() { //test basic println
+
+        var result = TestUtils.optimize("test/fixtures/public/Array3.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+
+    }
+
+
+    @Test
     public void array4() { //test basic println
         //SpecsIo.getResource(
         var result = TestUtils.optimize("test/fixtures/public/Array4.jmm");

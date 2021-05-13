@@ -9,5 +9,12 @@ class HelloWorld{
             a = 1;
 		}
         a = 1;
+
+        if (a + a < a * 2){
+            a = 3;
+        }else {
+            a = 1;
+        }
+        a = 1;
 	}
 }
