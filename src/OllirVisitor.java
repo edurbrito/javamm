@@ -174,6 +174,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         return result.toString();
     }
 
+
     private String dealWithMethodBody(JmmNode node){
         StringBuilder result = new StringBuilder("\n");
         for (JmmNode child:node.getChildren()){
@@ -181,6 +182,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         }
         return result.toString();
     }
+
 
     private String dealWithMainMethod(JmmNode node) {
         this.methodName = "main";
@@ -213,6 +215,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         return result.toString();
     }
 
+
     private String dealWithVar(JmmNode child) {
         StringBuilder result = new StringBuilder();
         String name = child.get("name");
@@ -226,6 +229,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         return result.toString();
     }
+
 
     private String dealWithTwoPart(JmmNode node){
 
@@ -317,6 +321,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         return result.toString();
     }
 
+
     private String dealWithThisExpression(JmmNode TwoPartNode) {
         StringBuilder result=new StringBuilder();
         JmmNode rightChild = TwoPartNode.getChildren().get(1);
@@ -344,6 +349,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         return result.toString();
     }
+
 
     private String dealWithEqualStatement(JmmNode equalNode){
         List<JmmNode> children = equalNode.getChildren();
@@ -380,6 +386,12 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             pre = res.get(0);           // the OLLIR code needed before the operation
             right = res.get(1);         // the right side of the op
         }
+
+        if(children.get(1).getKind().equals("AllocationExpression")){
+            pre = "t1.array.i32 :=.array.i32 " + right + ";";
+            right = "t1.array.i32";
+        }
+
 
 
         if(pre.equals("")){
@@ -425,6 +437,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         return putfield;
     }
 
+
     private List<String> dealWithBoolOp(JmmNode booleanNode) {
 
         List<String> finalList = new ArrayList<>();
@@ -455,6 +468,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         return finalList;
     }
+
 
     private List<String> dealWithArithmetic(JmmNode arithmeticNode){
 

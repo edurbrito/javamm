@@ -43,41 +43,297 @@
         ]
       },
       {
+        "kind": "Import",
+        "attributes": {
+          "col": "1",
+          "line": "3"
+        },
+        "children": [
+          {
+            "kind": "Library",
+            "attributes": {
+              "col": "8",
+              "line": "3",
+              "name": "Map"
+            },
+            "children": []
+          }
+        ]
+      },
+      {
         "kind": "Class",
         "attributes": {
           "col": "1",
-          "line": "4",
-          "name": "Array"
+          "line": "5",
+          "name": "Array2"
         },
         "children": [
+          {
+            "kind": "Var",
+            "attributes": {
+              "col": "5",
+              "line": "7",
+              "name": "a"
+            },
+            "children": [
+              {
+                "kind": "Type",
+                "attributes": {
+                  "col": "5",
+                  "line": "7",
+                  "name": "int"
+                },
+                "children": [
+                  {
+                    "kind": "Array",
+                    "attributes": {
+                      "col": "8",
+                      "line": "7"
+                    },
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "attributes": {
+              "col": "5",
+              "line": "8",
+              "name": "c"
+            },
+            "children": [
+              {
+                "kind": "Type",
+                "attributes": {
+                  "col": "5",
+                  "line": "8",
+                  "name": "int"
+                },
+                "children": []
+              }
+            ]
+          },
+          {
+            "kind": "Method",
+            "attributes": {
+              "col": "12",
+              "line": "10",
+              "name": "test"
+            },
+            "children": [
+              {
+                "kind": "Type",
+                "attributes": {
+                  "col": "12",
+                  "line": "10",
+                  "name": "int"
+                },
+                "children": []
+              },
+              {
+                "kind": "MethodBody",
+                "attributes": {
+                  "col": "9",
+                  "line": "11"
+                },
+                "children": []
+              },
+              {
+                "kind": "Return",
+                "attributes": {
+                  "col": "9",
+                  "line": "11"
+                },
+                "children": [
+                  {
+                    "kind": "Identifier",
+                    "attributes": {
+                      "col": "17",
+                      "line": "11",
+                      "name": "c"
+                    },
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "Method",
+            "attributes": {
+              "col": "12",
+              "line": "14",
+              "name": "test"
+            },
+            "children": [
+              {
+                "kind": "Type",
+                "attributes": {
+                  "col": "12",
+                  "line": "14",
+                  "name": "int"
+                },
+                "children": []
+              },
+              {
+                "kind": "MethodArguments",
+                "attributes": {
+                  "col": "21",
+                  "line": "14"
+                },
+                "children": [
+                  {
+                    "kind": "Argument",
+                    "attributes": {
+                      "col": "21",
+                      "line": "14",
+                      "name": "ola"
+                    },
+                    "children": [
+                      {
+                        "kind": "Type",
+                        "attributes": {
+                          "col": "21",
+                          "line": "14",
+                          "name": "int"
+                        },
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "MethodBody",
+                "attributes": {
+                  "col": "9",
+                  "line": "16"
+                },
+                "children": [
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "9",
+                      "line": "16"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "9",
+                          "line": "16",
+                          "name": "c"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "Integer",
+                        "attributes": {
+                          "col": "14",
+                          "line": "16",
+                          "value": "1"
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "9",
+                      "line": "18"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "9",
+                          "line": "18",
+                          "name": "a"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "AllocationExpression",
+                        "attributes": {
+                          "col": "13",
+                          "line": "18"
+                        },
+                        "children": [
+                          {
+                            "kind": "AccessToArray",
+                            "attributes": {
+                              "col": "20",
+                              "line": "18"
+                            },
+                            "children": [
+                              {
+                                "kind": "Integer",
+                                "attributes": {
+                                  "col": "22",
+                                  "line": "18",
+                                  "value": "8"
+                                },
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "Return",
+                "attributes": {
+                  "col": "9",
+                  "line": "31"
+                },
+                "children": [
+                  {
+                    "kind": "Integer",
+                    "attributes": {
+                      "col": "17",
+                      "line": "31",
+                      "value": "1"
+                    },
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
           {
             "kind": "MainMethod",
             "attributes": {
               "col": "12",
               "argName": "args",
-              "line": "5"
+              "line": "35"
             },
             "children": [
               {
                 "kind": "MethodBody",
                 "attributes": {
                   "col": "9",
-                  "line": "6"
+                  "line": "36"
                 },
                 "children": [
                   {
                     "kind": "Var",
                     "attributes": {
                       "col": "9",
-                      "line": "6",
-                      "name": "buffer"
+                      "line": "36",
+                      "name": "a"
                     },
                     "children": [
                       {
                         "kind": "Type",
                         "attributes": {
                           "col": "9",
-                          "line": "6",
+                          "line": "36",
                           "name": "int"
                         },
                         "children": [
@@ -85,7 +341,7 @@
                             "kind": "Array",
                             "attributes": {
                               "col": "12",
-                              "line": "6"
+                              "line": "36"
                             },
                             "children": []
                           }
@@ -97,35 +353,16 @@
                     "kind": "Var",
                     "attributes": {
                       "col": "9",
-                      "line": "7",
-                      "name": "bufsz"
+                      "line": "37",
+                      "name": "map"
                     },
                     "children": [
                       {
                         "kind": "Type",
                         "attributes": {
                           "col": "9",
-                          "line": "7",
-                          "name": "int"
-                        },
-                        "children": []
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "Var",
-                    "attributes": {
-                      "col": "9",
-                      "line": "8",
-                      "name": "value"
-                    },
-                    "children": [
-                      {
-                        "kind": "Type",
-                        "attributes": {
-                          "col": "9",
-                          "line": "8",
-                          "name": "int"
+                          "line": "37",
+                          "name": "Map"
                         },
                         "children": []
                       }
@@ -135,92 +372,130 @@
                     "kind": "EqualStatement",
                     "attributes": {
                       "col": "9",
-                      "line": "9"
+                      "line": "40"
                     },
                     "children": [
                       {
                         "kind": "Identifier",
                         "attributes": {
                           "col": "9",
-                          "line": "9",
-                          "name": "bufsz"
-                        },
-                        "children": []
-                      },
-                      {
-                        "kind": "Integer",
-                        "attributes": {
-                          "col": "20",
-                          "line": "9",
-                          "value": "100"
-                        },
-                        "children": []
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "EqualStatement",
-                    "attributes": {
-                      "col": "9",
-                      "line": "10"
-                    },
-                    "children": [
-                      {
-                        "kind": "Identifier",
-                        "attributes": {
-                          "col": "9",
-                          "line": "10",
-                          "name": "value"
-                        },
-                        "children": []
-                      },
-                      {
-                        "kind": "Integer",
-                        "attributes": {
-                          "col": "19",
-                          "line": "10",
-                          "value": "12"
-                        },
-                        "children": []
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "EqualStatement",
-                    "attributes": {
-                      "col": "9",
-                      "line": "12"
-                    },
-                    "children": [
-                      {
-                        "kind": "Identifier",
-                        "attributes": {
-                          "col": "9",
-                          "line": "12",
-                          "name": "buffer"
+                          "line": "40",
+                          "name": "a"
                         },
                         "children": []
                       },
                       {
                         "kind": "AllocationExpression",
                         "attributes": {
-                          "col": "18",
-                          "line": "12"
+                          "col": "13",
+                          "line": "40"
                         },
                         "children": [
                           {
                             "kind": "AccessToArray",
                             "attributes": {
-                              "col": "25",
-                              "line": "12"
+                              "col": "20",
+                              "line": "40"
+                            },
+                            "children": [
+                              {
+                                "kind": "Integer",
+                                "attributes": {
+                                  "col": "22",
+                                  "line": "40",
+                                  "value": "8"
+                                },
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "9",
+                      "line": "43"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "9",
+                          "line": "43",
+                          "name": "a"
+                        },
+                        "children": [
+                          {
+                            "kind": "AccessToArray",
+                            "attributes": {
+                              "col": "10",
+                              "line": "43"
+                            },
+                            "children": [
+                              {
+                                "kind": "Integer",
+                                "attributes": {
+                                  "col": "12",
+                                  "line": "43",
+                                  "value": "0"
+                                },
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "Integer",
+                        "attributes": {
+                          "col": "17",
+                          "line": "43",
+                          "value": "2"
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "TwoPartExpression",
+                    "attributes": {
+                      "col": "11",
+                      "line": "46"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "11",
+                          "line": "46",
+                          "name": "io"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "DotExpression",
+                        "attributes": {
+                          "col": "11",
+                          "line": "46"
+                        },
+                        "children": [
+                          {
+                            "kind": "MethodCall",
+                            "attributes": {
+                              "col": "12",
+                              "line": "46",
+                              "name": "printArray"
                             },
                             "children": [
                               {
                                 "kind": "Identifier",
                                 "attributes": {
-                                  "col": "31",
-                                  "line": "12",
-                                  "name": "bufsz"
+                                  "col": "24",
+                                  "line": "46",
+                                  "name": "a"
                                 },
                                 "children": []
                               }
@@ -231,48 +506,75 @@
                     ]
                   },
                   {
-                    "kind": "EqualStatement",
+                    "kind": "TwoPartExpression",
                     "attributes": {
-                      "col": "9",
-                      "line": "14"
+                      "col": "11",
+                      "line": "49"
                     },
                     "children": [
                       {
                         "kind": "Identifier",
                         "attributes": {
-                          "col": "9",
-                          "line": "14",
-                          "name": "buffer"
+                          "col": "11",
+                          "line": "49",
+                          "name": "io"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "DotExpression",
+                        "attributes": {
+                          "col": "11",
+                          "line": "49"
                         },
                         "children": [
                           {
-                            "kind": "AccessToArray",
+                            "kind": "MethodCall",
                             "attributes": {
-                              "col": "15",
-                              "line": "14"
+                              "col": "12",
+                              "line": "49",
+                              "name": "print"
                             },
                             "children": [
                               {
-                                "kind": "Integer",
+                                "kind": "TwoPartExpression",
                                 "attributes": {
-                                  "col": "18",
-                                  "line": "14",
-                                  "value": "10"
+                                  "col": "19",
+                                  "line": "49"
                                 },
-                                "children": []
+                                "children": [
+                                  {
+                                    "kind": "Identifier",
+                                    "attributes": {
+                                      "col": "19",
+                                      "line": "49",
+                                      "name": "a"
+                                    },
+                                    "children": []
+                                  },
+                                  {
+                                    "kind": "AccessToArray",
+                                    "attributes": {
+                                      "col": "19",
+                                      "line": "49"
+                                    },
+                                    "children": [
+                                      {
+                                        "kind": "Integer",
+                                        "attributes": {
+                                          "col": "21",
+                                          "line": "49",
+                                          "value": "0"
+                                        },
+                                        "children": []
+                                      }
+                                    ]
+                                  }
+                                ]
                               }
                             ]
                           }
                         ]
-                      },
-                      {
-                        "kind": "Identifier",
-                        "attributes": {
-                          "col": "27",
-                          "line": "14",
-                          "name": "value"
-                        },
-                        "children": []
                       }
                     ]
                   },
@@ -280,51 +582,33 @@
                     "kind": "EqualStatement",
                     "attributes": {
                       "col": "9",
-                      "line": "15"
+                      "line": "51"
                     },
                     "children": [
                       {
                         "kind": "Identifier",
                         "attributes": {
                           "col": "9",
-                          "line": "15",
-                          "name": "value"
+                          "line": "51",
+                          "name": "map"
                         },
                         "children": []
                       },
                       {
-                        "kind": "TwoPartExpression",
+                        "kind": "AllocationExpression",
                         "attributes": {
-                          "col": "23",
-                          "line": "15"
+                          "col": "15",
+                          "line": "51"
                         },
                         "children": [
                           {
-                            "kind": "Identifier",
+                            "kind": "Object",
                             "attributes": {
-                              "col": "23",
-                              "line": "15",
-                              "name": "buffer"
+                              "col": "22",
+                              "line": "51",
+                              "name": "Map"
                             },
                             "children": []
-                          },
-                          {
-                            "kind": "AccessToArray",
-                            "attributes": {
-                              "col": "23",
-                              "line": "15"
-                            },
-                            "children": [
-                              {
-                                "kind": "Integer",
-                                "attributes": {
-                                  "col": "26",
-                                  "line": "15",
-                                  "value": "11"
-                                },
-                                "children": []
-                              }
-                            ]
                           }
                         ]
                       }
