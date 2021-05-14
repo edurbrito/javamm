@@ -14,6 +14,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     private StringBuilder ollirCode = new StringBuilder("\n");
     private String methodName, methodKey;
     private int tempsCount=1;
+    private boolean hasReturn;
 
     public OllirVisitor(SymbolTableImp symbolTableImp) {
         super();
@@ -177,8 +178,12 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
     private String dealWithMethodBody(JmmNode node){
         StringBuilder result = new StringBuilder("\n");
+        this.hasReturn = false;
         for (JmmNode child:node.getChildren()){
             result.append(dealWithChild(child));
+        }
+        if (!hasReturn) {
+            result.append("ret.V;\n");
         }
         return result.toString();
     }
@@ -368,7 +373,6 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         String left, right, pre = "";
         left = dealWithChild(children.get(0));
         right = dealWithChild(children.get(1));
-        boolean arithm = false;
 
         // Checks if the right child is a compost operation (arithmetic or boolean)
         if(right.equals("")){
@@ -380,7 +384,6 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 res =  dealWithBoolOp(children.get(1));
             }else { // Arithmetic operation
                 res = dealWithArithmetic(children.get(1));
-                arithm = true;
             }
 
             pre = res.get(0);           // the OLLIR code needed before the operation
@@ -391,6 +394,17 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             pre = "t1.array.i32 :=.array.i32 " + right + ";";
             right = "t1.array.i32";
         }
+        if(left.contains("!!")){
+            String[] res = left.split("!!");
+            pre += res[0] + "\n";
+            left = res[1];
+        }
+        if(right.contains("!!")){
+            String[] res = left.split("!!");
+            pre += res[0] + "\n";
+            right = res[1];
+        }
+
 
 
 
@@ -602,8 +616,10 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         Type identifierType = getIdentifierType(child);
         if(identifierType.isArray() && child.getChildren().size() == 0)
             array += ".array";
-
-        return before + "\n" + pre + identifierName + array + "." + getTypeOllir(identifierType);
+        if(!before.isEmpty())
+            return before + " !! " + pre + identifierName + array + "." + getTypeOllir(identifierType);
+        else
+            return pre + identifierName + array + "." + getTypeOllir(identifierType);
     }
 
     private List<String> mountIdentifierOLLIR(JmmNode identifierNode, JmmNode accessNode){

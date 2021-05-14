@@ -16,10 +16,10 @@ class Array2 {
         c = 1;
         //array store
         a = new int[8];
-/*
+
         //array position store
         a[0] = 2;
-
+/*
         //array access
 
         (a);
