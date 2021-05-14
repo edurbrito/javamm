@@ -5,6 +5,7 @@ import pt.up.fe.comp.jmm.ast.PreorderJmmVisitor;
 import pt.up.fe.comp.jmm.report.Report;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,10 +38,56 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             case "AllocationExpression":{return dealWithAllocationExpression(child);}
             case "MethodBody":{return dealWithMethodBody(child);}
             case "Return":{return dealWithReturn(child);}
+            case "While":{return dealWithWhile(child);}
         }
         return "";
     }
 
+    private String dealWithWhile(JmmNode node) {
+        StringBuilder result= new StringBuilder();
+        for (JmmNode child:node.getChildren()){
+            switch (child.getKind()){
+                case "WhileCondition":{result.append(dealWithWhileCondition(child)); continue;}
+                //TODO:create condition missing
+                case "WhileBody":{result.append(dealWithWhileBody(child)); continue;}
+            }
+        }
+        result.append("EndLoop:\n");
+        return result.toString();
+    }
+
+    private String dealWithWhileCondition(JmmNode node){
+        StringBuilder result= new StringBuilder("Loop:");
+        List<String> ops = Arrays.asList("Sum","Sub","Mult","Div","LessThan");
+        List<String> bools = Arrays.asList("Not","And");
+        JmmNode ConditionNode = node.getChildren().get(0);
+        if (ops.contains(ConditionNode.getKind())) {
+            List<String> temp = dealWithArithmetic(ConditionNode);
+            for (int i=0;i<temp.size()-1;i++) {
+                result.append(temp.get(i).replace(";"));
+            }
+            result.append("if ("+temp.get(temp.size()-1)+") goto Body;");
+        }else if (bools.contains(ConditionNode.getKind())){
+            List<String> temp = dealWithBoolOp(ConditionNode);
+            System.out.println("random line");
+        }else{
+            result.append(dealWithChild(ConditionNode)); //TODO:see if create temp needed
+        }
+        //List<String> temp=dealWithArithmetic(node.getChildren().get(0));
+        //result.append(dealWithChild(temp));
+
+        result.append("\ngoto EndLoop;\n");
+        return result.toString();
+    }
+    private String dealWithWhileBody(JmmNode node){
+        StringBuilder result = new StringBuilder("Body:\n");
+        for (JmmNode child:node.getChildren()){
+            result.append(dealWithChild(child));
+        }
+        result.append("goto Loop;\n");
+
+        return result.toString();
+    }
 
     private String dealWithAllocationExpression(JmmNode child) {
         StringBuilder result=new StringBuilder();
