@@ -62,13 +62,13 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         List<String> bools = Arrays.asList("Not","And");
         JmmNode ConditionNode = node.getChildren().get(0);
         if (ops.contains(ConditionNode.getKind())) {
-            List<String> temp = dealWithArithmetic(ConditionNode);
+            List<String> temp = Arrays.asList(dealWithArithmetic(ConditionNode).split("\n"));
             for (int i=0;i<temp.size()-1;i++) {
-                result.append(temp.get(i).replace(";"));
+                result.append(temp.get(i).replace(";",""));
             }
             result.append("if ("+temp.get(temp.size()-1)+") goto Body;");
         }else if (bools.contains(ConditionNode.getKind())){
-            List<String> temp = dealWithBoolOp(ConditionNode);
+            List<String> temp = Arrays.asList(dealWithBoolOp(ConditionNode).split("\n"));
             System.out.println("random line");
         }else{
             result.append(dealWithChild(ConditionNode)); //TODO:see if create temp needed
@@ -350,9 +350,9 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
 
             if(rightNodeKind.equals("Not") || rightNodeKind.equals("And")){     // Boolean operation
-                res =  dealWithBoolOp(children.get(1));
+                res = Arrays.asList(dealWithBoolOp(children.get(1)).split("\n"));
             }else { // Arithmetic operation
-                res = dealWithArithmetic(children.get(1));
+                res = Arrays.asList(dealWithArithmetic(children.get(1)).split("\n"));
                 arithm = true;
             }
 
@@ -373,7 +373,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         }
     }
 
-    private List<String> dealWithBoolOp(JmmNode booleanNode) {
+    private String dealWithBoolOp(JmmNode booleanNode) {
 
         List<String> finalList = new ArrayList<>();
         StringBuilder result = new StringBuilder();
@@ -400,11 +400,15 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         finalList.add(pre);
         finalList.add(result.toString());
+        StringBuilder end=new StringBuilder();
+        for (String i:finalList){
+            end.append(i);end.append("\n");
+        }
 
-        return finalList;
+        return end.toString();
     }
 
-    private List<String> dealWithArithmetic(JmmNode arithmeticNode){
+    private String dealWithArithmetic(JmmNode arithmeticNode){
 
 
         List<String> finalList = new ArrayList<>();
@@ -434,7 +438,13 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         finalList.add(pre);
         finalList.add(result.toString());
 
-        return finalList;
+        StringBuilder end = new StringBuilder();
+
+        for(String i:finalList){
+            end.append(i);end.append("\n");
+        }
+
+        return end.toString();
     }
 
     private List<String> dealWithTemp(List<JmmNode> children, String type){
@@ -448,9 +458,9 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
             List<String> res;
             if(type.equals("i32")){         // it uses recursion to determine the ollir code of the operands
-                res = dealWithArithmetic(children.get(0));
+                res = Arrays.asList(dealWithArithmetic(children.get(0)).split("\n"));
             }else{
-                res = dealWithBoolOp(children.get(0));
+                res = Arrays.asList(dealWithBoolOp(children.get(0)).split("\n"));
             }
 
             left = "t1." + type;
@@ -464,9 +474,9 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
             List<String> res;
             if(type.equals("i32")){
-                res = dealWithArithmetic(children.get(1));
+                res = Arrays.asList(dealWithArithmetic(children.get(1)).split("\n"));
             }else{
-                res = dealWithBoolOp(children.get(1));
+                res = Arrays.asList(dealWithBoolOp(children.get(1)).split("\n"));
             }
 
             pre.append(res.get(0) + "\n");
