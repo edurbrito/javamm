@@ -4,8 +4,21 @@ myClass {
 	}
 
     .method public static main(args.array.String).V {
-	    t2.String :=.String ldc("Hello, World!").String;
-        invokestatic(io, "println", t2.String).V;
+        mc.myClass :=.myClass new(myClass).myClass;
+        invokespecial(mc.myClass,"<init>").V;
+
+        t1.i32 :=.i32 3.i32;
+        C.array.i32 :=.array.i32 new(array, t1.i32).array.i32;
+
+        i.i32 :=.i32 0.i32;
+        C[i.i32].i32 :=.i32 3.i32;
+        i.i32 :=.i32 1.i32;
+        C[i.i32].i32 :=.i32 4.i32;
+        i.i32 :=.i32 2.i32;
+        C[i.i32].i32 :=.i32 5.i32;
+
+	    t2.i32 :=.i32 invokevirtual(mc.myClass, "sum", C.array.i32).i32;
+        invokestatic(io, "println", t2.i32).V;
 	}
 	
 	.method public sum(A.array.i32).i32 {

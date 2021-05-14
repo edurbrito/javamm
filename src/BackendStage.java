@@ -173,6 +173,16 @@ public class BackendStage implements JasminBackend {
 
     public String generateOperation(Method method, Instruction instruction, boolean rhs) {
         StringBuilder builder = new StringBuilder();
+
+        List<String> labels = method.getLabels(instruction);
+        for(String label : labels) {
+            builder.append("\n");
+            builder.append("\t");
+            builder.append("\n");
+            builder.append("\t");
+            builder.append(label + ":");
+        }
+
         switch (instruction.getInstType()) {
             case ASSIGN:
                 builder.append(generateAssign(method, (AssignInstruction) instruction));
@@ -250,6 +260,20 @@ public class BackendStage implements JasminBackend {
             else
                 builder.append(" ");
             builder.append(reg);
+        }
+        else {
+            Operand operand = (Operand) dest;
+            if (operand.getType().getTypeOfElement().equals(ARRAYREF)) {
+                builder.append("\n");
+                builder.append("\t");
+                builder.append("astore");
+                int reg = OllirAccesser.getVarTable(method).get(operand.getName()).getVirtualReg();
+                if(reg < 4)
+                    builder.append("_");
+                else
+                    builder.append(" ");
+                builder.append(reg);
+            }
         }
 
         return builder.toString();
@@ -367,16 +391,6 @@ public class BackendStage implements JasminBackend {
 
                         builder.append(" ").append(dimensions);
                     }
-
-                    builder.append("\n");
-                    builder.append("\t");
-                    builder.append("astore");
-                    int reg = OllirAccesser.getVarTable(method).get(operand.getName()).getVirtualReg();
-                    if(reg < 4)
-                        builder.append("_");
-                    else
-                        builder.append(" ");
-                    builder.append(reg);
                 }
                 break;
             case invokevirtual:
@@ -440,9 +454,15 @@ public class BackendStage implements JasminBackend {
                 if(!objectInstance.getType().getTypeOfElement().equals(ElementType.THIS)) {
                     builder.append("\n");
                     builder.append("\t");
-                    builder.append("astore_");
+                    builder.append("astore");
                     Operand operand = (Operand) objectInstance;
-                    builder.append(OllirAccesser.getVarTable(method).get(operand.getName()).getVirtualReg());
+                    int reg = OllirAccesser.getVarTable(method).get(operand.getName()).getVirtualReg();
+                    if(reg < 4)
+                        builder.append("_");
+                    else
+                        builder.append(" ");
+
+                    builder.append(reg);
                 }
                 break;
             case invokestatic:

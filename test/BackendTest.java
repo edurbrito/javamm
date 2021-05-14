@@ -46,7 +46,6 @@ public class BackendTest {
 
         var output = result.run();
         assertEquals("30", output.trim());
-
     }
 
     @Test
@@ -56,6 +55,9 @@ public class BackendTest {
         TestUtils.noErrors(result.getReports());
 
         System.out.println("Jasmin Code: \n" + result.getJasminCode());
+
+        var output = result.run();
+        assertEquals("12", output.trim());
     }
 
     @Test
@@ -64,6 +66,8 @@ public class BackendTest {
         TestUtils.noErrors(result.getReports());
 
         System.out.println("Jasmin Code: \n" + result.getJasminCode());
+
+        var output = result.run();
     }
 
     @Test
@@ -72,6 +76,8 @@ public class BackendTest {
         TestUtils.noErrors(result.getReports());
 
         System.out.println("Jasmin Code: \n" + result.getJasminCode());
+
+        var output = result.run();
     }
 
     @Test
@@ -80,6 +86,8 @@ public class BackendTest {
         TestUtils.noErrors(result.getReports());
 
         System.out.println("Jasmin Code: \n" + result.getJasminCode());
+
+        var output = result.run();
     }
 
     @Test
@@ -88,5 +96,8 @@ public class BackendTest {
         TestUtils.noErrors(result.getReports());
 
         System.out.println("Jasmin Code: \n" + result.getJasminCode());
+
+        var output = result.run();
+        assertEquals("3628800", output.trim());
     }
 }
