@@ -96,12 +96,14 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         else {
             JmmNode lengthNode = child.getChildren().get(0).getChildren().get(0); // Get the nodes that are responsible for the array length
             String length;
-            if(!lengthNode.getKind().equals("Integer")) {
+            if(lengthNode.getKind().equals("Integer")) {
+                length = dealWithInteger(lengthNode);
+            }else if(lengthNode.getKind().equals("Identifier")) {
+                length = dealWithIdentifier(lengthNode);
+            }else{
                 List<String> tempRes = dealWithArithmetic(lengthNode);
                 result.append(tempRes.get(0));
                 length = tempRes.get(1);
-            }else {
-                length = dealWithInteger(lengthNode);
             }
 
             result.append("new(array, " + length + ")" + ".array.i32");

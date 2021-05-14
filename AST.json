@@ -47,7 +47,7 @@
         "attributes": {
           "col": "1",
           "line": "4",
-          "name": "Array3"
+          "name": "Array"
         },
         "children": [
           {
@@ -55,22 +55,50 @@
             "attributes": {
               "col": "12",
               "argName": "args",
-              "line": "6"
+              "line": "5"
             },
             "children": [
               {
                 "kind": "MethodBody",
                 "attributes": {
                   "col": "9",
-                  "line": "7"
+                  "line": "6"
                 },
                 "children": [
                   {
                     "kind": "Var",
                     "attributes": {
                       "col": "9",
+                      "line": "6",
+                      "name": "buffer"
+                    },
+                    "children": [
+                      {
+                        "kind": "Type",
+                        "attributes": {
+                          "col": "9",
+                          "line": "6",
+                          "name": "int"
+                        },
+                        "children": [
+                          {
+                            "kind": "Array",
+                            "attributes": {
+                              "col": "12",
+                              "line": "6"
+                            },
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "Var",
+                    "attributes": {
+                      "col": "9",
                       "line": "7",
-                      "name": "a"
+                      "name": "bufsz"
                     },
                     "children": [
                       {
@@ -80,16 +108,53 @@
                           "line": "7",
                           "name": "int"
                         },
-                        "children": [
-                          {
-                            "kind": "Array",
-                            "attributes": {
-                              "col": "12",
-                              "line": "7"
-                            },
-                            "children": []
-                          }
-                        ]
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "Var",
+                    "attributes": {
+                      "col": "9",
+                      "line": "8",
+                      "name": "value"
+                    },
+                    "children": [
+                      {
+                        "kind": "Type",
+                        "attributes": {
+                          "col": "9",
+                          "line": "8",
+                          "name": "int"
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "9",
+                      "line": "9"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "9",
+                          "line": "9",
+                          "name": "bufsz"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "Integer",
+                        "attributes": {
+                          "col": "20",
+                          "line": "9",
+                          "value": "100"
+                        },
+                        "children": []
                       }
                     ]
                   },
@@ -105,30 +170,57 @@
                         "attributes": {
                           "col": "9",
                           "line": "10",
-                          "name": "a"
+                          "name": "value"
+                        },
+                        "children": []
+                      },
+                      {
+                        "kind": "Integer",
+                        "attributes": {
+                          "col": "19",
+                          "line": "10",
+                          "value": "12"
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "EqualStatement",
+                    "attributes": {
+                      "col": "9",
+                      "line": "12"
+                    },
+                    "children": [
+                      {
+                        "kind": "Identifier",
+                        "attributes": {
+                          "col": "9",
+                          "line": "12",
+                          "name": "buffer"
                         },
                         "children": []
                       },
                       {
                         "kind": "AllocationExpression",
                         "attributes": {
-                          "col": "13",
-                          "line": "10"
+                          "col": "18",
+                          "line": "12"
                         },
                         "children": [
                           {
                             "kind": "AccessToArray",
                             "attributes": {
-                              "col": "20",
-                              "line": "10"
+                              "col": "25",
+                              "line": "12"
                             },
                             "children": [
                               {
-                                "kind": "Integer",
+                                "kind": "Identifier",
                                 "attributes": {
-                                  "col": "22",
-                                  "line": "10",
-                                  "value": "8"
+                                  "col": "31",
+                                  "line": "12",
+                                  "name": "bufsz"
                                 },
                                 "children": []
                               }
@@ -142,30 +234,30 @@
                     "kind": "EqualStatement",
                     "attributes": {
                       "col": "9",
-                      "line": "13"
+                      "line": "14"
                     },
                     "children": [
                       {
                         "kind": "Identifier",
                         "attributes": {
                           "col": "9",
-                          "line": "13",
-                          "name": "a"
+                          "line": "14",
+                          "name": "buffer"
                         },
                         "children": [
                           {
                             "kind": "AccessToArray",
                             "attributes": {
-                              "col": "10",
-                              "line": "13"
+                              "col": "15",
+                              "line": "14"
                             },
                             "children": [
                               {
                                 "kind": "Integer",
                                 "attributes": {
-                                  "col": "12",
-                                  "line": "13",
-                                  "value": "0"
+                                  "col": "18",
+                                  "line": "14",
+                                  "value": "10"
                                 },
                                 "children": []
                               }
@@ -174,128 +266,63 @@
                         ]
                       },
                       {
-                        "kind": "Integer",
+                        "kind": "Identifier",
                         "attributes": {
-                          "col": "17",
-                          "line": "13",
-                          "value": "2"
+                          "col": "27",
+                          "line": "14",
+                          "name": "value"
                         },
                         "children": []
                       }
                     ]
                   },
                   {
-                    "kind": "TwoPartExpression",
+                    "kind": "EqualStatement",
                     "attributes": {
-                      "col": "11",
-                      "line": "16"
+                      "col": "9",
+                      "line": "15"
                     },
                     "children": [
                       {
                         "kind": "Identifier",
                         "attributes": {
-                          "col": "11",
-                          "line": "16",
-                          "name": "io"
+                          "col": "9",
+                          "line": "15",
+                          "name": "value"
                         },
                         "children": []
                       },
                       {
-                        "kind": "DotExpression",
+                        "kind": "TwoPartExpression",
                         "attributes": {
-                          "col": "11",
-                          "line": "16"
+                          "col": "23",
+                          "line": "15"
                         },
                         "children": [
                           {
-                            "kind": "MethodCall",
+                            "kind": "Identifier",
                             "attributes": {
-                              "col": "12",
-                              "line": "16",
-                              "name": "printArray"
+                              "col": "23",
+                              "line": "15",
+                              "name": "buffer"
+                            },
+                            "children": []
+                          },
+                          {
+                            "kind": "AccessToArray",
+                            "attributes": {
+                              "col": "23",
+                              "line": "15"
                             },
                             "children": [
                               {
-                                "kind": "Identifier",
+                                "kind": "Integer",
                                 "attributes": {
-                                  "col": "24",
-                                  "line": "16",
-                                  "name": "a"
+                                  "col": "26",
+                                  "line": "15",
+                                  "value": "11"
                                 },
                                 "children": []
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "TwoPartExpression",
-                    "attributes": {
-                      "col": "11",
-                      "line": "19"
-                    },
-                    "children": [
-                      {
-                        "kind": "Identifier",
-                        "attributes": {
-                          "col": "11",
-                          "line": "19",
-                          "name": "io"
-                        },
-                        "children": []
-                      },
-                      {
-                        "kind": "DotExpression",
-                        "attributes": {
-                          "col": "11",
-                          "line": "19"
-                        },
-                        "children": [
-                          {
-                            "kind": "MethodCall",
-                            "attributes": {
-                              "col": "12",
-                              "line": "19",
-                              "name": "print"
-                            },
-                            "children": [
-                              {
-                                "kind": "TwoPartExpression",
-                                "attributes": {
-                                  "col": "19",
-                                  "line": "19"
-                                },
-                                "children": [
-                                  {
-                                    "kind": "Identifier",
-                                    "attributes": {
-                                      "col": "19",
-                                      "line": "19",
-                                      "name": "a"
-                                    },
-                                    "children": []
-                                  },
-                                  {
-                                    "kind": "AccessToArray",
-                                    "attributes": {
-                                      "col": "19",
-                                      "line": "19"
-                                    },
-                                    "children": [
-                                      {
-                                        "kind": "Integer",
-                                        "attributes": {
-                                          "col": "21",
-                                          "line": "19",
-                                          "value": "0"
-                                        },
-                                        "children": []
-                                      }
-                                    ]
-                                  }
-                                ]
                               }
                             ]
                           }

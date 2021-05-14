@@ -17,7 +17,7 @@ class Array2 {
         c = 1;
         //array store
         a = new int[8];
-
+/*
         //array position store
         a[0] = 2;
 
@@ -25,10 +25,12 @@ class Array2 {
 
         (a);
 
+
         //array position load
         io.print(a[0]);
-
+*/
         return 1;
+
     }
 
     public static void main(String[] args){
