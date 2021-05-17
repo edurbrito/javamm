@@ -36,6 +36,8 @@ public class OptimizationStage implements JmmOptimization {
         StringBuilder temp = new StringBuilder();
         int count = 0;
         for(String i:ollirCode.split("\n")){
+            if(i.length()==0)
+                continue;
             temp.append("\t".repeat(count)+i+"\n");
             if (i.contains("{"))
                 count++;
