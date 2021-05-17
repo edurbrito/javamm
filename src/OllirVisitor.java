@@ -52,7 +52,6 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         for (JmmNode child:node.getChildren()){
             switch (child.getKind()){
                 case "WhileCondition":{result.append(dealWithWhileCondition(child)); continue;}
-                //TODO:create condition missing
                 case "WhileBody":{result.append(dealWithWhileBody(child)); continue;}
             }
         }
@@ -65,11 +64,17 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         JmmNode ConditionNode = node.getChildren().get(0);
         for(String i:dealWithChild(ConditionNode)){
-            result.append(i.replace("\n","")).append('\n');
+            result.append(i).append('\n');
         }
 
-        //TODO:create if condition
-        result.append("\ngoto EndLoop;\n");
+
+        result.deleteCharAt(result.lastIndexOf("\n")); //necessary to locate where to put if condition
+        result.insert(result.lastIndexOf("\n")+1,"if (");
+        if (result.lastIndexOf(";")==result.length()-1)
+            result.deleteCharAt(result.lastIndexOf(";"));
+        result.append(") goto Body;\n");
+
+        result.append("goto EndLoop;\n");
         return result.toString();
     }
     private String dealWithWhileBody(JmmNode node){
