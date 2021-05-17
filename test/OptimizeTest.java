@@ -61,5 +61,15 @@ public class OptimizeTest {
 
     }
 
+    @Test
+    public void ifAndWhile() {//test class variables
+
+        var result = TestUtils.optimize("test/fixtures/public/whileTest.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+
+    }
+
 
 }

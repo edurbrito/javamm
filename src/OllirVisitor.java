@@ -457,20 +457,23 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         StringBuilder pre = new StringBuilder();
 
-        StringBuilder leftTemp=new StringBuilder();
-        for (String i:dealWithChild(children.get(0))){
-            if(i.length()>0)
+        StringBuilder leftTemp = new StringBuilder();
+        for (String i : dealWithChild(children.get(0))){
+            if(i.length() > 0)
                 leftTemp.append('\n').append(i);
         }
         leftTemp.deleteCharAt(0);
         String left = leftTemp.toString(), right = "";
 
-        List<String>ops= Arrays.asList("Sum","Sub","Mult","Div","And","LessThan");
+        List<String> opsAr = Arrays.asList("Sum", "Sub", "Mult", "Div", "And", "LessThan");
+        List<String> opsBo = Arrays.asList("And");
+
+
         // Checks if temporary variables are needed
-        if(ops.contains(children.get(0).getKind())){
+        if(opsAr.contains(children.get(0).getKind()) || opsBo.contains(children.get(0).getKind())){
 
             List<String> res;
-            if(type.equals("i32")){         // it uses recursion to determine the ollir code of the operands
+            if(opsAr.contains(children.get(0).getKind())){         // it uses recursion to determine the ollir code of the operands
                 res = dealWithArithmetic(children.get(0));
             }else{
                 res = dealWithBoolOp(children.get(0));
@@ -482,18 +485,18 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             pre.append(res.get(1) + "\n");
         }
 
-        StringBuilder rightTemp=new StringBuilder();
+        StringBuilder rightTemp = new StringBuilder();
         for (String i:dealWithChild(children.get(1))){
-            if(i.length()>0)
+            if(i.length() > 0)
                 rightTemp.append('\n').append(i);
         }
         rightTemp.deleteCharAt(0);
         right=rightTemp.toString();
-        if(children.size() > 1 && ops.contains(children.get(1).getKind())){
+        if(children.size() > 1 && (opsAr.contains(children.get(1).getKind()) || opsBo.contains(children.get(1).getKind()))){
             right = "u1." + type;
 
             List<String> res;
-            if(type.equals("i32")){
+            if(opsAr.contains(children.get(0).getKind())){
                 res = dealWithArithmetic(children.get(1));
             }else{
                 res = dealWithBoolOp(children.get(1));
