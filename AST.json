@@ -7,11 +7,29 @@
     },
     "children": [
       {
+        "kind": "Import",
+        "attributes": {
+          "col": "1",
+          "line": "1"
+        },
+        "children": [
+          {
+            "kind": "Library",
+            "attributes": {
+              "col": "8",
+              "line": "1",
+              "name": "io"
+            },
+            "children": []
+          }
+        ]
+      },
+      {
         "kind": "Class",
         "attributes": {
           "col": "1",
-          "line": "1",
-          "name": "MultipleSequential"
+          "line": "2",
+          "name": "HelloWorld"
         },
         "children": [
           {
@@ -19,47 +37,59 @@
             "attributes": {
               "col": "9",
               "argName": "args",
-              "line": "2"
+              "line": "3"
             },
             "children": [
               {
                 "kind": "MethodBody",
                 "attributes": {
                   "col": "3",
-                  "line": "3"
+                  "line": "4"
                 },
                 "children": [
                   {
-                    "kind": "While",
+                    "kind": "TwoPartExpression",
                     "attributes": {
-                      "col": "3",
-                      "line": "3"
+                      "col": "5",
+                      "line": "4"
                     },
                     "children": [
                       {
-                        "kind": "WhileBody",
+                        "kind": "Identifier",
                         "attributes": {
-                          "col": "16",
-                          "line": "3"
+                          "col": "5",
+                          "line": "4",
+                          "name": "io"
                         },
                         "children": []
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "While",
-                    "attributes": {
-                      "col": "3",
-                      "line": "5"
-                    },
-                    "children": [
+                      },
                       {
-                        "kind": "WhileBody",
+                        "kind": "DotExpression",
                         "attributes": {
-                          "col": "16",
-                          "line": "5"
+                          "col": "5",
+                          "line": "4"
                         },
-                        "children": []
+                        "children": [
+                          {
+                            "kind": "MethodCall",
+                            "attributes": {
+                              "col": "6",
+                              "line": "4",
+                              "name": "println"
+                            },
+                            "children": [
+                              {
+                                "kind": "Integer",
+                                "attributes": {
+                                  "col": "19",
+                                  "line": "4",
+                                  "value": "12345"
+                                },
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
                       }
                     ]
                   }
@@ -71,20 +101,5 @@
       }
     ]
   },
-  "reports": [
-    {
-      "type": "ERROR",
-      "stage": "SYNTATIC",
-      "line": 3,
-      "column": -1,
-      "message": "Detected error in while statement"
-    },
-    {
-      "type": "ERROR",
-      "stage": "SYNTATIC",
-      "line": 5,
-      "column": -1,
-      "message": "Detected error in while statement"
-    }
-  ]
+  "reports": []
 }

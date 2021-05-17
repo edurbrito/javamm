@@ -234,6 +234,49 @@ public class BackendStage implements JasminBackend {
             darray = true;
         }
 
+        if (rhs.getInstType().equals(InstructionType.BINARYOPER)) {
+            BinaryOpInstruction operation = (BinaryOpInstruction) rhs;
+            OperationType operationType = operation.getUnaryOperation().getOpType();
+
+            if (operationType.equals(OperationType.ADD) || operationType.equals(OperationType.SUB)) {
+                if (!operation.getLeftOperand().isLiteral() && operation.getRightOperand().isLiteral()) {
+
+                    Operand leftOp = (Operand) operation.getLeftOperand();
+                    Operand destOp = (Operand) dest;
+                    if(leftOp.getName().equals(destOp.getName())) {
+                        LiteralElement literal = (LiteralElement) operation.getRightOperand();
+                        builder.append("\n");
+                        builder.append("\t");
+                        builder.append("iinc ");
+                        builder.append(OllirAccesser.getVarTable(method).get(((Operand) operation.getLeftOperand()).getName()).getVirtualReg());
+                        if(operationType.equals(OperationType.ADD))
+                            builder.append(" ");
+                        else
+                            builder.append(" -");
+                        builder.append(literal.getLiteral());
+                        return builder.toString();
+                    }
+                }
+                else if (!operation.getLeftOperand().isLiteral() && operation.getLeftOperand().isLiteral()) {
+                    Operand rightOp = (Operand) operation.getRightOperand();
+                    Operand destOp = (Operand) dest;
+                    if (rightOp.getName().equals(destOp.getName())) {
+                        LiteralElement literal = (LiteralElement) operation.getLeftOperand();
+                        builder.append("\n");
+                        builder.append("\t");
+                        builder.append("iinc ");
+                        builder.append(OllirAccesser.getVarTable(method).get(((Operand) operation.getRightOperand()).getName()).getVirtualReg());
+                        if (operationType.equals(OperationType.ADD))
+                            builder.append(" ");
+                        else
+                            builder.append(" -");
+                        builder.append(literal.getLiteral());
+                        return builder.toString();
+                    }
+                }
+            }
+        }
+
         builder.append(generateOperation(method, rhs, darray));
 
         if (dest instanceof ArrayOperand) {

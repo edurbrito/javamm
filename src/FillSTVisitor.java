@@ -50,7 +50,7 @@ public class FillSTVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         while (current.getKind().equals("Var")) {
             Boolean unique = this.symbolTableImp.addField(getSymbol(current));
             if (!unique) {
-                reports.add(new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")),  "Variable " + getSymbol(current).getName() + " has already been declared."));
+                reports.add(new Report(ReportType.WARNING, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")),  "Variable " + getSymbol(current).getName() + " has already been declared."));
             }
             i++;
             if (i == children.size())
@@ -82,7 +82,7 @@ public class FillSTVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         MethodTable methodTable = new MethodTable(node.get("name"), getType(children.get(0)), parameters);
 
-        for(Parameter s: parameters)        // TODO: What is this?
+        for(Parameter s: parameters)
             methodTable.addLocalVariable(s.getSymbol(), true);
 
         methodSignature = methodTable.getSignature();
@@ -147,7 +147,7 @@ public class FillSTVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         while (current.getKind().equals("Var")) {
             Boolean unique = methodTable.addLocalVariable(getSymbol(current));
             if (!unique) {
-                reports.add(new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")),  "Variable " + getSymbol(current).getName() + " has already been declared."));
+                reports.add(new Report(ReportType.WARNING, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")),  "Variable " + getSymbol(current).getName() + " has already been declared."));
             }
             i++;
             if (i == children.size())

@@ -1,0 +1,38 @@
+import io;
+class MethodOverloading {
+    public int add(int a, int b) {
+        int c;
+        c = a+b;
+        return c;
+    }
+
+    public int add(int a, boolean b) {
+        if (!b) {
+            a = 0;   // meter -1
+        }
+        else {
+            a = a+1;
+        }
+        return a;
+    }
+
+    public int add(int a, int b, int c) {
+        int d;
+        d = a+b;
+        d = d+c;
+        return d;
+    }
+
+	public static void main(String[] args) {
+	    int r1;
+	    int r2;
+	    int r3;
+	    r1 = this.add(1,2);
+	    r2 = this.add(1,2,3);
+	    r2 = this.add(4,false);
+
+		io.println(r1);
+		io.println(r2);
+        io.println(r3);
+	}
+}

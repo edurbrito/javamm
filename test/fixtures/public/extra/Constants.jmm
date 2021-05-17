@@ -1,0 +1,20 @@
+import io;
+class Constants {
+    public static void main(String[] args) {
+        int n1;
+        int n2;
+        int n3;
+        int n4;
+
+        n1 = 3;
+        n2 = 100;
+        n3 = 12000;
+        n4 = 50000;
+
+        n1 = n1 + n2;
+        n1 = n1 + n3;
+        n1 = n1 + n4;
+
+        io.println(n1);
+    }
+}
