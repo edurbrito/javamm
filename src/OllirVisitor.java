@@ -61,7 +61,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     }
 
     private String dealWithWhileCondition(JmmNode node){
-        StringBuilder result= new StringBuilder("Loop:");
+        StringBuilder result= new StringBuilder("Loop:\n");
 
         JmmNode ConditionNode = node.getChildren().get(0);
         for(String i:dealWithChild(ConditionNode)){
