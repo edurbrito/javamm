@@ -16,7 +16,7 @@ class WhileAndIF {
         }
 
 
-        while((0-1) < c){
+/*        while((0-1) < c){
             d[c] = a-b;
             c= c-1;
             a= a-1;
@@ -29,7 +29,7 @@ class WhileAndIF {
             a= a-1;
             b= b-1;
         }
-
+*/
         c=0;
         while((c < 10)&&(b<7)){
             io.println(c);

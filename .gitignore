@@ -40,3 +40,4 @@ hs_err_pid*
 #AST generated every program run
 AST.json
 
+out
