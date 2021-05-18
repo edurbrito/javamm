@@ -16,14 +16,14 @@ class WhileAndIF {
         }
 
 
-        while((0-1) < c){
+        /*while((0-1) < c){
             d[c] = a-b;
             c= c-1;
             a= a-1;
             b= b-1;
-        }
+        }*/
 
-        while(true){
+        while(true){ //edge case to check if it handles non binary operations
             d[c] = a-b;
             c= c-1;
             a= a-1;
@@ -31,19 +31,19 @@ class WhileAndIF {
         }
 
         c=0;
-        while((c < 10)&&(b<7)){
+        /*while((c < 10)&&(b<7)){
             io.println(c);
             c= c+1;
-        }
+        }*/
     }
 
     public int funcWithArgs(int arg1, int arg2){
         int c;
         c=0;
-        while((c < arg1)&&(arg2<7)){
+        /*while((c < arg1)&&(arg2<7)){
             io.println(c);
             c= c+1;
-        }
+        }*/
         while(c < arg1){
             io.println(c);
             c= c+1;
