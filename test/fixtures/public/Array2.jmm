@@ -22,7 +22,7 @@ class Array2 {
 
         //array access
 
-        (a);
+        //(a);
 
 
         //array position load

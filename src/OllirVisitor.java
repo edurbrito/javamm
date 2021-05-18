@@ -584,6 +584,12 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         StringBuilder result = new StringBuilder();
         List<JmmNode> children = booleanNode.getChildren();
 
+        if(booleanNode.getKind().equals("Boolean")){
+            finalList.add("");      // There are no Temps
+            finalList.add(booleanNode.get("value")+".bool" + " &&.bool " + booleanNode.get("value") + ".bool");
+            return finalList;
+        }
+
 
         String left, right, pre;        // the left side, right side (of the operation) and what precedes it
         List<String> temps = dealWithTemp(children, "bool");    // Checks if temporary variables are needed
@@ -597,7 +603,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 break;
             }
             case "And":{
-                result.append(" && ");
+                result.append(" &&.bool ");
                 result.append(right);
                 break;
             }

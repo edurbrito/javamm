@@ -91,7 +91,7 @@ public class OptimizeTest {
     @Test
     public void array3() { //test basic println
 
-        var result = TestUtils.optimize("test/fixtures/public/Array2.jmm");
+        var result = TestUtils.optimize("test/fixtures/public/Array3.jmm");
         //TestUtils.noErrors(result.getReports());
         System.out.println(result.getOllirClass().getClassName());
         result.getOllirClass().show();
