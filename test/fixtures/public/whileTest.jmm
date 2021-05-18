@@ -37,4 +37,19 @@ class WhileAndIF {
         }
     }
 
+    public int funcWithArgs(int arg1, int arg2){
+        int c;
+        c=0;
+        while((c < arg1)&&(arg2<7)){
+            io.println(c);
+            c= c+1;
+        }
+        while(c < arg1){
+            io.println(c);
+            c= c+1;
+        }
+        return c;
+
+    }
+
 }
