@@ -19,7 +19,7 @@ class Array2 {
 
         //array position store
         a[0] = 2;
-/*
+
         //array access
 
         (a);
@@ -27,7 +27,7 @@ class Array2 {
 
         //array position load
         io.print(a[0]);
-*/
+
         return 1;
 
     }
