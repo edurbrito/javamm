@@ -10,8 +10,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     private SymbolTableImp symbolTableImp;
     private StringBuilder ollirCode = new StringBuilder("\n");
     private String methodName, methodKey;
-    private int tempsCount=1;
-    private boolean hasReturn;
+    private int tempsCount = 1;
+    private boolean hasReturn = false;
 
     public OllirVisitor(SymbolTableImp symbolTableImp) {
         super();
@@ -21,15 +21,16 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         addVisit("Class", this::dealWithClass);
 
     }
+
     public String getOllirCode(){return this.ollirCode.toString();}
 
     private List<String> dealWithChild(JmmNode child){
         switch (child.getKind()){
             case "Method": {return Collections.singletonList(dealWithMethod(child));}
             case "MainMethod": {return Collections.singletonList(dealWithMainMethod(child));}
-            case "TwoPartExpression":{return Collections.singletonList(dealWithTwoPart(child));}
+            case "TwoPartExpression":{return dealWithTwoPart(child);}
             case "EqualStatement": {return Collections.singletonList(dealWithEqualStatement(child));}
-            case "Identifier" :{ return Collections.singletonList(dealWithIdentifier(child));}
+            case "Identifier" :{ return dealWithIdentifier(child);}
             case "Integer" :{ return Collections.singletonList(dealWithInteger(child));}
             case "Boolean":{ return Collections.singletonList(dealWithBoolean(child));}
             case "AllocationExpression":{return Collections.singletonList(dealWithAllocationExpression(child));}
@@ -43,9 +44,12 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             case "LessThan": {return dealWithArithmetic(child);}
             case "Not":
             case "And": {return dealWithBoolOp(child);}
+
         }
         return Collections.singletonList("");
     }
+
+
 
     private String dealWithIfElse(JmmNode ifElse) {
 
@@ -71,7 +75,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         JmmNode ifBody = ifElse.getChildren().get(1);
 
         for(JmmNode bodyExp : ifBody.getChildren()){
-            res.add(dealWithChild(bodyExp));
+            res.add(join(dealWithChild(bodyExp)));
         }
         res.add("goto endif;");
 
@@ -80,13 +84,22 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     
         JmmNode ifElseBody = ifElse.getChildren().get(2);
         for(JmmNode bodyExp : ifElseBody.getChildren()){
-            res.add(dealWithChild(bodyExp));
+            res.add(join(dealWithChild(bodyExp)));
         }
 
         res.add("endif:\n");
 
 
         return res.toString();
+    }
+
+    private String join(List<String> in){
+        String res = "";
+        for(String str : in){
+            if(str.length()>0)
+                res += str;
+        }
+        return res;
     }
 
     private String dealWithWhile(JmmNode node) {
@@ -114,6 +127,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         result.append("\ngoto EndLoop;\n");
         return result.toString();
     }
+
+
     private String dealWithWhileBody(JmmNode node){
         StringBuilder result = new StringBuilder("Body:\n");
         for (JmmNode child:node.getChildren()) {
@@ -129,6 +144,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         return result.toString();
     }
 
+
     private String dealWithAllocationExpression(JmmNode child) {
         StringBuilder result = new StringBuilder();
 
@@ -143,7 +159,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             if(lengthNode.getKind().equals("Integer")) {
                 length = dealWithInteger(lengthNode);
             }else if(lengthNode.getKind().equals("Identifier")) {
-                length = dealWithIdentifier(lengthNode);
+                length = dealWithIdentifier(lengthNode).get(0);
             }else{
                 List<String> tempRes = dealWithArithmetic(lengthNode);
                 result.append(tempRes.get(0));
@@ -155,8 +171,6 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         }
         return result.toString();
     }
-
-
 
 
     private boolean dealWithClass(JmmNode node, List<Report> reports) {
@@ -221,17 +235,11 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
     private String dealWithMethodBody(JmmNode node){
         StringBuilder result = new StringBuilder("\n");
-        this.hasReturn = false;
+
         for (JmmNode child:node.getChildren()){
-            for(String i:dealWithChild(child)){
-                if(i.length()>0)
-                result.append(i).append('\n');
-            }
-//            result.append(dealWithChild(child).get(0));
+            result.append(join(dealWithChild(child)));
         }
-        if (!hasReturn) {
-            result.append("ret.V;\n");
-        }
+
         return result.toString();
     }
 
@@ -246,24 +254,32 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         result.append(dealWithMethodBody(methodBody));
 
-        result.append("}\n");
+        result.append("ret.V;\n}\n");
+
+
+
         return result.toString();
     }
 
 
     private String dealWithMethod(JmmNode node) {
         this.methodName = node.get("name");
+        this.hasReturn = false;
 
         StringBuilder result = new StringBuilder();
         result.append(".method public "+ node.get("name")+"("+getArgs(node)+")");
         result.append("."+ getTypeOllir(symbolTableImp.methods.get(methodKey).returnType));
         result.append(" {");
 
-        for (JmmNode child:node.getChildren()){
+        for (JmmNode child : node.getChildren()){
             result.append(dealWithChild(child).get(0));
         }
 
+        if (!hasReturn) {
+            result.append("ret.V;\n");
+        }
         result.append("}\n");
+
         return result.toString();
     }
 
@@ -283,11 +299,18 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     }
 
 
-    private String dealWithTwoPart(JmmNode node){
+    private List<String> dealWithTwoPart(JmmNode node){
 
-        if(node.getChildren().get(1).getKind().equals("AccessToArray")) return "";
+        if(node.getChildren().get(1).getKind().equals("AccessToArray")) {
+            List<String> res = new ArrayList<>();
+            List<String> resAccess = dealWithArithmetic(node.getChildren().get(1).getChildren().get(0));
+            res.add(resAccess.get(0));
+            res.add(node.getChildren().get(0).get("name") + "[" + resAccess.get(1) + "]" +".i32");
 
-        StringBuilder result=new StringBuilder("t"+this.tempsCount);
+            return res;
+        }
+
+        StringBuilder result = new StringBuilder("t" + this.tempsCount);
 
         JmmNode leftChild = node.getChildren().get(0);
         JmmNode rightChild = node.getChildren().get(1);
@@ -296,7 +319,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             String expressionResult = dealWithThisExpression(node);
             String type = ("." + expressionResult.split("\\.")[expressionResult.split("\\.").length - 1]);
             result.append(type+" := "+ type+ " "+expressionResult+";"+"\n");
-            return result.toString();
+
+            return Collections.singletonList(result.toString());
         }
 
         String objectName = leftChild.get("name");
@@ -319,17 +343,15 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                         key.append(" t1.i32 ");
 
                     }else
-                        key.append(dealWithChild(child));
-                    //String to_append=dealWithChild(child);
-                    //if (to_append.equals(""))
-                    //    to_append=dealWithArithmetic(child).get(0)+dealWithArithmetic(child).get(1);
+                        key.append(dealWithChild(child).get(0));
+
                     for(String i:dealWithChild(child)){
                         if(i.length()>0)
                             result.append(i).append('\n');
                     }
-//                    result.append(dealWithChild(child).get(0));
                 }
-                result=new StringBuilder();
+
+                result = new StringBuilder();
                 result.append(before + "\n");
                 result.append("invokestatic(" + objectName + ", \"" + methodCall.get("name")+"\"");
                 result.append(key.toString());
@@ -337,7 +359,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
                 result.append(").V;\n");
             }
-            return result.toString();
+            return Collections.singletonList(result.toString());
         }
 
         String className = classSym.getType().getName();
@@ -373,10 +395,10 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         result.append(")");
 
-        result.append("."+getTypeOllir(symbolTableImp.methods.get(key.toString()).returnType));
+        result.append("." + getTypeOllir(symbolTableImp.methods.get(key.toString()).returnType));
 
 
-        return result.toString();
+        return Collections.singletonList(result.toString());
     }
 
 
@@ -415,7 +437,6 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
     private String dealWithEqualStatement(JmmNode equalNode){
         List<JmmNode> children = equalNode.getChildren();
-        boolean putfield = false;
 
         // Get OLLIR type of operation
         Type leftType = getIdentifierType(children.get(0));
@@ -425,15 +446,35 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             type = "array." + type;
         }
 
-        putfield = isPutfield(children);
+        boolean putfield = isPutfield(children);
 
-        String left, right, pre = "";
-        left = dealWithChild(children.get(0)).get(0);
-        right = dealWithChild(children.get(1)).get(0);
-        boolean arithm = false;
+        String leftEqual, rightEqual, preEqual = "";
+        List<String> resLeft = dealWithChild(children.get(0));
+        List<String> resRight = dealWithChild(children.get(1));
 
+        if(resLeft.size() > 1){
+            if(resLeft.get(0).length() > 0){
+                preEqual = resLeft.get(0) + "\n";
+            }
+            leftEqual = resLeft.get(1);
+        }else{
+            leftEqual = resLeft.get(0);
+        }
+
+        if(resRight.size() > 1){
+            if(resRight.get(0).length() > 0){
+                preEqual = resRight.get(0) + "\n";
+            }
+            rightEqual = resRight.get(1);
+        }else{
+            rightEqual = resRight.get(0);
+        }
+
+
+
+/*
         // Checks if the right child is a compost operation (arithmetic or boolean)
-        if(right.equals("")){
+        if(rightEqual.equals("")){
             List<String> res;
             String rightNodeKind = children.get(1).getKind();
 
@@ -444,36 +485,38 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 res = dealWithArithmetic(children.get(1));
             }
 
-            pre = res.get(0);           // the OLLIR code needed before the operation
-            right = res.get(1);         // the right side of the op
+            preEqual = res.get(0);           // the OLLIR code needed before the operation
+            rightEqual = res.get(1);         // the right side of the op
         }
 
         if(children.get(1).getKind().equals("AllocationExpression")){
-            pre = "t1.array.i32 :=.array.i32 " + right + ";";
-            right = "t1.array.i32";
-        }
-        if(left.contains("!!")){
-            String[] res = left.split("!!");
-            pre += res[0] + "\n";
-            left = res[1];
-        }
-        if(right.contains("!!")){
-            String[] res = left.split("!!");
-            pre += res[0] + "\n";
-            right = res[1];
+            preEqual += "t1.array.i32 :=.array.i32 " + rightEqual + ";\n" ;
+            rightEqual = "t1.array.i32";
         }
 
 
+        if(leftEqual.contains("!!")){
+            String[] res = leftEqual.split("!!");
+            preEqual += res[0] + "\n";
+            leftEqual = res[1];
+        }
+        if(rightEqual.contains("!!")){
+            String[] res = leftEqual.split("!!");
+            preEqual += res[0] + "\n";
+            rightEqual = res[1];
+        }
+
+*/
 
 
-        if(pre.equals("")){
+        if(preEqual.equals("")){
             if (putfield)
-                return "putfield(this," + left + "," + right + ").V;\n";
-            return left + " :=."  + type + " " + right  + ";\n";
+                return "putfield(this," + leftEqual + "," + rightEqual + ").V;\n";
+            return leftEqual + " :=."  + type + " " + rightEqual  + ";\n";
         }else{
             if (putfield)
-                return pre + '\n' + "putfield(this," + left + "," + right + ").V;\n";
-            return pre + "\n" + left + " :=." + type + " " + right + ";\n";
+                return preEqual + '\n' + "putfield(this," + leftEqual + "," + rightEqual + ").V;\n";
+            return preEqual + "\n" + leftEqual + " :=." + type + " " + rightEqual + ";\n";
         }
     }
 
@@ -587,6 +630,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         return finalList;
     }
 
+
     private List<String> dealWithTemp(List<JmmNode> children, String type){
 
         StringBuilder pre = new StringBuilder();
@@ -652,23 +696,23 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         return res;
     }
 
+
     private String dealWithReturn(JmmNode node){
-        StringBuilder result=new StringBuilder();
+        this.hasReturn = true;
+        StringBuilder result = new StringBuilder();
         result.append("ret.");
         result.append(getTypeOllir(symbolTableImp.methods.get(this.methodKey).returnType));
         result.append(" ");
         for (JmmNode child:node.getChildren())
-            for(String i:dealWithChild(child)){
-                if(i.length()>0)
-                    result.append(i).append('\n');
-            }
+            result.append(join(dealWithChild(child)));
+
 //            result.append(dealWithChild(child).get(0));
         result.append(";\n");
         return result.toString();
     }
 
 
-    private String dealWithIdentifier(JmmNode child) {
+    private List<String> dealWithIdentifier(JmmNode child) {
         String identifierName = child.get("name");
         String pre = "";
         Parameter parameter = this.symbolTableImp.getMethod(this.methodKey).getParameter(identifierName);
@@ -697,11 +741,15 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         Type identifierType = getIdentifierType(child);
         if(identifierType.isArray() && child.getChildren().size() == 0)
             array += ".array";
+
+        List<String> finalString = new ArrayList<>();
         if(!before.isEmpty())
-            return before + " !! " + pre + identifierName + array + "." + getTypeOllir(identifierType);
-        else
-            return pre + identifierName + array + "." + getTypeOllir(identifierType);
+            finalString.add(before);
+
+        finalString.add(pre + identifierName + array + "." + getTypeOllir(identifierType));
+        return finalString;
     }
+
 
     private List<String> mountIdentifierOLLIR(JmmNode identifierNode, JmmNode accessNode){
 
@@ -738,6 +786,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         return finalList;
     }
+
 
     private String dealWithInteger(JmmNode child) {
 

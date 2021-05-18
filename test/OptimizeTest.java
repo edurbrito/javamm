@@ -15,8 +15,7 @@
 import org.junit.Test;
 
 import pt.up.fe.comp.TestUtils;
-import pt.up.fe.comp.jmm.analysis.JmmSemanticsResult;
-import pt.up.fe.specs.util.SpecsIo;
+
 
 public class OptimizeTest {
 
@@ -120,5 +119,14 @@ public class OptimizeTest {
 
     }
 
+    @Test
+    public void personal() {//test class variables
+
+        var result = TestUtils.optimize("test/fixtures/public/personal.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+
+    }
 
 }
