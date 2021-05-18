@@ -94,7 +94,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 }
             }
         }
-        result.append("EndLoop:" + whileNumber + "\n");
+        result.append("EndLoop" + whileNumber + ":\n");
         return result.toString();
     }
 
