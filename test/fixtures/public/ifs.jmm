@@ -1,0 +1,37 @@
+class Ifs{
+	public static void main(String[] args) {
+		int a;
+		a = 2;
+
+        if(true){
+            a = 1;
+        }else{
+            a = 0;
+        }
+
+        if(false){
+            a = 1;
+        }else{
+            a = 0;
+        }
+
+		if (a < 2){
+		    a = 3;
+		    if(a < 3){
+		        a = 1;
+		    }else{
+		        a = 0;
+		    }
+		}else {
+            a = 1;
+		}
+        a = 1;
+
+        if (a + a < a * 2){
+            a = 3;
+        }else {
+            a = 1;
+        }
+
+	}
+}

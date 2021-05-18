@@ -15,10 +15,10 @@
 import org.junit.Test;
 
 import pt.up.fe.comp.TestUtils;
-import pt.up.fe.comp.jmm.analysis.JmmSemanticsResult;
-import pt.up.fe.specs.util.SpecsIo;
+
 
 public class OptimizeTest {
+
 
     @Test
     public void testHelloWorld() { //test basic println
@@ -60,6 +60,54 @@ public class OptimizeTest {
         result.getOllirClass().show();
 
     }
+    @Test
+    public void ifs() {//test class variables
+
+        var result = TestUtils.optimize("test/fixtures/public/ifs.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+
+    }
+
+    @Test
+    public void array1() {
+
+        var result = TestUtils.optimize("test/fixtures/public/Array1.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+    }
+
+    @Test
+    public void array2() {
+
+        var result = TestUtils.optimize("test/fixtures/public/Array2.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+    }
+
+    @Test
+    public void array3() { //test basic println
+
+        var result = TestUtils.optimize("test/fixtures/public/Array3.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+
+    }
+
+
+    @Test
+    public void array4() { //test basic println
+        //SpecsIo.getResource(
+        var result = TestUtils.optimize("test/fixtures/public/Array4.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+
+    }
 
     @Test
     public void ifAndWhile() {//test class variables
@@ -71,5 +119,14 @@ public class OptimizeTest {
 
     }
 
+    @Test
+    public void personal() {//test class variables
+
+        var result = TestUtils.optimize("test/fixtures/public/personal.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+
+    }
 
 }

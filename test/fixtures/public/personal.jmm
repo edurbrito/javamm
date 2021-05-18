@@ -2,15 +2,15 @@ import io.print;
 import io.printArray;
 import Map;
 
-class Array2 {
+class Personal {
 
     int[] a;
     int c;
-
+/*
     public int test() {
         return c;
     }
-
+*/
     public int test(int ola){
 
         c = 1;
@@ -33,6 +33,7 @@ class Array2 {
     }
 
     public static void main(String[] args){
+
         int[] a;
         Map map;
 
@@ -49,5 +50,7 @@ class Array2 {
         io.print(a[0]);
 
         map = new Map();
+
     }
+
 }
