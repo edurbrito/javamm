@@ -260,6 +260,9 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         for (JmmNode child:node.getChildren()){
             result.append(join(dealWithChild(child)));
+            if(child.getKind().equals("Identifier")){
+                result.append(";");
+            }
         }
 
         return result.toString();
