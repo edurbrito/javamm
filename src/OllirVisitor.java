@@ -470,10 +470,10 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         try{
             result.append("." + getTypeOllir(symbolTableImp.methods.get(key.toString()).returnType));
         }catch (NullPointerException e){//if function is from extended superclass
-            result.append("." + "int");
+            result.append("." + "i32");
         }
 
-
+        result.append(";");
         return Collections.singletonList(result.toString());
     }
 
@@ -508,7 +508,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             try{
                 result.append("." + getTypeOllir(symbolTableImp.methods.get(key.toString()).returnType));
             }catch (NullPointerException e){//if function is from extended superclass
-                result.append("." + "int");
+                result.append("." + "i32");
             }
 
         }
@@ -559,8 +559,13 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 return "putfield(this," + leftEqual + "," + rightEqual + ").V;\n";
             return leftEqual + " :=."  + type + " " + rightEqual  + ";\n";
         }else{
-            if (putfield)
+            if (putfield) {
+                if (Arrays.asList("Sum","Sub","Mult","Div").contains(children.get(1).getKind())){
+                    preEqual=preEqual+"t2.i32 :=.i32 "+rightEqual+";\n";
+                    rightEqual="t2.i32";
+                }
                 return preEqual + '\n' + "putfield(this," + leftEqual + "," + rightEqual + ").V;\n";
+            }
             return preEqual + "\n" + leftEqual + " :=." + type + " " + rightEqual + ";\n";
         }
     }
@@ -666,7 +671,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             }else{
                 finalList.add("");
             }
-            finalList.add(res.get(1));
+            finalList.add(res.get(0));
 
             return finalList;
         }
