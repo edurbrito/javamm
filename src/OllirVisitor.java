@@ -770,6 +770,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             accessToArray = true;
             JmmNode indexNode = child.getChildren().get(0).getChildren().get(0);
 
+            //List<String> res =  dealWithArithmetic(indexNode);
             List<String> res =  dealWithArithmetic(indexNode);
             before.append(res.get(0)).append("\n");
 
