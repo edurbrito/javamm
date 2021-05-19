@@ -754,19 +754,26 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         StringBuilder before = new StringBuilder();
         String array = "";
+
         if(child.getChildren().size() > 0 && child.getChildren().get(0).getKind().equals("AccessToArray")){     //if is accessing an array
             accessToArray = true;
             JmmNode indexNode = child.getChildren().get(0).getChildren().get(0);
 
-            List<String> res =  dealWithArithmetic(indexNode);
-            before.append(res.get(0)).append("\n");
+            List<String> res = dealWithChild(indexNode);
+            String  inline = "";
+            if(res.size() > 1){
+                before.append(res.get(0)).append("\n");
+                inline = res.get(1);
+            }else{
+                inline = res.get(0);
+            }
 
             String betwPar;
             if(!indexNode.getKind().equals("Integer")){
-                before.append("t1.i32 :=.i32 ").append(res.get(1)).append(";\n");
+                before.append("t1.i32 :=.i32 ").append(inline).append(";\n");
                 betwPar = "t1.i32";
             }else {
-                betwPar = res.get(1);
+                betwPar = inline;
             }
             array = "[" +  betwPar + "]";
 
@@ -776,7 +783,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         if(identifierType.isArray() && child.getChildren().size() == 0)
             array += ".array";
 
-        List<String> finalString = new ArrayList<>();
+        List<String> finalList = new ArrayList<>();
         boolean putfield = isPutfield(child.getParent().getChildren());
 
         if(putfield && accessToArray){
@@ -784,14 +791,14 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         }
 
         if(!before.isEmpty())
-            finalString.add(before.toString());
+            finalList.add(before.toString());
 
         if(putfield && accessToArray)
-            finalString.add("t1.i32");
+            finalList.add("t1.i32");
         else
-            finalString.add(pre + identifierName + array + "." + getTypeOllir(identifierType));
+            finalList.add(pre + identifierName + array + "." + getTypeOllir(identifierType));
 
-        return finalString;
+        return finalList;
     }
 
 
