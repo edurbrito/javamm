@@ -15,6 +15,11 @@ class WhileAndIF {
             c = b-1;
         }
 
+        if(true){
+            a=a-1;
+        }else{
+            a=a-1;
+        }
 
         /*while((0-1) < c){
             d[c] = a-b;

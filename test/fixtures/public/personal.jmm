@@ -1,56 +1,16 @@
-import io.print;
-import io.printArray;
-import Map;
-
 class Personal {
 
-    int[] a;
-    int c;
-/*
-    public int test() {
-        return c;
-    }
-*/
-    public int test(int ola){
-
-        c = 1;
-        //array store
-        a = new int[8];
-
-        //array position store
-        a[0] = 2;
-
-        //array access
-
-        //(a);
-
-
-        //array position load
-        io.print(a[0]);
-
-        return 1;
-
-    }
 
     public static void main(String[] args){
 
-        int[] a;
-        Map map;
-
-        //array store
-        a = new int[8];
-
-        //array position store
-        a[0] = 2;
-
-        //array access
-        io.printArray(a);
-
-        //array position load
-        io.print(a[0]);
-
-        map = new Map();
-
+        int a;
+        int b;
+        int c;
+        int[] d;
+        a = 20;
+        b = 10;
+        c = 0;
+        d = new int[2];
+        d[c] = a-b;
     }
-
 }
