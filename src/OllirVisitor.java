@@ -452,7 +452,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                     result.append(i).append('\n');
             }
 //            result.append(dealWithChild(callArgs).get(0));
-            if(dealWithChild(callArgs).get(0).split("\\.")[1].equals("i32")){
+            if(dealWithChild(callArgs).get(0).split("\\.")[1].equals("i32") || dealWithChild(callArgs).get(0).split("\\.")[1].equals("array")){
                 key.append("int");
             }else if (dealWithChild(callArgs).get(0).split("\\.")[1].equals("bool")){
                 key.append("bool");
@@ -467,7 +467,11 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         result.append(")");
 
-        result.append("." + getTypeOllir(symbolTableImp.methods.get(key.toString()).returnType));
+        try{
+            result.append("." + getTypeOllir(symbolTableImp.methods.get(key.toString()).returnType));
+        }catch (NullPointerException e){//if function is from extended superclass
+            result.append("." + "int");
+        }
 
 
         return Collections.singletonList(result.toString());
@@ -500,7 +504,13 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 }
             }
             result.append(")");
-            result.append("." + getTypeOllir(symbolTableImp.methods.get(key.toString()).returnType));
+
+            try{
+                result.append("." + getTypeOllir(symbolTableImp.methods.get(key.toString()).returnType));
+            }catch (NullPointerException e){//if function is from extended superclass
+                result.append("." + "int");
+            }
+
         }
 
         return result.toString();
@@ -597,6 +607,12 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         if(booleanNode.getKind().equals("Boolean")){
             finalList.add("");      // There are no Temps
             finalList.add(booleanNode.get("value")+".bool" + " &&.bool " + booleanNode.get("value") + ".bool");
+            return finalList;
+        }
+
+        if(children.size()==0){
+            finalList.add("");      // There are no Temps
+            finalList.add(booleanNode.get("name")+".bool" + " &&.bool " + "true" + ".bool");
             return finalList;
         }
 
