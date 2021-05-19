@@ -8,12 +8,23 @@ import static org.junit.Assert.*;
 public class FileTests {
 
     @Test
+    public void Arithmetic() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/Arithmetic.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+
+    }
+
+    @Test
     public void Array1() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/Array1.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
     }
 
     @Test
@@ -55,6 +66,15 @@ public class FileTests {
     @Test
     public void FindMaximum() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/FindMaximum.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+    }
+
+    @Test
+    public void GlobalAccess() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/GlobalAccess.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);

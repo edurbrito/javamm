@@ -15,24 +15,16 @@
 import org.junit.Test;
 
 import pt.up.fe.comp.TestUtils;
+import pt.up.fe.comp.jmm.JmmParserResult;
+import pt.up.fe.comp.jmm.analysis.JmmSemanticsResult;
+
+import static org.junit.Assert.assertEquals;
 
 
 public class OptimizeTest {
 
-
     @Test
-    public void testHelloWorld() { //test basic println
-        //SpecsIo.getResource(
-        var result = TestUtils.optimize("test/fixtures/public/HelloWorld.jmm");
-        //TestUtils.noErrors(result.getReports());
-        System.out.println(result.getOllirClass().getClassName());
-        result.getOllirClass().show();
-
-    }
-
-
-    @Test
-    public void arithmetic() {//test arithmetic
+    public void Arithmetic() {//test arithmetic
         //SpecsIo.getResource(
         var result = TestUtils.optimize("test/fixtures/public/Arithmetic.jmm");
         //TestUtils.noErrors(result.getReports());
@@ -42,9 +34,65 @@ public class OptimizeTest {
     }
 
     @Test
-    public void simple() {//test create class and invoque methods
+    public void Array1() {
 
-        var result = TestUtils.optimize("test/fixtures/public/Simple.jmm");
+        var result = TestUtils.optimize("test/fixtures/public/Array1.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+    }
+
+    @Test
+    public void Array2() {
+
+        var result = TestUtils.optimize("test/fixtures/public/Array2.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+    }
+
+    @Test
+    public void Array3() { //test basic println
+
+        var result = TestUtils.optimize("test/fixtures/public/Array3.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+
+    }
+
+
+    @Test
+    public void Array4() { //test basic println
+        //SpecsIo.getResource(
+        var result = TestUtils.optimize("test/fixtures/public/Array4.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+    }
+
+    @Test
+    public void Custom() { //test basic println
+        //SpecsIo.getResource(
+        var result = TestUtils.optimize("test/fixtures/public/Custom.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+    }
+
+    @Test
+    public void FindMaximum() { //test basic println
+        //SpecsIo.getResource(
+        var result = TestUtils.optimize("test/fixtures/public/FindMaximum.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+    }
+
+    @Test
+    public void HelloWorld() { //test basic println
+        //SpecsIo.getResource(
+        var result = TestUtils.optimize("test/fixtures/public/HelloWorld.jmm");
         //TestUtils.noErrors(result.getReports());
         System.out.println(result.getOllirClass().getClassName());
         result.getOllirClass().show();
@@ -52,9 +100,31 @@ public class OptimizeTest {
     }
 
     @Test
-    public void globals() {//test class variables
+    public void Lazysort() { //test basic println
+        //SpecsIo.getResource(
+        var result = TestUtils.optimize("test/fixtures/public/Lazysort.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
 
-        var result = TestUtils.optimize("test/fixtures/public/global_access.jmm");
+    }
+
+    @Test
+    public void Life() { //test basic println
+        //SpecsIo.getResource(
+        var result = TestUtils.optimize("test/fixtures/public/Life.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+
+    }
+
+
+
+    @Test
+    public void GlobalAccess() {//test class variables
+
+        var result = TestUtils.optimize("test/fixtures/public/GlobalAccess.jmm");
         //TestUtils.noErrors(result.getReports());
         System.out.println(result.getOllirClass().getClassName());
         result.getOllirClass().show();
@@ -71,42 +141,129 @@ public class OptimizeTest {
     }
 
     @Test
-    public void array1() {
-
-        var result = TestUtils.optimize("test/fixtures/public/Array1.jmm");
-        //TestUtils.noErrors(result.getReports());
-        System.out.println(result.getOllirClass().getClassName());
-        result.getOllirClass().show();
+    public void MonteCarloPi() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/MonteCarloPi.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
     }
 
     @Test
-    public void array2() {
-
-        var result = TestUtils.optimize("test/fixtures/public/Array2.jmm");
-        //TestUtils.noErrors(result.getReports());
-        System.out.println(result.getOllirClass().getClassName());
-        result.getOllirClass().show();
+    public void notInitInIf() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/notInitInIf.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
     }
 
     @Test
-    public void array3() { //test basic println
-
-        var result = TestUtils.optimize("test/fixtures/public/Array3.jmm");
-        //TestUtils.noErrors(result.getReports());
-        System.out.println(result.getOllirClass().getClassName());
-        result.getOllirClass().show();
-
+    public void notInitInIf2() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/notInitInIf2.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
     }
 
+    @Test
+    public void notInitInIf3() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/notInitInIf3.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+    }
 
     @Test
-    public void array4() { //test basic println
-        //SpecsIo.getResource(
-        var result = TestUtils.optimize("test/fixtures/public/Array4.jmm");
-        //TestUtils.noErrors(result.getReports());
-        System.out.println(result.getOllirClass().getClassName());
-        result.getOllirClass().show();
+    public void NotInitInIf4() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/NotInitInIf4.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+    }
 
+    @Test
+    public void QuickSort() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/QuickSort.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+    }
+
+    @Test
+    public void Simple() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/Simple.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+    }
+
+    @Test
+    public void test2() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/test2.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+    }
+
+    @Test
+    public void test3() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/test3.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+    }
+
+    @Test
+    public void test4() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/test4.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+    }
+
+    @Test
+    public void test5() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/test5.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+    }
+
+    @Test
+    public void TicTacToe() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/TicTacToe.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+    }
+
+    @Test
+    public void varNotInit() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/varNotInit.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+    }
+
+    @Test
+    public void WhileAndIF() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/WhileAndIF.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
     }
 
     @Test
