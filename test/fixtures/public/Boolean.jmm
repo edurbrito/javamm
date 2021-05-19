@@ -1,6 +1,4 @@
-class Personal {
-
-
+class Boolean {
     public static void main(String[] args){
 
         boolean b;
@@ -9,9 +7,5 @@ class Personal {
         c = false;
         b = !(c && c);
         b = !true;
-
-
-
-
     }
 }

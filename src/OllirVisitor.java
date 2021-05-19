@@ -610,7 +610,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             return finalList;
         }
 
-        if(children.size()==0){
+        if(children.size() == 0){
             finalList.add("");      // There are no Temps
             finalList.add(booleanNode.get("name")+".bool" + " &&.bool " + "true" + ".bool");
             return finalList;
@@ -740,17 +740,13 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         // Checks if temporary variables are needed
         if(opsAr.contains(children.get(0).getKind()) || opsBo.contains(children.get(0).getKind())){
 
-            List<String> res = new ArrayList<>();
-            if(opsAr.contains(children.get(0).getKind())){         // it uses recursion to determine the ollir code of the operands
-                res = dealWithArithmetic(children.get(0));
-            }else if(opsBo.contains(children.get(0).getKind())){
-                res = dealWithBoolOp(children.get(0));
-            }
 
+
+            String tempVar = "t1." + type;
+            pre.append(tempVar + " :=." + type + " ");
+            pre.append(left + ";\n");
             left = "t1." + type;
-            pre.append(res.get(0) + "\n");
-            pre.append("t1." + type + " :=." + type + " ");
-            pre.append(res.get(1) + ";\n");
+
         }
 
         StringBuilder rightTemp = new StringBuilder();
@@ -760,12 +756,14 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 rightTemp.append('\n').append(i);
 
         }*/
-        List<String> rightPart = dealWithChild(children.get(1));
-        if(rightPart.size() > 1){
-            pre.append(rightPart.get(0)).append("\n");
-            right = rightPart.get(1);
-        }else{
-            right = rightPart.get(0);
+        if(children.size() > 1){
+            List<String> rightPart = dealWithChild(children.get(1));
+            if(rightPart.size() > 1){
+                pre.append(rightPart.get(0)).append("\n");
+                right = rightPart.get(1);
+            }else{
+                right = rightPart.get(0);
+            }
         }
 
 
@@ -773,20 +771,12 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         //rightTemp.deleteCharAt(0);
         //right=rightTemp.toString();
         if(children.size() > 1 && (opsAr.contains(children.get(1).getKind()) || opsBo.contains(children.get(1).getKind()))){
-            right = "u1." + type;
 
-            List<String> res = new ArrayList<>();
-            if(opsAr.contains(children.get(1).getKind())){
-                res = dealWithArithmetic(children.get(1));
+            String tempVar = "u1." + type;
+            pre.append(tempVar + " :=." + type + " ");
+            pre.append(right + ";\n");
+            right = "t1." + type;
 
-            }else if(opsBo.contains(children.get(1).getKind())){
-                res = dealWithBoolOp(children.get(1));
-
-            }
-
-            pre.append(res.get(0)).append("\n");
-            pre.append("u1.").append(type).append(" :=.").append(type).append(" ");
-            pre.append(res.get(1)).append(";\n");
         }
 
         List<String> res = new ArrayList<>();

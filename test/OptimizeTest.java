@@ -72,6 +72,16 @@ public class OptimizeTest {
     }
 
     @Test
+    public void Boolean() {//test class variables
+
+        var result = TestUtils.optimize("test/fixtures/public/Boolean.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+
+    }
+
+    @Test
     public void Custom() { //test basic println
         //SpecsIo.getResource(
         var result = TestUtils.optimize("test/fixtures/public/Custom.jmm");
@@ -283,6 +293,7 @@ public class OptimizeTest {
         result.getOllirClass().show();
 
     }
+
 
     @Test
     public void personal() {//test class variables
