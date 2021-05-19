@@ -797,12 +797,10 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             }
 
             String betwPar;
-            if(!indexNode.getKind().equals("Integer")){
-                before.append("t1.i32 :=.i32 ").append(inline).append(";\n");
-                betwPar = "t1.i32";
-            }else {
-                betwPar = inline;
-            }
+
+            before.append("t1.i32 :=.i32 ").append(inline).append(";\n");
+            betwPar = "t1.i32";
+
             array = "[" +  betwPar + "]";
 
 
