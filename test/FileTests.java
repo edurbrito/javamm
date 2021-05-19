@@ -101,6 +101,15 @@ public class FileTests {
     }
 
     @Test
+    public void Length() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/Length.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+    }
+
+    @Test
     public void Life() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/Life.jmm");
         assertEquals("Program",res.getRootNode().getKind());

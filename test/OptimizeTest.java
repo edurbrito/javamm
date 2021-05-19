@@ -110,6 +110,16 @@ public class OptimizeTest {
     }
 
     @Test
+    public void Length() { //test basic println
+        //SpecsIo.getResource(
+        var result = TestUtils.optimize("test/fixtures/public/Length.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+
+    }
+
+    @Test
     public void Life() { //test basic println
         //SpecsIo.getResource(
         var result = TestUtils.optimize("test/fixtures/public/Life.jmm");
@@ -118,8 +128,6 @@ public class OptimizeTest {
         result.getOllirClass().show();
 
     }
-
-
 
     @Test
     public void GlobalAccess() {//test class variables
