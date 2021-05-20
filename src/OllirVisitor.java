@@ -75,23 +75,24 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         res.add(pre);
 
-        res.add("if ( " + inCond.replace("<", ">=") + " ) goto else" + countIf +";");
-
-        // IfElse Body
-        JmmNode ifBody = ifElse.getChildren().get(1);
-
-        for(JmmNode bodyExp : ifBody.getChildren()){
-            res.add(join(dealWithChild(bodyExp)));
-        }
-        res.add("goto endif" + countIf + ";");
+        res.add("if ( " + inCond + " ) goto body" + countIf +";");
 
         // IfElse else
-        res.add("else" + countIf +":");
+        JmmNode ifBody = ifElse.getChildren().get(1);
 
         JmmNode ifElseBody = ifElse.getChildren().get(2);
         for(JmmNode bodyExp : ifElseBody.getChildren()){
             res.add(join(dealWithChild(bodyExp)));
         }
+        res.add("goto endif" + countIf + ";");
+
+        // IfElse body
+        res.add("body" + countIf +":");
+
+        for(JmmNode bodyExp : ifBody.getChildren()){
+            res.add(join(dealWithChild(bodyExp)));
+        }
+
 
         res.add("endif" + countIf + ":\n");
 
