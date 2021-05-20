@@ -96,7 +96,7 @@ public class TestUtils {
                 semanticsResult = optimization.optimize(semanticsResult);
             }
 
-            var ollirResult = optimization.toOllir(semanticsResult);
+            var ollirResult = optimization.toOllir(semanticsResult, optimize);
 
             if (optimize) {
                 ollirResult = optimization.optimize(ollirResult);
@@ -105,7 +105,6 @@ public class TestUtils {
             return ollirResult;
 
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException("Could not generate OLLIR code", e);
         }
     }
