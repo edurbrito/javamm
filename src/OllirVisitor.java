@@ -374,18 +374,24 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             return res;
         }
 
-        StringBuilder result = new StringBuilder("t" + this.tempsCount);
+        StringBuilder result = new StringBuilder();
 
 
         JmmNode leftChild = node.getChildren().get(0);
         JmmNode rightChild = node.getChildren().get(1);
 
         if (leftChild.getKind().equals("This")) {
-            String expressionResult = dealWithThisExpression(node);
-            String type = ("." + expressionResult.split("\\.")[expressionResult.split("\\.").length - 1]);
-            result.append(type+" := "+ type+ " "+expressionResult+";"+"\n");
+            List<String> listRes = dealWithThisExpression(node);
 
-            return Collections.singletonList(result.toString());
+            String expressionResult = listRes.get(1);
+            String type = ("." + expressionResult.split("\\.")[expressionResult.split("\\.").length - 1]);
+            result.append(" " + expressionResult + ";" + "\n");
+            List<String> finalL = new ArrayList<>();
+            finalL.add(listRes.get(0));
+            finalL.add(result.toString());
+
+            return finalL;
+
         }else if(rightChild.getKind().equals("DotExpression") && leftChild.getKind().equals("Identifier") && getIdentifierType(leftChild) != null && getIdentifierType(leftChild).isArray()){
             List<String> resLength = new ArrayList<>();
             resLength.add("t1.i32 :=.i32 arraylength(" + getParameterSig(leftChild.get("name")) + leftChild.get("name") + ".array.i32" + ").i32;");
@@ -398,6 +404,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         String objectName = leftChild.get("name");
         Symbol classSym = this.symbolTableImp.getMethod(this.methodKey).getVariable(objectName);
         if (classSym==null) {
+            result.append("t" + this.tempsCount);
             String before = "";
             if (this.symbolTableImp.getImports().contains(objectName)) {
                 JmmNode methodCall = rightChild.getChildren().get(0);
@@ -444,26 +451,33 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
 
         StringBuilder key= new StringBuilder(callName);
+        StringBuilder pre = new StringBuilder();
 
         for (JmmNode callArgs : rightChild.getChildren().get(0).getChildren()) {
-            result.append(",");
-            for(String i:dealWithChild(callArgs)){
-                if(i.length()>0)
-                    result.append(i).append('\n');
+
+            List<String> stringList = dealWithChild(callArgs);
+            String res="";
+            if(stringList.size() > 1){
+                pre.append(stringList.get(0)).append("\n");
+                res = stringList.get(1);
+            }else{
+                res = stringList.get(0);
             }
+
+
 //            result.append(dealWithChild(callArgs).get(0));
-            if(dealWithChild(callArgs).get(0).split("\\.")[1].equals("i32") || dealWithChild(callArgs).get(0).split("\\.")[1].equals("array")){
+            if(res.split("\\.")[1].equals("i32") || res.split("\\.")[1].equals("array")){
                 key.append("int");
-            }else if (dealWithChild(callArgs).get(0).split("\\.")[1].equals("bool")){
+            }else if (res.split("\\.")[1].equals("bool")){
                 key.append("bool");
             }else{
-                key.append(dealWithChild(callArgs).get(0).split("\\.")[1]);
+                key.append(res.split("\\.")[1]);
             }
         }
         result = new StringBuilder();
 
 
-        result.append("invokevirtual(" + objectName + "." + className + ",\"" + callName + "\"");
+        result.append(pre).append("invokevirtual(").append(objectName).append(".").append(className).append(",\"").append(callName).append("\"");
 
         result.append(")");
 
@@ -478,31 +492,61 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     }
 
 
-    private String dealWithThisExpression(JmmNode TwoPartNode) {
-        StringBuilder result=new StringBuilder();
+    private List<String> dealWithThisExpression(JmmNode TwoPartNode) {
+        StringBuilder result = new StringBuilder();
         JmmNode rightChild = TwoPartNode.getChildren().get(1);
+        List<String> finalList = new ArrayList<>();
+
         if (rightChild.getChildren().get(0).getKind().equals("MethodCall")) {
             JmmNode methodCall = rightChild.getChildren().get(0);
 
-            result.append("invokevirtual(this,");
-            result.append("\""+methodCall.get("name") + "\"");
-            StringBuilder key=new StringBuilder(methodCall.get("name"));
+
+            StringBuilder key = new StringBuilder(methodCall.get("name"));
+
+            StringBuilder args = new StringBuilder();
+            StringBuilder pre = new StringBuilder();
 
             for (JmmNode callArgs : methodCall.getChildren()) {
-                result.append(",");
-                for(String i:dealWithChild(callArgs)){
-                    if(i.length()>0)
-                        result.append(i).append('\n');
+                args.append(",");
+                String res = "";
+                List<String> stringList = dealWithChild(callArgs);
+
+                List<String> opsAr = Arrays.asList("Sum", "Sub", "Mult", "Div", "And", "LessThan");
+                List<String> opsBo = Arrays.asList("And", "Not");
+
+                if(stringList.size() > 1){
+                    pre.append(stringList.get(0)).append("\n");
+                    if(opsAr.contains(callArgs.getKind())){
+                        pre.append("t1.i32 :=.i32 ").append(stringList.get(1)).append(";\n");
+                        args.append("t1.i32");
+                        res = "t1.i32";
+                    }else if(opsBo.contains(callArgs.getKind())){
+                        pre.append("t1.bool :=.bool ").append(stringList.get(1)).append(";\n");
+                        args.append("t1.bool");
+                        res = "t1.bool";
+                    }else{
+                        args.append(stringList.get(1));
+                        res = stringList.get(1);
+                    }
+
+
+                }else{
+                    args.append(stringList.get(0));
+                    res = stringList.get(0);
                 }
-//                result.append(dealWithChild(callArgs).get(0));
-                if(dealWithChild(callArgs).get(0).split("\\.")[1].equals("i32") || dealWithChild(callArgs).get(0).split("\\.")[1].equals("array")){
+
+                if(res.split("\\.")[1].equals("i32") || res.split("\\.")[1].equals("array")){
                     key.append("int");
-                }else if (dealWithChild(callArgs).get(0).split("\\.")[1].equals("bool")){
+                }else if (res.split("\\.")[1].equals("bool")){
                     key.append("bool");
                 }else{
-                    key.append(dealWithChild(callArgs).get(0).split("\\.")[1]);
+                    key.append(res.split("\\.")[1]);
                 }
             }
+
+            result.append("invokevirtual(this,");
+            result.append("\""+methodCall.get("name") + "\"").append(args.toString());
+
             result.append(")");
 
             try{
@@ -510,10 +554,12 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             }catch (NullPointerException e){//if function is from extended superclass
                 result.append("." + "i32");
             }
-
+            finalList.add(pre.toString());
+            finalList.add(result.toString());
         }
 
-        return result.toString();
+
+        return finalList;
     }
 
 
@@ -695,7 +741,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         List<String> temps = dealWithTemp(children, "i32");         // Checks if temporary variables are needed
         left = temps.get(0); right = temps.get(1); pre = temps.get(2);
         if (right.contains(":=")) {
-            pre=right;
+            pre += right;
             right=right.split("\\.")[0]+"."+right.split("\\.")[right.split("\\.").length-1].replace("\n","").replace(";","");//temp variable
         }
         result.append(left);
