@@ -99,6 +99,16 @@ public class OptimizeTest {
         result.getOllirClass().show();
     }
 
+
+    @Test
+    public void GetField() { //test basic println
+        //SpecsIo.getResource(
+        var result = TestUtils.optimize("test/fixtures/public/GetField.jmm");
+        //TestUtils.noErrors(result.getReports());
+        System.out.println(result.getOllirClass().getClassName());
+        result.getOllirClass().show();
+    }
+
     @Test
     public void HelloWorld() { //test basic println
         //SpecsIo.getResource(
