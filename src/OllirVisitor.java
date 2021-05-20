@@ -394,8 +394,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         }else if(rightChild.getKind().equals("DotExpression") && leftChild.getKind().equals("Identifier") && getIdentifierType(leftChild) != null && getIdentifierType(leftChild).isArray()){
             List<String> resLength = new ArrayList<>();
-            resLength.add("t1.i32 :=.i32 arraylength(" + getParameterSig(leftChild.get("name")) + leftChild.get("name") + ".array.i32" + ").i32;");
-            resLength.add("t1.i32");
+            resLength.add("ti1.i32 :=.i32 arraylength(" + getParameterSig(leftChild.get("name")) + leftChild.get("name") + ".array.i32" + ").i32;");
+            resLength.add("ti.i32");
             return resLength;
         }
 
@@ -418,8 +418,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                     if(child.getKind().equals("TwoPartExpression")){
 
                         List<String> res = mountIdentifierOLLIR(child.getChildren().get(0), child.getChildren().get(1));
-                        before = res.get(0) + "\n" + "t1.i32 :=.i32 " + res.get(1) + ";";
-                        key.append(" t1.i32 ");
+                        before = res.get(0) + "\n" + "ti1.i32 :=.i32 " + res.get(1) + ";";
+                        key.append(" ti1.i32 ");
 
                     }else
                         key.append(dealWithChild(child).get(0));
@@ -517,13 +517,13 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 if(stringList.size() > 1){
                     pre.append(stringList.get(0)).append("\n");
                     if(opsAr.contains(callArgs.getKind())){
-                        pre.append("t1.i32 :=.i32 ").append(stringList.get(1)).append(";\n");
-                        args.append("t1.i32");
-                        res = "t1.i32";
+                        pre.append("ti1.i32 :=.i32 ").append(stringList.get(1)).append(";\n");
+                        args.append("ti1.i32");
+                        res = "ti1.i32";
                     }else if(opsBo.contains(callArgs.getKind())){
-                        pre.append("t1.bool :=.bool ").append(stringList.get(1)).append(";\n");
-                        args.append("t1.bool");
-                        res = "t1.bool";
+                        pre.append("tb1.bool :=.bool ").append(stringList.get(1)).append(";\n");
+                        args.append("tb1.bool");
+                        res = "tb1.bool";
                     }else{
                         args.append(stringList.get(1));
                         res = stringList.get(1);
@@ -581,39 +581,40 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         List<String> resRight = dealWithChild(children.get(1));
 
         if(resLeft.size() > 1){
-            if(resLeft.get(0).length() > 0){
-                preEqual = resLeft.get(0) + "\n";
-            }
+
+            preEqual = resLeft.get(0) + "\n";
+
             leftEqual = resLeft.get(1);
         }else{
             leftEqual = resLeft.get(0);
         }
 
         if(resRight.size() > 1){
-            if(resRight.get(0).length() > 0){
+            if(children.get(1).getKind().equals("TwoPartExpression")){
+                preEqual += getTempVar(type, true) + " :=." + type + " " + resRight.get(1) + ";\n";
+                rightEqual = getTempVar(type, true);
+            }else{
+
                 preEqual += resRight.get(0) + "\n";
+
+                rightEqual = resRight.get(1);
             }
-            rightEqual = resRight.get(1);
+
+
         }else{
             rightEqual = resRight.get(0);
         }
 
 
-
-        if(preEqual.equals("")){
-            if (putfield)
-                return "putfield(this," + leftEqual + "," + rightEqual + ").V;\n";
-            return leftEqual + " :=."  + type + " " + rightEqual  + ";\n";
-        }else{
-            if (putfield) {
-                if (Arrays.asList("Sum","Sub","Mult","Div").contains(children.get(1).getKind())){
-                    preEqual=preEqual+"t2.i32 :=.i32 "+rightEqual+";\n";
-                    rightEqual="t2.i32";
-                }
-                return preEqual + '\n' + "putfield(this," + leftEqual + "," + rightEqual + ").V;\n";
+        if (putfield) {
+            if (Arrays.asList("Sum","Sub","Mult","Div").contains(children.get(1).getKind())){
+                preEqual += preEqual + "t2.i32 :=.i32 " + rightEqual + ";\n";
+                rightEqual = "t2.i32";
             }
-            return preEqual + "\n" + leftEqual + " :=." + type + " " + rightEqual + ";\n";
+            return preEqual + '\n' + "putfield(this," + leftEqual + "," + rightEqual + ").V;\n";
         }
+        return preEqual + "\n" + leftEqual + " :=." + type + " " + rightEqual + ";\n";
+
     }
 
 
@@ -705,9 +706,9 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         // For access to array
         if(arithmeticNode.getKind().equals("Integer")){
-            pre = "t1.i32 :=.i32 " + arithmeticNode.get("value") + ".i32;";
+            pre = "ti1.i32 :=.i32 " + arithmeticNode.get("value") + ".i32;";
             finalList.add(pre);
-            finalList.add("t1.i32");
+            finalList.add("ti1.i32");
             return finalList;
         }else if(arithmeticNode.getKind().equals("Identifier")){
             List<String> res = dealWithIdentifier(arithmeticNode);
@@ -763,6 +764,11 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         return finalList;
     }
 
+    private String getTempVar(String type, boolean left){
+        if(left)
+            return type.equals("bool") ? "tb1.bool" : "ti1.i32";
+        return type.equals("bool") ? "ub1.bool" : "ui1.i32";
+    }
 
     private List<String> dealWithTemp(List<JmmNode> children, String type){
 
@@ -776,37 +782,26 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         }else{
             left = leftPart.get(0);
         }
-        /*for (String i : dealWithChild(children.get(0))){
-            if(i.length() > 0)
-                leftTemp.append('\n').append(i);
-        }*/
 
-        // leftTemp.deleteCharAt(0);
         String right = "";
 
         List<String> opsAr = Arrays.asList("Sum", "Sub", "Mult", "Div", "And", "LessThan");
         List<String> opsBo = Arrays.asList("And", "Not");
 
-
+        String leftKind = children.get(0).getKind();
         // Checks if temporary variables are needed
-        if(opsAr.contains(children.get(0).getKind()) || opsBo.contains(children.get(0).getKind())){
+        if(opsAr.contains(leftKind) || opsBo.contains(leftKind) || leftKind.equals("TwoPartExpression")){
 
-
-
-            String tempVar = "t1." + type;
+            String tempVar = getTempVar(type, true);
             pre.append(tempVar + " :=." + type + " ");
             pre.append(left + ";\n");
-            left = "t1." + type;
+
+            left = getTempVar(type, true);
 
         }
 
         StringBuilder rightTemp = new StringBuilder();
-         /*for (String i:dealWithChild(children.get(1))){
 
-            if(i.length() > 0)
-                rightTemp.append('\n').append(i);
-
-        }*/
         if(children.size() > 1){
             List<String> rightPart = dealWithChild(children.get(1));
             if(rightPart.size() > 1){
@@ -819,14 +814,12 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
 
 
-        //rightTemp.deleteCharAt(0);
-        //right=rightTemp.toString();
-        if(children.size() > 1 && (opsAr.contains(children.get(1).getKind()) || opsBo.contains(children.get(1).getKind()))){
+        if(children.size() > 1 && (opsAr.contains(children.get(1).getKind()) || opsBo.contains(children.get(1).getKind()) || children.get(1).getKind().equals("TwoPartExpression"))){
 
-            String tempVar = "u1." + type;
-            pre.append(tempVar + " :=." + type + " ");
-            pre.append(right + ";\n");
-            right = "t1." + type;
+            String tempVar = getTempVar(type, false);
+            pre.append(tempVar).append(" :=.").append(type).append(" ");
+            pre.append(right).append(";\n");
+            right = getTempVar(type, false);
 
         }
 
@@ -893,8 +886,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
             String betwPar;
 
-            before.append("t1.i32 :=.i32 ").append(inline).append(";\n");
-            betwPar = "t1.i32";
+            before.append("ti1.i32 :=.i32 ").append(inline).append(";\n");
+            betwPar = "ti1.i32";
 
             array = "[" +  betwPar + "]";
 
@@ -908,14 +901,14 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         boolean putfield = isPutfield(child.getParent().getChildren());
 
         if(putfield && accessToArray){
-            before.append("t1.i32 :=.i32 ").append(pre).append(identifierName).append(array).append(".").append(getTypeOllir(identifierType)).append(";");
+            before.append("ti1.i32 :=.i32 ").append(pre).append(identifierName).append(array).append(".").append(getTypeOllir(identifierType)).append(";");
         }
 
         if(!before.isEmpty())
             finalList.add(before.toString());
 
         if(putfield && accessToArray)
-            finalList.add("t1.i32");
+            finalList.add("ti1.i32");
         else
             finalList.add(pre + identifierName + array + "." + getTypeOllir(identifierType));
 
@@ -941,8 +934,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         String betwPar;
         if(!indexNode.getKind().equals("Integer")){
-            before += "\n"  + "t1.i32 :=.i32 " + res.get(1) +";";
-            betwPar = "t1.i32";
+            before += "\n"  + "ti1.i32 :=.i32 " + res.get(1) +";";
+            betwPar = "ti1.i32";
         }else {
             betwPar = res.get(1);
         }
