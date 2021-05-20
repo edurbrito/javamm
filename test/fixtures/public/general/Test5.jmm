@@ -1,0 +1,40 @@
+import io;
+
+class Test5 {
+    int fibonacci;
+
+    public int getFibo() {
+
+        int n;
+        int i;
+        int a;
+        int b;
+        int c;
+        n = 5;
+        i = 0;
+
+        a = 1;
+        b = 1;
+        c = 2;
+        while (i < n) {
+            c = a + b;
+            a = b;
+            b = c;
+            i = i + 1;
+        }
+
+        fibonacci = c;
+        return c;
+    }
+
+    public static void main(String[] args){
+        Test5 fibo;
+        int res;
+        int i;
+        i = 5;
+        fibo = new Test5();
+        res = fibo.getFibo();
+
+        io.println(res);
+    }
+}

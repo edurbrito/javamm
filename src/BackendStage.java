@@ -739,6 +739,7 @@ public class BackendStage implements JasminBackend {
                 builder.append("eq");
                 break;
             case NEQ:
+            case NOTB:
                 builder.append("ne");
                 break;
             case LTH:

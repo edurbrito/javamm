@@ -1,0 +1,70 @@
+class Exam {
+
+	int[] scores; // student scores on this exam
+	int size; // = # of scores = next available slot
+	int capacity; // = max number of scores
+
+	public int validateIndex(int index) {
+
+	    int i;
+
+		if(index < 0) {
+            i = 0;
+		}
+		else {
+            i = index;
+		}
+
+		if(size < index) {
+            i = 0;
+		}
+		else {
+            i = index;
+		}
+
+		return i;
+	}
+
+	public int getScore(int index) {
+		int a;
+		this.validateIndex(index);
+		a = scores[index];
+		return a;
+	}
+
+	public int getSize() {
+		return 10;
+	}
+
+	public int addScore(int score) {
+		if (size < capacity) {
+			scores[size] = score;
+			size = size + 1;
+		}
+		else {
+		    size = size;
+		}
+
+		return 0;
+	}
+
+    public int getAverage() {
+		int result;
+		int index;
+
+		result = 0;
+		index = 0;
+		while(index < size) {
+			result = result + scores[index];
+			index = index + 1;
+		}
+
+		if (0 < size) {
+			result = result/size;
+		} else {
+			result = 0;
+		}
+
+		return result;
+	}
+}
