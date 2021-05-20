@@ -1,0 +1,11 @@
+class Boolean {
+    public static void main(String[] args){
+
+        boolean b;
+        boolean c;
+
+        c = false;
+        b = !(c && c);
+        b = !true;
+    }
+}

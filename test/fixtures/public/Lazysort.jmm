@@ -19,6 +19,7 @@ class Lazysort extends Quicksort {
         q = new Lazysort();
 
         q.quicksort(L);
+        Quicksort.printL(L);
         d = q.printL(L);
     }
 

@@ -1,0 +1,22 @@
+class Life {
+
+    public static void main(String[] args) {
+        int [] a;
+        int [] b;
+        int c;
+        a = new int[2];
+        b = new int[a.length];
+        c = b.length;
+
+        if(c < a.length && c < b.length){
+            c = 2;
+        }else{
+            c = 1;
+        }
+
+        while(c < a.length && c < b.length){
+            c = 2;
+        }
+
+    }
+}

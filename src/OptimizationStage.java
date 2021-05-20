@@ -21,7 +21,6 @@ import pt.up.fe.comp.jmm.report.Report;
  */
 
 public class OptimizationStage implements JmmOptimization {
-    public String codeOllir;
 
     @Override
     public OllirResult toOllir(JmmSemanticsResult semanticsResult) {
@@ -36,7 +35,11 @@ public class OptimizationStage implements JmmOptimization {
         //formating string
         StringBuilder temp = new StringBuilder();
         int count = 0;
+        ollirCode=ollirCode.replace(";\n;",";\n");
         for(String i:ollirCode.split("\n")){
+            if(i.length()==0)
+                continue;
+            i=i.replace(";;",";");
             temp.append("\t".repeat(count)+i+"\n");
             if (i.contains("{"))
                 count++;
@@ -46,32 +49,10 @@ public class OptimizationStage implements JmmOptimization {
         ollirCode = temp.toString();
         System.out.println(ollirCode);
 
-
-
-
         // More reports from this stag
         List<Report> reports = new ArrayList<>();
 
         return new OllirResult(semanticsResult, ollirCode, reports);
-    }
-
-    public String exp(JmmSemanticsResult semanticsResult) {
-
-        JmmNode node = semanticsResult.getRootNode();
-
-        // Convert the AST to a String containing the equivalent OLLIR code
-        OllirVisitor visitor = new OllirVisitor(( SymbolTableImp) semanticsResult.getSymbolTable());
-        visitor.visit(semanticsResult.getRootNode());
-        String ollirCode = visitor.getOllirCode();
-
-
-        this.codeOllir = ollirCode;
-
-
-        // More reports from this stag
-        List<Report> reports = new ArrayList<>();
-
-        return ollirCode;
     }
 
     @Override

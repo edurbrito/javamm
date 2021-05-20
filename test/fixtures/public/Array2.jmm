@@ -8,7 +8,6 @@ class Array2 {
     int c;
 
     public int test() {
-
         return c;
     }
 
@@ -23,12 +22,14 @@ class Array2 {
 
         //array access
 
-        (a);
+        //(a);
+
 
         //array position load
         io.print(a[0]);
 
         return 1;
+
     }
 
     public static void main(String[] args){

@@ -10,12 +10,23 @@ import static org.junit.Assert.*;
 public class FileTests {
 
     @Test
+    public void Arithmetic() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/Arithmetic.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+
+    }
+
+    @Test
     public void Array1() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/Array1.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
     }
 
     @Test
@@ -30,6 +41,15 @@ public class FileTests {
     @Test
     public void Array3() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/Array3.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+    }
+
+    @Test
+    public void Array4() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/Array4.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
@@ -89,6 +109,15 @@ public class FileTests {
     @Test
     public void Lazysort() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/Lazysort.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+    }
+
+    @Test
+    public void Length() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/Length.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
