@@ -18,28 +18,22 @@ import org.junit.Test;
 
 import pt.up.fe.comp.TestUtils;
 import pt.up.fe.comp.jmm.ollir.OllirResult;
-import pt.up.fe.comp.jmm.ollir.OllirUtils;
 import pt.up.fe.specs.util.SpecsIo;
-
-import java.util.ArrayList;
 
 public class BackendTest {
 
     @Test
     public void testHelloWorld() {
-        var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/HelloWorld.ollir")), null, new ArrayList<>()));
+        var result = TestUtils.backend(new OllirResult(SpecsIo.getResource("fixtures/public/ollir/HelloWorld.ollir")));
         TestUtils.noErrors(result.getReports());
-
         System.out.println("Jasmin Code: \n" + result.getJasminCode());
-
         var output = result.run();
         assertEquals("Hello, World!", output.trim());
-
     }
 
     @Test
     public void testSimple() {
-        var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/Simple.ollir")), null, new ArrayList<>()));
+        var result = TestUtils.backend(new OllirResult(SpecsIo.getResource("fixtures/public/ollir/Simple.ollir")));
         TestUtils.noErrors(result.getReports());
 
         System.out.println("Jasmin Code: \n" + result.getJasminCode());
@@ -51,7 +45,7 @@ public class BackendTest {
     @Test
     public void testClass1() {
 
-        var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/myclass1.ollir")), null, new ArrayList<>()));
+        var result = TestUtils.backend(new OllirResult(SpecsIo.getResource("fixtures/public/ollir/myclass1.ollir")));
         TestUtils.noErrors(result.getReports());
 
         System.out.println("Jasmin Code: \n" + result.getJasminCode());
@@ -62,7 +56,7 @@ public class BackendTest {
 
     @Test
     public void testClass2() {
-        var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/myclass2.ollir")), null, new ArrayList<>()));
+        var result = TestUtils.backend(new OllirResult(SpecsIo.getResource("fixtures/public/ollir/myclass2.ollir")));
         TestUtils.noErrors(result.getReports());
 
         System.out.println("Jasmin Code: \n" + result.getJasminCode());
@@ -72,7 +66,7 @@ public class BackendTest {
 
     @Test
     public void testClass3() {
-        var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/myclass3.ollir")), null, new ArrayList<>()));
+        var result = TestUtils.backend(new OllirResult(SpecsIo.getResource("fixtures/public/ollir/myclass3.ollir")));
         TestUtils.noErrors(result.getReports());
 
         System.out.println("Jasmin Code: \n" + result.getJasminCode());
@@ -82,7 +76,7 @@ public class BackendTest {
 
     @Test
     public void testClass4() {
-        var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/myclass4.ollir")), null, new ArrayList<>()));
+        var result = TestUtils.backend(new OllirResult(SpecsIo.getResource("fixtures/public/ollir/myclass4.ollir")));
         TestUtils.noErrors(result.getReports());
 
         System.out.println("Jasmin Code: \n" + result.getJasminCode());
@@ -92,7 +86,7 @@ public class BackendTest {
 
     @Test
     public void testFac() {
-        var result = TestUtils.backend(new OllirResult(OllirUtils.parse(SpecsIo.getResource("fixtures/public/ollir/Fac.ollir")), null, new ArrayList<>()));
+        var result = TestUtils.backend(new OllirResult(SpecsIo.getResource("fixtures/public/ollir/Fac.ollir")));
         TestUtils.noErrors(result.getReports());
 
         System.out.println("Jasmin Code: \n" + result.getJasminCode());

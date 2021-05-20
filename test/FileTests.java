@@ -16,7 +16,6 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
-
     }
 
     @Test
@@ -76,7 +75,7 @@ public class FileTests {
 
     @Test
     public void GlobalAccess() {
-        JmmParserResult res = TestUtils.parse("test/fixtures/public/global_access.jmm");
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/GlobalAccess.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
@@ -103,7 +102,7 @@ public class FileTests {
         JasminResult jasminResult = backendStage.toJasmin(ollirResult);
 
         var output = jasminResult.run();
-        assertEquals("12345", output.trim());
+        assertEquals("1234", output.trim());
     }
 
     @Test
