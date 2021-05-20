@@ -142,13 +142,17 @@ public class BackendStage implements JasminBackend {
             builder.append(")");
             builder.append(getType(method.getReturnType()));
 
+            int limit = method.getParams().size() + (method.getVarTable().size() - method.getParams().size());
+            if (!method.isStaticMethod() && !method.getVarTable().containsKey("this"))
+                limit += 1;
+
             builder.append("\n");
-            builder.append("\t.limit stack 99");
+            builder.append("\t.limit stack ").append(limit);
             builder.append("\n");
-            builder.append("\t.limit locals 99");
+            builder.append("\t.limit locals ").append(limit);
 
             for(Instruction instruction : method.getInstructions()) {
-                String inst = generateOperation(method, instruction);
+                String inst = generateOperation(method, instruction, false);
                 builder.append(inst);
             }
 
@@ -167,8 +171,18 @@ public class BackendStage implements JasminBackend {
         return builder.toString();
     }
 
-    public String generateOperation(Method method, Instruction instruction) {
+    public String generateOperation(Method method, Instruction instruction, boolean rhs) {
         StringBuilder builder = new StringBuilder();
+
+        List<String> labels = method.getLabels(instruction);
+        for(String label : labels) {
+            builder.append("\n");
+            builder.append("\t");
+            builder.append("\n");
+            builder.append("\t");
+            builder.append(label + ":");
+        }
+
         switch (instruction.getInstType()) {
             case ASSIGN:
                 builder.append(generateAssign(method, (AssignInstruction) instruction));
@@ -189,10 +203,16 @@ public class BackendStage implements JasminBackend {
                 builder.append(generateBinaryOperation(method, (BinaryOpInstruction) instruction));
                 break;
             case NOPER:
-                builder.append(generateSingleOperation(method, (SingleOpInstruction) instruction));
+                builder.append(generateSingleOperation(method, (SingleOpInstruction) instruction, rhs));
                 break;
             case RETURN:
                 builder.append(generateReturnOperation(method, (ReturnInstruction) instruction));
+                break;
+            case BRANCH:
+                builder.append(generateBranchOperation(method, (CondBranchInstruction) instruction));
+                break;
+            case GOTO:
+                builder.append(generateGoToOperation((GotoInstruction) instruction));
                 break;
             default:
                 break;
@@ -208,10 +228,56 @@ public class BackendStage implements JasminBackend {
 
         Instruction rhs = instruction.getRhs();
 
-        if (dest instanceof ArrayOperand)
+        boolean darray = false;
+        if (dest instanceof ArrayOperand){
             builder.append(generateDest(method, dest));
+            darray = true;
+        }
 
-        builder.append(generateOperation(method, rhs));
+        if (rhs.getInstType().equals(InstructionType.BINARYOPER)) {
+            BinaryOpInstruction operation = (BinaryOpInstruction) rhs;
+            OperationType operationType = operation.getUnaryOperation().getOpType();
+
+            if (operationType.equals(OperationType.ADD) || operationType.equals(OperationType.SUB)) {
+                if (!operation.getLeftOperand().isLiteral() && operation.getRightOperand().isLiteral()) {
+
+                    Operand leftOp = (Operand) operation.getLeftOperand();
+                    Operand destOp = (Operand) dest;
+                    if(leftOp.getName().equals(destOp.getName())) {
+                        LiteralElement literal = (LiteralElement) operation.getRightOperand();
+                        builder.append("\n");
+                        builder.append("\t");
+                        builder.append("iinc ");
+                        builder.append(OllirAccesser.getVarTable(method).get(((Operand) operation.getLeftOperand()).getName()).getVirtualReg());
+                        if(operationType.equals(OperationType.ADD))
+                            builder.append(" ");
+                        else
+                            builder.append(" -");
+                        builder.append(literal.getLiteral());
+                        return builder.toString();
+                    }
+                }
+                else if (!operation.getLeftOperand().isLiteral() && operation.getLeftOperand().isLiteral()) {
+                    Operand rightOp = (Operand) operation.getRightOperand();
+                    Operand destOp = (Operand) dest;
+                    if (rightOp.getName().equals(destOp.getName())) {
+                        LiteralElement literal = (LiteralElement) operation.getLeftOperand();
+                        builder.append("\n");
+                        builder.append("\t");
+                        builder.append("iinc ");
+                        builder.append(OllirAccesser.getVarTable(method).get(((Operand) operation.getRightOperand()).getName()).getVirtualReg());
+                        if (operationType.equals(OperationType.ADD))
+                            builder.append(" ");
+                        else
+                            builder.append(" -");
+                        builder.append(literal.getLiteral());
+                        return builder.toString();
+                    }
+                }
+            }
+        }
+
+        builder.append(generateOperation(method, rhs, darray));
 
         if (dest instanceof ArrayOperand) {
             builder.append("\n");
@@ -237,6 +303,20 @@ public class BackendStage implements JasminBackend {
             else
                 builder.append(" ");
             builder.append(reg);
+        }
+        else {
+            Operand operand = (Operand) dest;
+            if (operand.getType().getTypeOfElement().equals(ARRAYREF)) {
+                builder.append("\n");
+                builder.append("\t");
+                builder.append("astore");
+                int reg = OllirAccesser.getVarTable(method).get(operand.getName()).getVirtualReg();
+                if(reg < 4)
+                    builder.append("_");
+                else
+                    builder.append(" ");
+                builder.append(reg);
+            }
         }
 
         return builder.toString();
@@ -329,16 +409,31 @@ public class BackendStage implements JasminBackend {
                     for (Element arg : instruction.getListOfOperands()) {
                         builder.append(generateValue(method, arg));
                     }
-                    builder.append("\n");
-                    builder.append("\t");
-                    builder.append("newarray ");
-                    // if(((ArrayType) instruction.getReturnType()).getTypeOfElements().equals(INT32)) TODO OTHER CLASSES
-                    builder.append("int");
 
                     builder.append("\n");
                     builder.append("\t");
-                    builder.append("astore_");
-                    builder.append(OllirAccesser.getVarTable(method).get(operand.getName()).getVirtualReg());
+                    int dimensions = instruction.getNumOperands() - 1;
+                    if(dimensions == 1) {
+                        if(((ArrayType) instruction.getReturnType()).getTypeOfElements().equals(INT32)) {
+                            builder.append("newarray int");
+                        }
+                        else {
+                            builder.append("anewarray ");
+                            builder.append(((ClassType) instruction.getReturnType()).getName());
+                        }
+                    }
+                    else {
+                        builder.append("multianewarray ");
+
+                        for(int i = 0; i < dimensions; i++)
+                            builder.append("[");
+                        if(((ArrayType) instruction.getReturnType()).getTypeOfElements().equals(INT32))
+                            builder.append("I");
+                        else
+                            builder.append(((ClassType) instruction.getReturnType()).getName());
+
+                        builder.append(" ").append(dimensions);
+                    }
                 }
                 break;
             case invokevirtual:
@@ -402,9 +497,15 @@ public class BackendStage implements JasminBackend {
                 if(!objectInstance.getType().getTypeOfElement().equals(ElementType.THIS)) {
                     builder.append("\n");
                     builder.append("\t");
-                    builder.append("astore_");
+                    builder.append("astore");
                     Operand operand = (Operand) objectInstance;
-                    builder.append(OllirAccesser.getVarTable(method).get(operand.getName()).getVirtualReg());
+                    int reg = OllirAccesser.getVarTable(method).get(operand.getName()).getVirtualReg();
+                    if(reg < 4)
+                        builder.append("_");
+                    else
+                        builder.append(" ");
+
+                    builder.append(reg);
                 }
                 break;
             case invokestatic:
@@ -431,7 +532,7 @@ public class BackendStage implements JasminBackend {
                 builder.append("arraylength ");
                 break;
             case ldc:
-                builder.append("\n\tldc " + ((LiteralElement) objectInstance).getLiteral());
+                builder.append("\n\tldc ").append(((LiteralElement) objectInstance).getLiteral());
                 break;
             default:
                 break;
@@ -516,12 +617,13 @@ public class BackendStage implements JasminBackend {
         return builder.toString();
     }
 
-    public String generateSingleOperation(Method method, SingleOpInstruction instruction) {
+    public String generateSingleOperation(Method method, SingleOpInstruction instruction, boolean rhs) {
         StringBuilder builder = new StringBuilder();
 
         Element element = instruction.getSingleOperand();
 
-        builder.append("\n");
+        if (!rhs)
+            builder.append("\n");
 
         builder.append(generateValue(method, element));
 
@@ -556,10 +658,88 @@ public class BackendStage implements JasminBackend {
         return builder.toString();
     }
 
-    public String generateDest(Method method, Element element) {
+    public String generateBranchOperation(Method method, CondBranchInstruction instruction) {
         StringBuilder builder = new StringBuilder();
 
         builder.append("\n");
+        builder.append("\t");
+        Element leftOperand = instruction.getLeftOperand();
+        builder.append(generateValue(method, leftOperand));
+        Element rightOperand = instruction.getRightOperand();
+        Operation operation = instruction.getCondOperation();
+
+        if (rightOperand == null) {
+            builder.append("\n");
+            builder.append("\t");
+            builder.append("if");
+        }
+        else if(operation.getOpType().equals(OperationType.ANDB)) {
+            builder.append("\n");
+            builder.append("\t");
+            builder.append("ifeq");
+            builder.append(" ");
+            builder.append(instruction.getLabel());
+            builder.append(generateValue(method, rightOperand));
+            builder.append("\n");
+            builder.append("\t");
+            builder.append("if");
+        }
+        else {
+            builder.append(generateValue(method, rightOperand));
+
+            builder.append("\n");
+            builder.append("\t");
+            builder.append("if_icmp");
+        }
+
+
+        switch (operation.getOpType()) {
+            case EQ:
+            case ANDB:
+                builder.append("eq");
+                break;
+            case NEQ:
+                builder.append("ne");
+                break;
+            case LTH:
+                builder.append("lt");
+                break;
+            case GTH:
+                builder.append("gt");
+                break;
+            case LTE:
+                builder.append("le");
+                break;
+            case GTE:
+                builder.append("ge");
+                break;
+            default:
+                break;
+        }
+
+        builder.append(" ");
+        builder.append(instruction.getLabel());
+
+        return builder.toString();
+    }
+
+    public String generateGoToOperation(GotoInstruction instruction) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("\n");
+        builder.append("\t");
+        builder.append("goto ");
+        builder.append(instruction.getLabel());
+
+        return builder.toString();
+    }
+
+    public String generateDest(Method method, Element element) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("\n");
+        builder.append("\t");
+        builder.append("\n");
+        builder.append("\t");
         generateArray(method, (ArrayOperand) element, builder);
 
         return builder.toString();
@@ -595,6 +775,9 @@ public class BackendStage implements JasminBackend {
         else if (element instanceof ArrayOperand) {
             generateArray(method, (ArrayOperand) element, builder);
 
+            builder.append("\n");
+            builder.append("\t");
+
             if(element.getType().getTypeOfElement().equals(INT32) || element.getType().getTypeOfElement().equals(BOOLEAN))
                 builder.append("i");
             else
@@ -621,7 +804,6 @@ public class BackendStage implements JasminBackend {
     }
 
     private void generateArray(Method method, ArrayOperand operand, StringBuilder builder) {
-        builder.append("\t");
         builder.append("aload");
         int reg = OllirAccesser.getVarTable(method).get(operand.getName()).getVirtualReg();
         if(reg < 4)

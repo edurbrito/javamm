@@ -1,9 +1,10 @@
 class Personal extends Quicksort{
     public static void main(String[] args){
-        int[] L;
-        boolean lazy;
 
-        L = new int[2];
-        lazy = this.quicksort(L, 0, L.length - 1);
+        int c;
+        boolean a;
+
+        c = 1 + 1 + 1;
+        a = true && true && true;
     }
 }

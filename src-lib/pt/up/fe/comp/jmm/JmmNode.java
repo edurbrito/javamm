@@ -160,7 +160,6 @@ public interface JmmNode {
      * <p>
      * Puts the parent of the child as null.
      *
-     * TODO: should remove all it's children recursively?
      *
      * @param index
      * @return

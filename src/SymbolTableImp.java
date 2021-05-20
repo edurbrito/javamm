@@ -10,7 +10,7 @@ public class SymbolTableImp implements SymbolTable {
     List<String> imports = new ArrayList();
     String className = "";
     String superClass = "";
-    HashMap<Symbol, Boolean> fields = new HashMap<>();   // Boolean is true if the variable has been assigned TODO nunca ira ser
+    HashMap<Symbol, Boolean> fields = new HashMap<>();   // Boolean is true if the variable has been assigned
     HashMap<String, MethodTable> methods = new HashMap<>();
 
     @Override
@@ -42,16 +42,6 @@ public class SymbolTableImp implements SymbolTable {
         return methods.get(signature);
     }
 
-    public MethodTable getMethodByName(String name)
-    {
-        for(MethodTable methodTable : this.methods.values()){
-            if(methodTable.getName().equals(name))
-                return methodTable;
-        }
-        return null;
-    }
-
-
     @Override
     public Type getReturnType(String signature) {
         return methods.get(signature).getReturnType();
@@ -67,13 +57,6 @@ public class SymbolTableImp implements SymbolTable {
         }
         return symbolsPar;
     }
-
-    public List<Parameter> getParametersWithOrder(String signature) {
-       return this.methods.get(signature).getParameters();
-    }
-
-
-
 
     @Override
     public List<Symbol> getLocalVariables(String signature) {
@@ -103,10 +86,6 @@ public class SymbolTableImp implements SymbolTable {
 
     public void setSuperClass(String superClass) {
         this.superClass = superClass;
-    }
-
-    public void addField(Type type, String name) {
-        fields.put(new Symbol(type, name), false);
     }
 
     public Boolean addField(Symbol var) {

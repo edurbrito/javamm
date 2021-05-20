@@ -95,7 +95,7 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
 
         // Check if variables are both initialized
         if ((children.get(0).getKind().equals("Identifier") && !symbolTableImp.isAssigned(methodSignature, children.get(0).get("name"))) || (children.get(1).getKind().equals("Identifier") && !symbolTableImp.isAssigned(methodSignature, children.get(1).get("name")))) {
-            Report report = new Report(ReportType.ERROR, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Assignment with variables not yet initialized ");
+            Report report = new Report(ReportType.WARNING, Stage.SEMANTIC, Integer.parseInt(node.get("line")), Integer.parseInt(node.get("col")), "Assignment with variables not yet initialized ");
             reports.add(report);
         }
 

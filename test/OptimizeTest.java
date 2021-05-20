@@ -267,15 +267,6 @@ public class OptimizeTest {
     }
 
     @Test
-    public void varNotInit() {
-        JmmParserResult res = TestUtils.parse("test/fixtures/public/varNotInit.jmm");
-        assertEquals("Program",res.getRootNode().getKind());
-        TestUtils.noErrors(res.getReports());
-        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
-        TestUtils.noErrors(semanticsResult.getReports());
-    }
-
-    @Test
     public void WhileAndIF() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/WhileAndIF.jmm");
         assertEquals("Program",res.getRootNode().getKind());

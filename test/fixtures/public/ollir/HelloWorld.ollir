@@ -11,6 +11,7 @@ HelloWorld {
 	    h.HelloWorld :=.HelloWorld new(HelloWorld).HelloWorld;
 	    invokespecial(h.HelloWorld,"<init>").V;
 	    t1.String :=.String invokevirtual(h.HelloWorld, "toString").String;
+	    t2.String :=.String invokevirtual(h.HelloWorld, "getWithoutThis").String;
         invokestatic(io, "println", t1.String).V;
 	}
 
@@ -22,5 +23,10 @@ HelloWorld {
 	.method public getString().String {
 	    t1.String :=.String getfield(this, a.String).String;
 	    ret.String t1.String;
+	}
+
+	.method public getWithoutThis().String {
+        t1.String :=.String ldc("Hello, World!").String;
+        ret.String t1.String;
 	}
 }
