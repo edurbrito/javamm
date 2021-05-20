@@ -6,9 +6,16 @@ class globals{
 	    a = 3;
 		io.println(a);
 	}
+
 	public int test() {
     	    a = 3;
     		io.println(a);
     		return a;
+    }
+
+	public int test2(int a) {
+            a = 3;
+            io.println(a);
+            return a;
     }
 }
