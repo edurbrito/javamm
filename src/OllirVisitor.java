@@ -604,6 +604,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         }
 
         if(resRight.size() > 1){
+            preEqual += resRight.get(0) + "\n";
             if(children.get(1).getKind().equals("TwoPartExpression")){
                 String tempVar =  getTempVar(type, true);
 
@@ -611,7 +612,6 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 rightEqual = tempVar;
             }else{
 
-                preEqual += resRight.get(0) + "\n";
                 rightEqual = resRight.get(1);
             }
 
@@ -934,7 +934,12 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         List<String> finalList = new ArrayList<>();
         boolean putfield = isPutfield(child.getParent().getChildren());
-        String tempVar = getTempVar(typeStr, true);
+
+        String tempVar = "";
+        if((putfield && accessToArray) || isGetfield(child)){
+            tempVar = getTempVar(typeStr, true);
+        }
+
 
         if(putfield && accessToArray)
             before.append(tempVar).append(" :=.").append(typeStr).append(" ")
