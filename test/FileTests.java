@@ -16,6 +16,15 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
     @Test
@@ -26,6 +35,14 @@ public class FileTests {
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
 
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
     @Test
@@ -35,6 +52,15 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
     @Test
@@ -44,6 +70,15 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
     @Test
@@ -53,6 +88,33 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
+    }
+
+    @Test
+    public void Boolean() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/Boolean.jmm");
+        assertEquals("Program",res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
     @Test
@@ -62,6 +124,15 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
     @Test
@@ -71,9 +142,17 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
-    @Test
     public void GlobalAccess() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/GlobalAccess.jmm");
         assertEquals("Program",res.getRootNode().getKind());
@@ -85,6 +164,8 @@ public class FileTests {
         BackendStage backendStage = new BackendStage();
         JasminResult jasminResult = backendStage.toJasmin(ollirResult);
 
+        System.out.println(jasminResult.getJasminCode());
+
         jasminResult.run();
     }
 
@@ -93,9 +174,9 @@ public class FileTests {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/HelloWorld.jmm");
         assertEquals("Program",res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
-
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
         OptimizationStage optimizationStage = new OptimizationStage();
         OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
         BackendStage backendStage = new BackendStage();
@@ -112,6 +193,15 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
     @Test
@@ -121,6 +211,15 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
     @Test
@@ -130,6 +229,15 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
     @Test
@@ -139,6 +247,15 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
     @Test
@@ -148,6 +265,15 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
     @Test
@@ -157,6 +283,15 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
     @Test
@@ -166,6 +301,15 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
     @Test
@@ -175,6 +319,15 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
     @Test
@@ -184,9 +337,17 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
-    @Test
     public void Simple() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/Simple.jmm");
         assertEquals("Program",res.getRootNode().getKind());
@@ -209,6 +370,15 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
     @Test
@@ -218,6 +388,15 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
     @Test
@@ -227,6 +406,15 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
     @Test
@@ -236,6 +424,15 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
     @Test
@@ -245,6 +442,15 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 
     @Test
@@ -254,5 +460,14 @@ public class FileTests {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 }

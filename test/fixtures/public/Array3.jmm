@@ -12,9 +12,6 @@ class Array3 {
         //array position store
         a[0] = 2;
 
-        //array access
-        io.printArray(a);
-
         //array position load
         io.print(a[0]);
     }
