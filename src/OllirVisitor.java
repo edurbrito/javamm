@@ -650,15 +650,16 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     }
 
 
+
     private List<String> dealWithBoolOp(JmmNode booleanNode) {
 
         List<String> finalList = new ArrayList<>();
         StringBuilder result = new StringBuilder();
         List<JmmNode> children = booleanNode.getChildren();
 
-        if(booleanNode.getKind().equals("Boolean")){
+        if(booleanNode.getKind().equals("Boolean")){            // for if(true)
             finalList.add("");      // There are no Temps
-            finalList.add(booleanNode.get("value")+".bool" + " &&.bool " + booleanNode.get("value") + ".bool");
+            finalList.add(dealWithBoolean(booleanNode) + " &&.bool " + dealWithBoolean(booleanNode));
             return finalList;
         }
 
@@ -1013,7 +1014,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
 
     private String dealWithBoolean(JmmNode child) {
-        return child.get("value") + ".bool";
+
+        return child.get("value").equals("true") ? "1.bool" : "0.bool";
     }
 
 
