@@ -1,14 +1,14 @@
 
 class Arithmetic{
 	public static void main(String[] args) {
-        this.sum(1, 2);
+        Arithmetic a;
+        a = new Arithmetic();
+        a.sum(1, 2);
 	}
 
 	public int sum(int a, int b) {
 	    int c;
-
 	    c = a + a + b * b;
-
 	    return c;
 	}
 }

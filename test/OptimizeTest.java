@@ -129,7 +129,6 @@ public class OptimizeTest {
 
     }
 
-    @Test
     public void Life() { //test basic println
         //SpecsIo.getResource(
         var result = TestUtils.optimize("test/fixtures/public/Life.jmm");
