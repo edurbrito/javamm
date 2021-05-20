@@ -1,0 +1,19 @@
+class myClass {
+    int a;
+    int c;
+    public int get(){
+        int b;
+        b = a + c;
+        return b;
+    }
+    public int put(int n){
+        a = n;
+        return 0;
+    }
+    public int m1(){
+        return 0;
+    }
+    public static void main(String[] args){
+
+    }
+}

@@ -1,0 +1,71 @@
+import io;
+
+class Company {
+
+	int cap;
+	int[] staff;
+	int size;
+
+	public int hire(int e) {
+
+		if (size < cap) {
+            size = size + 1;
+			staff[size] = e;
+		}
+		else {
+		    size = size;
+		}
+
+		return size;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public int setInfo() {
+        int i;
+        size = 10;
+        i = 0;
+
+        staff = new int[size];
+
+        while(i < size) {
+            staff[i] = i+3;
+        }
+
+        return size;
+    }
+
+	public int getEmployee(int index) {
+
+	    int rett;
+
+		if ((0 < index) && (index < size)) {
+			rett = staff[index];
+		} else {
+			rett = 0;
+		}
+
+		return rett;
+	}
+
+	public static void main(String[] args) {
+		Company acme;
+        int p;
+		int e;
+		int i;
+		acme = new Company();
+		i = 0;
+		while(i < acme.getSize()) {
+			e = acme.getEmployee(i);
+			if (0 < e) {
+				io.println(e);
+			}
+			else {
+			    io.println(0);
+			}
+			i = i + 1;
+		}
+	}
+}

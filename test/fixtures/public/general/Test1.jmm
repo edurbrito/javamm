@@ -1,0 +1,33 @@
+import io;
+
+class Calculator {
+
+	// centigrade to Farenheit conversion
+    // F = 9 * C / 5 + 32
+	public int c2f(int local_1) { // note: local_0 = this
+		local_1 = 9 * local_1;
+		local_1 = local_1/5;
+		local_1 = local_1 + 32;
+		return local_1;
+	}
+
+	// Farenheit to centigrade conversion
+	// C = 5 * (f - 32) / 9
+	public int f2c(int local_1) {
+		local_1 = local_1 - 32;
+		local_1 = local_1 * 5;
+		local_1 = local_1 / 9;
+		return local_1;
+	}
+
+	public static void main(String[] args){
+        int a;
+        int b;
+        Calculator c;
+        c = new Calculator();
+        a = c.c2f(3);
+        b = c.f2c(72);
+        io.println(a);
+        io.println(b);
+	}
+}

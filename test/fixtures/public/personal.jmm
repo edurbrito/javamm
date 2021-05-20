@@ -1,10 +1,10 @@
 class Personal extends Quicksort{
     public static void main(String[] args){
-
-        int c;
-        boolean a;
-
-        c = 1 + 1 + 1;
-        a = true && true && true;
+        int a;
+        if(1 < 2){
+            a = 1;
+        }else{
+            a = 2;
+        }
     }
 }
