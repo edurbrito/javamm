@@ -10,8 +10,6 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     private final SymbolTableImp symbolTableImp;
     private final StringBuilder ollirCode = new StringBuilder("\n");
     private String methodName, methodKey;
-    //private int tempsCount = 1;
-    //private int tempsCount2 = 1;
     private int whileCounter = 1;
     private int tempsCount = 0, tempIf = 0;
     private boolean hasReturn = false;
@@ -187,6 +185,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         List<String> finalList = new ArrayList<>();
         boolean putfield = isPutfield(child.getParent().getChildren());
+        String type = getTypeOllir(getIdentifierType(child.getParent().getChildren().get(0)));
 
 
         if (child.getChildren().get(0).getKind().equals("Object")) {
@@ -220,9 +219,10 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
             result.append("new(array, ").append(length).append(")").append(".array.i32");
             if(putfield){
-                pre.append("a1.array.i32 :=.array.i32 ").append(result.toString()).append(";\n");
+                String tempVar = getTempVar(type, true);
+                pre.append( tempVar + " :=." + type + " ").append(result.toString()).append(";\n");
                 result = new StringBuilder();
-                result.append("a1.array.i32");
+                result.append(tempVar);
             }
             finalList.add(pre.toString());
             finalList.add(result.toString());
@@ -352,7 +352,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         result.append(".field private " + name + ".");          // Grammar only accepts private fields
 
-        String typeOllir = getTypeOllir(type);
+        String typeOllir = getTypeOllir(type, child.getChildren().get(0).getChildren().size() == 0);
 
         result.append(typeOllir + ";");
 
@@ -583,10 +583,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         // Get OLLIR type of operation
         Type leftType = getIdentifierType(children.get(0));
 
-        String type = getTypeOllir(leftType);
-        if(leftType.isArray() && children.get(0).getChildren().size() == 0){
-            type = "array." + type;
-        }
+        String type = getTypeOllir(leftType, !leftType.isArray());
 
         boolean putfield = isPutfield(children);
 
@@ -640,12 +637,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             JmmNode identifierNode = children.get(0);
 
 
-            List<Symbol> classVariables = symbolTableImp.getFields();
-            for (Symbol i : classVariables) {
-                if (i.getName().equals(children.get(0).get("name"))) {
-                    putfield = true;
-                }
-            }
+            putfield = verifySymbolTab(identifierNode);
+
         }
         return putfield;
     }
@@ -654,16 +647,39 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     private boolean isGetfield(JmmNode identifierNode) {
         boolean getField = false;
         if (identifierNode.getKind().equals("Identifier")){
-            List<Symbol> classVariables = symbolTableImp.getFields();
-            for (Symbol i : classVariables) {
-                if (i.getName().equals(identifierNode.get("name"))) {
-                    getField = true;
-                }
-            }
+
+
+            getField = verifySymbolTab(identifierNode);
+
         }
         return getField;
     }
 
+
+    private boolean verifySymbolTab(JmmNode identifierNode){
+        boolean putfield = false;
+        List<Symbol> classVariables = symbolTableImp.getFields();
+        for (Symbol i : classVariables) {
+            if (i.getName().equals(identifierNode.get("name"))) {
+                putfield = true;
+            }
+        }
+
+        // Searching the symbols in the function parameters
+        List<Parameter> parameters = symbolTableImp.getMethod(this.methodKey).getParameters();
+        for (Parameter i : parameters) {
+            if (i.getSymbol().getName().equals(identifierNode.get("name")))
+                putfield = false;
+        }
+
+
+        HashMap<Symbol, Boolean> localVariables = symbolTableImp.getMethod(this.methodKey).getLocalVariables();
+        for (Symbol i : localVariables.keySet()) {
+            if (i.getName().equals(identifierNode.get("name")))
+                putfield = false;
+        }
+        return putfield;
+    }
 
 
     private List<String> dealWithBoolOp(JmmNode booleanNode) {
@@ -783,9 +799,12 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
     private String getTempVar(String type, boolean left){
         int tempN = this.tempsCount++;
+        String array = type.contains("array") ? ".array" : "";
+
         if(left)
-            return type.equals("bool") ? "tb" + tempN + ".bool" : "ti" + tempN + ".i32";
-        return type.equals("bool") ? "ub" + tempN + ".bool" : "ui" + tempN + ".i32";
+
+            return type.contains("bool") ? "tb" + tempN + array + ".bool" : "ti" + tempN + array + ".i32";
+        return type.contains("bool") ? "ub" + tempN + array + ".bool" : "ui" + tempN + array + ".i32";
     }
 
     private List<String> dealWithTemp(List<JmmNode> children, String type){
@@ -927,10 +946,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         }
         Type identifierType = getIdentifierType(child);
-        String typeStr = getTypeOllir(identifierType);
-
-        if(identifierType.isArray() && child.getChildren().size() == 0)
-            array += ".array";
+        String typeStr = getTypeOllir(identifierType, child.getChildren().size() != 0);
 
         List<String> finalList = new ArrayList<>();
         boolean putfield = isPutfield(child.getParent().getChildren());
@@ -945,7 +961,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             before.append(tempVar).append(" :=.").append(typeStr).append(" ")
                     .append(parameterStr).append(identifierName).append(array).append(".").append(getTypeOllir(identifierType)).append(";\n");
 
-        if(isGetfield(child)){
+        if(isGetfield(child) && !child.getParent().getKind().equals("EqualStatement")){
             before.append(tempVar).append(" :=.").append(typeStr).append(" getfield(this, ")
                             .append(identifierName).append(".").append(typeStr).append(").").append(typeStr).append(";\n");
         }
@@ -953,10 +969,10 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         if(!before.isEmpty())
             finalList.add(before.toString());
 
-        if((putfield && accessToArray) || isGetfield(child))
+        if((putfield && accessToArray) || (isGetfield(child) && !child.getParent().getKind().equals("EqualStatement")))
             finalList.add(tempVar);
         else
-            finalList.add(parameterStr + identifierName + array + "." + getTypeOllir(identifierType));
+            finalList.add(parameterStr + identifierName + array + "." + typeStr);
 
         return finalList;
     }
@@ -1013,18 +1029,30 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
      */
     private String getTypeOllir(Type type) {
 
-        StringBuilder result = new StringBuilder();
+        return getTypeOllir(type, true);
+    }
 
-        String typeOllir;
+    /**
+     * Returns the ollir type of integer and boolean
+     * @param type information about the variable type
+     * @return  the ollir type, in a string
+     */
+    private String getTypeOllir(Type type, boolean access) {
 
-        if(type.getName().equals("int")) typeOllir = "i32";
-        else if(type.getName().equals("boolean")) typeOllir = "bool";
-        else if(type.getName().equals("void")) typeOllir = "V";
-        else typeOllir = type.getName();
 
-        result.append(typeOllir);
+        String typeOllir = "";
 
-        return result.toString();
+        if(type.isArray() && !access)
+            typeOllir += "array.";
+
+        if(type.getName().equals("int")) typeOllir += "i32";
+        else if(type.getName().equals("boolean")) typeOllir += "bool";
+        else if(type.getName().equals("void")) typeOllir += "V";
+        else typeOllir += type.getName();
+
+
+
+        return typeOllir;
     }
 
 
