@@ -51,7 +51,7 @@ class Lazysort extends Quicksort {
 		int rand;
         _allowedNameL = L.length;
         
-        $allowedNameI = 0;
+        /*$allowedNameI = 0;
         while ($allowedNameI < _allowedNameL/2) {
             L[$allowedNameI] = MathUtils.random(0, 10);
 
@@ -63,7 +63,7 @@ class Lazysort extends Quicksort {
             L[$allowedNameI] = rand + 1;
 
             $allowedNameI = $allowedNameI + 1;
-        }        
+        }      */
         
         
         return true;
