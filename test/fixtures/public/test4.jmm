@@ -1,6 +1,6 @@
 /*
 Tests:
-    -warnings in variables not initialized in all the conditional branches
+    - warnings in variables not initialized in all the conditional branches
 */
 
 class test4 {

@@ -644,10 +644,10 @@ public class BackendStage implements JasminBackend {
             builder.append(lessThanCounter).append(":");
             lessThanCounter++;
         }
-        else if (instruction.getUnaryOperation().getOpType().equals(OperationType.AND)) {
+        else if (instruction.getUnaryOperation().getOpType().equals(OperationType.AND) || instruction.getUnaryOperation().getOpType().equals(OperationType.ANDB)) {
             builder.append("iand");
         }
-        else if (instruction.getUnaryOperation().getOpType().equals(OperationType.NOTB)) {
+        else if (instruction.getUnaryOperation().getOpType().equals(OperationType.NOT) || instruction.getUnaryOperation().getOpType().equals(OperationType.NOTB)) {
             builder.append("iconst_1");
             this.countStack += 1;
             builder.append("\n");

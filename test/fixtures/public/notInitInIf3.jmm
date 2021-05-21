@@ -9,8 +9,8 @@ class VarNotInit {
         int k;
         k = 2;
 
-        while(true){
-            i = 2;
+        i = 2;
+        while(i < 10){
             i = i+2;
         }
 
