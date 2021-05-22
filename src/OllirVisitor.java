@@ -61,38 +61,39 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         JmmNode ifCondition = ifElse.getChildren().get(0);
         JmmNode op = ifCondition.getChildren().get(0);
         List<String> cond;
-        StringJoiner res = new StringJoiner("\n");
+        StringBuilder res = new StringBuilder("\n");
 
-        if(op.getKind().equals("LessThan")){
-            cond = dealWithArithmetic(op);
-        }else {
-            cond = dealWithBoolOp(op);
-        }
+        cond = dealWithChild(op);
 
         String pre = cond.get(0), inCond = cond.get(1);
 
-        res.add(pre);
 
-        res.add("if ( " + inCond + " ) goto bodyIf" + countIf +";");
+        if(!inCond.contains("&&") && !inCond.contains("<")){
+            inCond += " &&.bool 1.bool";
+        }
+
+        res.append(pre).append("\n");
+
+        res.append("if ( " + inCond + " ) goto bodyIf" + countIf +";\n");
 
         // IfElse else
         JmmNode ifBody = ifElse.getChildren().get(1);
 
         JmmNode ifElseBody = ifElse.getChildren().get(2);
         for(JmmNode bodyExp : ifElseBody.getChildren()){
-            res.add(join(dealWithChild(bodyExp)));
+            res.append(join(dealWithChild(bodyExp))).append("\n");
         }
-        res.add("goto endif" + countIf + ";");
+        res.append("goto endif" + countIf + ";\n");
 
         // IfElse body
-        res.add("bodyIf" + countIf +":");
+        res.append("bodyIf" + countIf +": \n");
 
         for(JmmNode bodyExp : ifBody.getChildren()){
-            res.add(join(dealWithChild(bodyExp)));
+            res.append(join(dealWithChild(bodyExp))).append("\n");
         }
 
 
-        res.add("endif" + countIf + ":\n");
+        res.append("endif" + countIf + ":\n");
 
         List<String> finalList = new ArrayList<>();
         finalList.add(res.toString());
@@ -136,15 +137,16 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         StringBuilder result = new StringBuilder("Loop" + whileNumber + ":\n");
         JmmNode ConditionNode = node.getChildren().get(0);
 
-        List<String> cond;
-        if(ConditionNode.getKind().equals("LessThan")){
-            cond = dealWithArithmetic(ConditionNode);
-        }else {
-            cond = dealWithBoolOp(ConditionNode);
+        List<String> cond = new ArrayList<>();
+        String pre = cond.get(0), inCond = cond.get(1);
+
+
+        if(!inCond.contains("&&") && !inCond.contains("<")){
+            inCond += " &&.bool 1.bool";
         }
 
-        String pre = cond.get(0), inCond = cond.get(1);
-        result.append(pre);
+        result.append(pre).append("\n");
+
         result.append("if ( " + inCond + ") goto Body" + whileNumber + ";\n");
         result.append("goto EndLoop" + whileNumber + ";\n");
 
@@ -171,7 +173,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         StringBuilder result = new StringBuilder("Body" + whileNumber + ":\n");
         for (JmmNode child : node.getChildren()) {
             for (String i : dealWithChild(child)) {
-                result.append(i.replace("\n", "")).append('\n');
+                result.append(i.replace("\n\n", "\n")).append('\n');
             }
         }
         result.append("goto Loop" + whileNumber + ";\n");
@@ -397,13 +399,20 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         if (leftChild.getKind().equals("This")) {
             List<String> listRes = dealWithThisExpression(node);
+            String functionType = "";
+            if(listRes.get(1).contains("bool")){
+                functionType = "bool";
+            }else if (listRes.get(1).contains("i32")){
+                functionType = "i32";
+            }
+
+            String tempVar = getTempVar(functionType, true);
 
             String expressionResult = listRes.get(1);
-            String type = ("." + expressionResult.split("\\.")[expressionResult.split("\\.").length - 1]);
             result.append(" " + expressionResult + ";" + "\n");
             List<String> finalL = new ArrayList<>();
-            finalL.add(listRes.get(0));
-            finalL.add(result.toString());
+            finalL.add(listRes.get(0) + "\n" + tempVar + " :=." + functionType + " " + result.toString() + "\n");
+            finalL.add(tempVar);
 
             return finalL;
 

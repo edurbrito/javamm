@@ -40,7 +40,7 @@ public class OptimizationStage implements JmmOptimization {
             if(i.length()==0)
                 continue;
             i=i.replace(";;",";");
-            temp.append("\t".repeat(count)+i+"\n");
+            temp.append("\t".repeat(count)+i+"\n\n");
             if (i.contains("{"))
                 count++;
             if (i.contains("}"))
