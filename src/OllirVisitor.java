@@ -1038,7 +1038,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         if(!before.isEmpty())
             finalList.add(before.toString());
 
-        if((putfield && accessToArray) || (isGetfield(child) && !child.getParent().getKind().equals("EqualStatement")))
+        if((putfield && accessToArray) || (isGetfield(child)))
             finalList.add(tempVar);
         else
             finalList.add(parameterStr + identifierName + array + "." + typeStr);

@@ -37,14 +37,11 @@ public class BackendStage implements JasminBackend {
     int lessThanCounter = 1;
     int maxStack = 2;
     int countStack = 0;
-    int fieldLocals = 0;
-    int lastRegister = 0;
 
     @Override
     public JasminResult toJasmin(OllirResult ollirResult) {
 
         ClassUnit ollirClass = ollirResult.getOllirClass();
-        superClass = ollirClass.getSuperClass();
         try {
 
             // Example of what you can do with the OLLIR class
@@ -606,7 +603,8 @@ public class BackendStage implements JasminBackend {
         builder.append("\n");
         builder.append("\t");
         builder.append(generateValue(method, leftOperand));
-        builder.append(generateValue(method, rightOperand));
+        if (!instruction.getUnaryOperation().getOpType().equals(OperationType.NOTB))
+            builder.append(generateValue(method, rightOperand));
         builder.append("\n");
         builder.append("\t");
 
@@ -646,8 +644,15 @@ public class BackendStage implements JasminBackend {
             builder.append(lessThanCounter).append(":");
             lessThanCounter++;
         }
-        else if (instruction.getUnaryOperation().getOpType().equals(OperationType.AND)) {
+        else if (instruction.getUnaryOperation().getOpType().equals(OperationType.AND) || instruction.getUnaryOperation().getOpType().equals(OperationType.ANDB)) {
             builder.append("iand");
+        }
+        else if (instruction.getUnaryOperation().getOpType().equals(OperationType.NOT) || instruction.getUnaryOperation().getOpType().equals(OperationType.NOTB)) {
+            builder.append("iconst_1");
+            this.countStack += 1;
+            builder.append("\n");
+            builder.append("\t");
+            builder.append("ixor");
         }
 
         if(this.countStack > this.maxStack)
