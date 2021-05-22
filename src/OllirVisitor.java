@@ -114,7 +114,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             return in.get(0);
 
         for(String str : in){
-            if(str.length()>0)
+            if(str.length()>0 && str.length() > 8)
                 res.append(str + "\n");
         }
         return res.toString();
