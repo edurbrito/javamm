@@ -185,6 +185,10 @@ public class BackendStage implements JasminBackend {
     }
 
     public String generateOperation(Method method, Instruction instruction, boolean rhs) {
+        return generateOperation(method, instruction, rhs, false);
+    }
+
+    public String generateOperation(Method method, Instruction instruction, boolean rhs, boolean assign) {
         StringBuilder builder = new StringBuilder();
 
         List<String> labels = method.getLabels(instruction);
@@ -210,7 +214,7 @@ public class BackendStage implements JasminBackend {
                 this.setMaxStack();
                 break;
             case CALL:
-                builder.append(generateCall(method, (CallInstruction) instruction));
+                builder.append(generateCall(method, (CallInstruction) instruction, assign));
                 this.setMaxStack();
                 break;
             case UNARYOPER:
@@ -294,7 +298,7 @@ public class BackendStage implements JasminBackend {
             }
         }
 
-        builder.append(generateOperation(method, rhs, darray));
+        builder.append(generateOperation(method, rhs, darray, true));
 
         if (dest instanceof ArrayOperand) {
             builder.append("\n");
@@ -404,7 +408,7 @@ public class BackendStage implements JasminBackend {
         return builder.toString();
     }
 
-    public String generateCall(Method method, CallInstruction instruction) {
+    public String generateCall(Method method, CallInstruction instruction, boolean isAssign) {
         StringBuilder builder = new StringBuilder();
 
         builder.append("\n");
@@ -492,10 +496,16 @@ public class BackendStage implements JasminBackend {
                 }
                 builder.append(")");
                 builder.append(getType(instruction.getReturnType()));
+                if (!instruction.getReturnType().getTypeOfElement().equals(VOID) && !isAssign) {
+                    builder.append("\n");
+                    builder.append("\t");
+                    builder.append("pop");
+                }
                 break;
             case invokeinterface:
                 break;
             case invokespecial:
+                this.countStack += 2;
                 if(objectInstance.getType().getTypeOfElement().equals(ElementType.THIS)) {
                     builder.append("\n");
                     builder.append("\t");
@@ -548,6 +558,11 @@ public class BackendStage implements JasminBackend {
                 }
                 builder.append(")");
                 builder.append(getType(instruction.getReturnType()));
+                if (!instruction.getReturnType().getTypeOfElement().equals(VOID) && !isAssign) {
+                    builder.append("\n");
+                    builder.append("\t");
+                    builder.append("pop");
+                }
                 break;
             case arraylength:
                 builder.append(generateValue(method, objectInstance));

@@ -30,7 +30,7 @@ Lazysort {
 		 invokevirtual(this,"beLazy",$1.L.array.i32).i32;
 		lazy.bool :=.bool 1.bool;
 		endif0:
-		if ( lazy.bool &&.bool true.bool ) goto body1;
+		if ( lazy.bool &&.bool 1.bool ) goto body1;
 		ti7.i32 :=.i32 arraylength($1.L.array.i32).i32;
 		ti8.i32 :=.i32 ti7.i32;
 		ti9.i32 :=.bool ti8.i32 -.i32 1.i32;

@@ -1,7 +1,7 @@
 HelloWorld {
     .field private a.String;
 
-	.construct HelloWorld().V{
+	.construct HelloWorld().V {
 		invokespecial(this, "<init>").V;
 	    t3.String :=.String ldc("Hello, World!").String;
 		putfield(this, a.String, t3.String).V;
@@ -17,6 +17,7 @@ HelloWorld {
 
 	.method public toString().String {
 	    t2.String :=.String invokevirtual(this,"getString").String;
+	    invokevirtual(this,"getString").String;
 	    ret.String t2.String;
 	}
 
