@@ -114,7 +114,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             return in.get(0);
 
         for(String str : in){
-            if(str.length()>0)
+            if(str.length()>0 && str.length() > 8)
                 res.append(str + "\n");
         }
         return res.toString();
@@ -528,18 +528,27 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         StringBuilder key= new StringBuilder(callName);
         StringBuilder pre = new StringBuilder();
-
+        StringBuilder args = new StringBuilder();
+        StringBuilder before= new StringBuilder();
+        result = new StringBuilder();
+        String res="";
         for (JmmNode callArgs : rightChild.getChildren().get(0).getChildren()) {
 
             List<String> stringList = dealWithChild(callArgs);
-            String res="";
+
             if(stringList.size() > 1){
                 pre.append(stringList.get(0)).append("\n");
                 res = stringList.get(1);
             }else{
                 res = stringList.get(0);
             }
-
+            if (res.matches(".*[+|-|/|*|invoke].*")){
+                List<String> aux = createTemp(res);
+                before.append(aux.get(0)+";\n");
+                args.append(", "+aux.get(1));
+            }else {
+                args.append(", " + res);
+            }
 
 //            result.append(dealWithChild(callArgs).get(0));
             if(res.split("\\.")[1].equals("i32") || res.split("\\.")[1].equals("array")){
@@ -550,11 +559,11 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 key.append(res.split("\\.")[1]);
             }
         }
-        result = new StringBuilder();
+
 
 
         result.append(pre).append("invokevirtual(").append(objectName).append(".").append(className).append(",\"").append(callName).append("\"");
-
+        result.append(args.toString());
         result.append(")");
 
         try{
@@ -564,7 +573,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         }
 
         result.append(";");
-        return Collections.singletonList(result.toString());
+        return Arrays.asList(before.toString(),result.toString());
     }
 
     private List<String> createTemp(String operation) {
