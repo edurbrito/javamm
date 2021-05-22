@@ -153,6 +153,7 @@ public class FileTests {
         jasminResult.run();
     }
 
+    @Test
     public void GlobalAccess() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/GlobalAccess.jmm");
         assertEquals("Program",res.getRootNode().getKind());
@@ -351,7 +352,7 @@ public class FileTests {
 
         jasminResult.run();
     }
-
+    @Test
     public void Simple() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/Simple.jmm");
         assertEquals("Program",res.getRootNode().getKind());

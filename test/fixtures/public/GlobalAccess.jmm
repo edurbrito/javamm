@@ -3,8 +3,12 @@ class globals{
     int a;
 	public static void main(String[] args) {
 	    int a;
+	    globals g;
 	    a = 3;
 		io.println(a);
+        g=new globals();
+        g.test();
+        g.test2(2);
 	}
 
 	public int test() {

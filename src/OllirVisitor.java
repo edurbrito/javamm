@@ -64,8 +64,15 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         StringBuilder res = new StringBuilder("\n");
 
         cond = dealWithChild(op);
+        String pre = "", inCond = "";
+        if(cond.size() > 1){
+            pre = cond.get(0);
+            inCond = cond.get(1);
+        }else{
+            inCond = cond.get(0);
+        }
 
-        String pre = cond.get(0), inCond = cond.get(1);
+
 
 
         if(!inCond.contains("&&") && !inCond.contains("<")){
@@ -137,8 +144,15 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         StringBuilder result = new StringBuilder("Loop" + whileNumber + ":\n");
         JmmNode ConditionNode = node.getChildren().get(0);
 
-        List<String> cond = new ArrayList<>();
-        String pre = cond.get(0), inCond = cond.get(1);
+        List<String> cond = dealWithChild(ConditionNode);
+        String pre = "", inCond = "";
+        if(cond.size() > 1){
+            pre = cond.get(0);
+            inCond = cond.get(1);
+        }else{
+            inCond = cond.get(0);
+        }
+
 
 
         if(!inCond.contains("&&") && !inCond.contains("<")){
