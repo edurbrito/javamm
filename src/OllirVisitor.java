@@ -956,7 +956,12 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         result.append(getTypeOllir(symbolTableImp.methods.get(this.methodKey).returnType));
         result.append(" ");
 
-        result.append(retResult.toString());
+        if(retResult.toString().contains("invoke")){
+            //result.insert(0, createTemp(retResult.toString()).get(0));
+            //result.append(createTemp(retResult.toString()));
+        }else {
+            result.append(retResult.toString());
+        }
 
 //            result.append(dealWithChild(child).get(0));
         result.append(";\n");
