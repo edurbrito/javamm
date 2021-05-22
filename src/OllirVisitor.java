@@ -145,7 +145,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         String pre = cond.get(0), inCond = cond.get(1);
         result.append(pre);
-        result.append("if ( " + inCond.replace("<", ">=") + ") goto Body" + whileNumber + ";\n");
+        result.append("if ( " + inCond + ") goto Body" + whileNumber + ";\n");
         result.append("goto EndLoop" + whileNumber + ";\n");
 
         /*
@@ -185,13 +185,21 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         List<String> finalList = new ArrayList<>();
         boolean putfield = isPutfield(child.getParent().getChildren());
-        String type = getTypeOllir(getIdentifierType(child.getParent().getChildren().get(0)));
+
+        String type=null;
+        if(child.getParent().getChildren().get(0).getKind().equals("Identifier")) {
+            type = getTypeOllir(getIdentifierType(child.getParent().getChildren().get(0)));
+        }
 
 
         if (child.getChildren().get(0).getKind().equals("Object")) {
             result.append("new (").append(child.getChildren().get(0).get("name")).append(")").append(".");
             result.append(child.getChildren().get(0).get("name")).append(";\n");
-            result.append("invokespecial(").append(child.getParent().getChildren().get(0).get("name")).append(".").append(child.getChildren().get(0).get("name")).append(",\"<init>\").V");
+            try {
+                result.append("invokespecial("+child.getParent().getChildren().get(0).get("name")+"."+child.getChildren().get(0).get("name")+",\"<init>\").V");
+            }catch(Exception e){
+                result.append("invokespecial("+child.getChildren().get(0).get("name")+"."+child.getChildren().get(0).get("name")+",\"<init>\").V");
+            }
             finalList.add(result.toString());
             return finalList;
         }
@@ -234,7 +242,13 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     private boolean dealWithClass(JmmNode node, List<Report> reports) {
 
         //class constructor
-        ollirCode.append(node.get("name") + " {\n");
+        ollirCode.append(node.get("name")+" ");
+        try{
+            ollirCode.append("extends "+node.get("extends"));
+        }catch (Exception e){
+
+        }
+        ollirCode.append(" {\n");
         for (JmmNode child : node.getChildren()) {
             if (child.getKind().equals("Var")) {
                 ollirCode.append(dealWithVar(child) + '\n');
@@ -282,7 +296,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         assert methodTable != null;
 
         for (Parameter parameter : methodTable.parameters) {
-            result.append(parameter.getSymbol().getName() + "." + getTypeOllir(parameter.getSymbol().getType()) + ",");
+            result.append(parameter.getSymbol().getName() + "." + getTypeOllir(parameter.getSymbol().getType(),false) + ",");
         }
         if (result.length() > 0)
             result.deleteCharAt(result.length() - 1);
@@ -402,8 +416,12 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         }
 
 
-
-        String objectName = leftChild.get("name");
+        String objectName;
+        if (leftChild.getKind().equals("AllocationExpression")){
+            objectName=leftChild.getChildren().get(0).get("name");
+        }else {
+            objectName = leftChild.get("name");
+        }
         Symbol classSym = this.symbolTableImp.getMethod(this.methodKey).getVariable(objectName);
         if (classSym==null) {
             result.append("t" + this.tempsCount++);
@@ -413,44 +431,67 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 List<JmmNode> identifiers = methodCall.getChildren();
 
 
-                StringBuilder key = new StringBuilder();
+                List<String> key = new ArrayList<>();
                 for (JmmNode child : identifiers) {
 
-                    key.append(",");
+
                     if(child.getKind().equals("TwoPartExpression")){
 
                         List<String> res = mountIdentifierOLLIR(child.getChildren().get(0), child.getChildren().get(1));
                         String tempVar = getTempVar("i32", true);
                         before.append(res.get(0) + "\n" + tempVar + " :=.i32 " + res.get(1) + ";\n");
-                        key.append(tempVar);
+                        key.add(tempVar);
 
                     }else{
                         List<String> res = dealWithChild(child);
                         if(res.size() > 1){
                             before.append(res.get(0)).append("\n");
-                            key.append(res.get(1));
+                            key.add(res.get(1));
                         }else {
-                            key.append(res.get(0));
+                            key.add(res.get(0));
 
                         }
                     }
 
 
+                    List<String> dealResult = dealWithChild(child);
+                    List<String> opsAr = Arrays.asList("Sum", "Sub", "Mult", "Div", "And", "LessThan");
+                    List<String> opsBo = Arrays.asList("And", "Not");
+
+                    if (opsAr.contains(child.getKind())||opsBo.contains(child.getKind())){
+                        before.append(createTemp(dealResult.get(1)).get(0));
+                        key.set(key.size()-1, createTemp(dealResult.get(1)).get(1));
+                        continue;
+                    }
+
                     for(String i:dealWithChild(child)){
+
                         if(i.length()>0)
                             result.append(i).append('\n');
                     }
                 }
 
                 result = new StringBuilder();
-                result.append(before.toString());
+                //result.append(before.toString());
                 result.append("invokestatic(" + objectName + ", \"" + methodCall.get("name")+"\"");
-                result.append(key.toString());
+                for (String i :key){
+                    result.append(", "+i);
+                }
+                //result.append(","+key.toString());
 
 
-                result.append(").V;\n");
+                result.append(")");
+                result.append(".V");
+                result.append(";\n");
             }
-            return Collections.singletonList(result.toString());
+            else if (this.symbolTableImp.className.equals(objectName)){
+                List<String> temp0 = dealWithChild(leftChild);
+                List<String> temp1 = dealWithChild(rightChild);
+                System.out.println("temp");
+            }else if (this.symbolTableImp.superClass.equals(objectName)){
+
+            }
+            return Arrays.asList(before.toString(),result.toString());
         }
 
         String className = classSym.getType().getName();
@@ -501,6 +542,19 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         result.append(";");
         return Collections.singletonList(result.toString());
+    }
+
+    private List<String> createTemp(String operation) {
+        List<String> type;
+        if (operation.contains("i32")){
+            type=Arrays.asList("int",".i32");
+        }else{
+            type = Arrays.asList("bool", ".bool");
+        }
+        String temp="t"+ type.get(0).charAt(0)+tempsCount+type.get(1)+" :="+type.get(1)+" "+operation+";";
+        String finalOp="t"+ type.get(0).charAt(0)+tempsCount+type.get(1);
+        tempsCount++;
+        return Arrays.asList(temp,finalOp);
     }
 
 
@@ -615,6 +669,16 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         }else{
             rightEqual = resRight.get(0);
+            String rightType=rightEqual.split("\\.")[rightEqual.split("\\.").length-1];
+            String StringleftType=leftEqual.split("\\.")[leftEqual.split("\\.").length-1];
+            if (!rightType.equals(StringleftType)){
+                int start = rightEqual.lastIndexOf(rightType);
+                StringBuilder builder = new StringBuilder();
+                builder.append(rightEqual.substring(0, start));
+                builder.append(StringleftType);
+                builder.append(rightEqual.substring(start + rightType.length()));
+                rightEqual=builder.toString();
+            }
         }
 
 
