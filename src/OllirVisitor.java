@@ -6,6 +6,7 @@ import pt.up.fe.comp.jmm.report.Report;
 import pt.up.fe.specs.util.utilities.StringList;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     private final SymbolTableImp symbolTableImp;
@@ -186,9 +187,11 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         StringBuilder result = new StringBuilder("Body" + whileNumber + ":\n");
         for (JmmNode child : node.getChildren()) {
             for (String i : dealWithChild(child)) {
-                result.append(i.replace("\n\n", "\n")).append('\n');
+                if (!Pattern.matches("[tu][ib][0-9]+\\..{3}",i))
+                    result.append(i.replace("\n\n", "\n")).append('\n');
             }
         }
+        //result.append(";\n");
         result.append("goto Loop" + whileNumber + ";\n");
 
         return result.toString();
@@ -682,6 +685,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
 
                 }else{
+                    //if (callArgs.getKind().equals("AllocationExpression"))
                     args.append(stringList.get(0));
                     res = stringList.get(0);
                 }

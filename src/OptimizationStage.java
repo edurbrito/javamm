@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import pt.up.fe.comp.jmm.JmmNode;
 import pt.up.fe.comp.jmm.analysis.JmmSemanticsResult;
@@ -39,6 +40,8 @@ public class OptimizationStage implements JmmOptimization {
         ollirCode=ollirCode.replace(";\n;",";\n").replace(";;",";");
         for(String i:ollirCode.split("\n")){
             if(i.length()==0)
+                continue;
+            if (Pattern.matches("[tu][ib][0-9]+\\..{3,4}",i))
                 continue;
             i=i.replace(";;",";");
             temp.append("\t".repeat(count)+i+"\n\n");
