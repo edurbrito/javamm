@@ -1233,7 +1233,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             before.append(tempVar).append(" :=.").append(typeStr).append(" ")
                     .append(parameterStr).append(identifierName).append(array).append(".").append(getTypeOllir(identifierType)).append(";\n");
 
-        if(isGetfield(child) && !child.getParent().getKind().equals("EqualStatement")){
+        if(isGetfield(child) ){//&& !child.getParent().getKind().equals("EqualStatement")){
             before.append(tempVar).append(" :=.").append(typeStr).append(" getfield(this, ")
                             .append(identifierName).append(".").append(typeStr).append(").").append(typeStr).append(";\n");
         }
