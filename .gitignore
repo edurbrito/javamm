@@ -41,3 +41,6 @@ hs_err_pid*
 AST.json
 
 out
+
+test.txt
+*.dot
