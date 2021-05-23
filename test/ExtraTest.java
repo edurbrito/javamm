@@ -163,4 +163,22 @@ public class ExtraTest {
 
         jasminResult.run();
     }
+
+    @Test
+    public void FlagDraw() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/extra/FlagDraw.jmm");
+        assertEquals("Program", res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run("50\n50");
+    }
 }
