@@ -540,12 +540,20 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 for (JmmNode child : identifiers) {
 
 
-                    if(child.getKind().equals("TwoPartExpression")){
+                    if(child.getKind().equals("TwoPartExpression") ){
+                        if(child.getChildren().get(1).getKind().equals("DotExpression")){
+                            List<String> res = dealWithMethodCall(child.getChildren().get(0), child.getChildren().get(1));
+                            String typeString = res.get(2);
+                            String tempVar = getTempVar(typeString,true);
+                            before.append(res.get(0) + "\n" + tempVar + " :=." +typeString + " " + res.get(1) + ";\n");
+                            key.add(tempVar);
+                        }else{
+                            List<String> res = mountIdentifierOLLIR(child.getChildren().get(0), child.getChildren().get(1));
+                            String tempVar = getTempVar("i32", true);
+                            before.append(res.get(0) + "\n" + tempVar + " :=.i32 " + res.get(1) + ";\n");
+                            key.add(tempVar);
+                        }
 
-                        List<String> res = mountIdentifierOLLIR(child.getChildren().get(0), child.getChildren().get(1));
-                        String tempVar = getTempVar("i32", true);
-                        before.append(res.get(0) + "\n" + tempVar + " :=.i32 " + res.get(1) + ";\n");
-                        key.add(tempVar);
 
                     }else{
                         List<String> res = dealWithChild(child);
@@ -767,8 +775,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             result.append(")");
 
             try{
-                result.append("." + getTypeOllir(symbolTableImp.methods.get(key.toString()).returnType));
-            }catch (NullPointerException e){//if function is from extended superclass
+                result.append("." + getTypeOllir(symbolTableImp.methods.get(key.toString()).returnType, !symbolTableImp.methods.get(key.toString()).returnType.isArray()));
+                }catch (NullPointerException e){//if function is from extended superclass
                 result.append("." + "i32");
             }
             finalList.add(pre.toString());
@@ -1215,8 +1223,6 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             betwPar = tempVar;
 
             array = "[" +  betwPar + "]";
-
-
         }
 
 
@@ -1290,6 +1296,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         return finalList;
     }
+
+
 
 
     private String dealWithInteger(JmmNode child) {
@@ -1367,6 +1375,85 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         return child.get("value").equals("true") ? "1.bool" : "0.bool";
     }
 
+    private List<String> dealWithMethodCall(JmmNode identifierNode, JmmNode dotExpression) {
+
+        StringBuilder result = new StringBuilder();
+
+        List<String> finalList = new ArrayList<>();
+
+        if (dotExpression.getChildren().get(0).getKind().equals("MethodCall")) {
+            JmmNode methodCall = dotExpression.getChildren().get(0);
 
 
+            StringBuilder key = new StringBuilder(methodCall.get("name"));
+
+            StringBuilder args = new StringBuilder();
+            StringBuilder pre = new StringBuilder();
+
+            for (JmmNode callArgs : methodCall.getChildren()) {
+                args.append(",");
+                String res = "";
+                List<String> stringList = dealWithChild(callArgs);
+
+                List<String> opsAr = Arrays.asList("Sum", "Sub", "Mult", "Div", "And", "LessThan");
+                List<String> opsBo = Arrays.asList("And", "Not");
+
+
+                if (stringList.size() > 1) {
+                    pre.append(stringList.get(0)).append("\n");
+                    if (callArgs.getKind().equals("TwoPartExpression")) {
+                        Type type = getIdentifierType(identifierNode);
+                        String typeString = getTypeOllir(type, callArgs.getChildren().get(1).getKind().equals("AccessToArray"));
+                        res = getTempVar(typeString, true);
+                        pre.append(res + " :=." + typeString + " " + stringList.get(1) + ";");
+                        args.append(res);
+                    } else if (opsAr.contains(callArgs.getKind())) {
+                        String tempVar = getTempVar("i32", true);
+                        pre.append(tempVar).append(" :=.i32 ").append(stringList.get(1)).append(";\n");
+                        args.append(tempVar);
+                        res = tempVar;
+                    } else if (opsBo.contains(callArgs.getKind())) {
+                        String tempVar = getTempVar("bool", true);
+                        pre.append(tempVar + " :=.bool ").append(stringList.get(1)).append(";\n");
+                        args.append(tempVar);
+                        res = tempVar;
+                    } else {
+                        args.append(stringList.get(1));
+                        res = stringList.get(1);
+                    }
+
+
+                } else {
+                    //if (callArgs.getKind().equals("AllocationExpression"))
+                    args.append(stringList.get(0));
+                    res = stringList.get(0);
+                }
+
+                if (res.contains("i32") || res.contains("array")) {
+                    String array = res.contains("array") ? "array" : "";
+                    key.append(array + "int");
+                } else if (res.contains("bool")) {
+                    key.append("bool");
+                } else {
+                    key.append(res.split("\\.")[1]);
+                }
+            }
+
+            result.append("invokevirtual (this,");
+            result.append("\"" + methodCall.get("name") + "\"").append(args.toString());
+
+            result.append(")");
+
+            try {
+                result.append("." + getTypeOllir(symbolTableImp.methods.get(key.toString()).returnType, !symbolTableImp.methods.get(key.toString()).returnType.isArray()));
+            } catch (NullPointerException e) {//if function is from extended superclass
+                result.append("." + "i32");
+            }
+            finalList.add(pre.toString());
+            finalList.add(result.toString());
+            finalList.add(getTypeOllir(symbolTableImp.methods.get(key.toString()).returnType, !symbolTableImp.methods.get(key.toString()).returnType.isArray()));
+            }
+
+        return finalList;
+        }
 }
