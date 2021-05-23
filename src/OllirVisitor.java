@@ -464,8 +464,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
                 if(isGetfield(node.getChildren().get(0))){
                     Type type = getIdentifierType(node.getChildren().get(0));
-                    String typeStr = getTypeOllir(getIdentifierType(node.getChildren().get(0)));
-                    String tempVar = getTempVar(typeStr, !type.isArray());
+                    String typeStr = getTypeOllir(type, !type.isArray());
+                    String tempVar = getTempVar(typeStr, true);
                     before.append(tempVar).append(" :=.").append(typeStr).append(" getfield(this, ")
                             .append(identifierName).append(".").append(typeStr).append(").").append(typeStr).append(";\n");
                     identifierName = tempVar.split("\\.")[0];
@@ -492,7 +492,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             List<String> listRes = dealWithThisExpression(node);
             String functionType = "";
 
-            if (listRes.get(1).contains("array"))
+            if (listRes.get(1).contains("array") && !listRes.get(1).contains("bool"))
                 functionType="array.";
             if(listRes.get(1).contains("bool")){
                 functionType += "bool";
@@ -725,13 +725,13 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                     pre.append(stringList.get(0)).append("\n");
                     if (callArgs.getKind().equals("TwoPartExpression")){
                         Type type = getIdentifierType(callArgs.getChildren().get(0));
-                        String typeString = getTypeOllir(type,callArgs.getChildren().get(1).getKind().equals("AccessToArray"));
-                        res=getTempVar(typeString,true);
+                        String typeString = getTypeOllir(type, callArgs.getChildren().get(1).getKind().equals("AccessToArray"));
+                        res = getTempVar(typeString,true);
                         pre.append(res+" :=."+typeString+" "+stringList.get(1)+";");
                         args.append(res);
                     }else if(opsAr.contains(callArgs.getKind())){
                         String tempVar = getTempVar("i32", true);
-                        pre.append(tempVar).append(" :=.bool ").append(stringList.get(1)).append(";\n");
+                        pre.append(tempVar).append(" :=.i32 ").append(stringList.get(1)).append(";\n");
                         args.append(tempVar);
                         res = tempVar;
                     }else if(opsBo.contains(callArgs.getKind())) {
