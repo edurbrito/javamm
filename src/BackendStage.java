@@ -734,17 +734,6 @@ public class BackendStage implements JasminBackend {
             builder.append("\t");
             builder.append("if");
         }
-        else if(operation.getOpType().equals(OperationType.ANDB)) {
-            builder.append("\n");
-            builder.append("\t");
-            builder.append("ifeq");
-            builder.append(" ");
-            builder.append(instruction.getLabel());
-            builder.append(generateValue(method, rightOperand));
-            builder.append("\n");
-            builder.append("\t");
-            builder.append("if");
-        }
         else {
             builder.append(generateValue(method, rightOperand));
 
