@@ -511,7 +511,11 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             }
             else if (this.symbolTableImp.className.equals(objectName)){
                 List<String> temp0 = dealWithChild(leftChild);
+
                 List<String> temp1 = dealWithChild(rightChild);
+
+                before.append(temp0);
+                result.append(temp1);
                 System.out.println("temp");
             }else if (this.symbolTableImp.superClass.equals(objectName)){
 
