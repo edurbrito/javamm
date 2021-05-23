@@ -200,7 +200,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
     private List<String> dealWithAllocationExpression(JmmNode child) {
         StringBuilder result = new StringBuilder();
-
+        StringBuilder pre = new StringBuilder();
         List<String> finalList = new ArrayList<>();
         boolean putfield = isPutfield(child.getParent().getChildren());
 
@@ -211,20 +211,21 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
 
         if (child.getChildren().get(0).getKind().equals("Object")) {
-            result.append("new (").append(child.getChildren().get(0).get("name")).append(")").append(".");
-            result.append(child.getChildren().get(0).get("name")).append(";\n");
-            try {
-                result.append("invokespecial("+child.getParent().getChildren().get(0).get("name")+"."+child.getChildren().get(0).get("name")+",\"<init>\").V");
-            }catch(Exception e){
-                result.append("invokespecial("+child.getChildren().get(0).get("name")+"."+child.getChildren().get(0).get("name")+",\"<init>\").V");
-            }
+            String tempVar = getTempVar(child.getChildren().get(0).get("name"), true);
+
+            pre.append(tempVar).append(" :=.").append(child.getChildren().get(0).get("name"))
+                    .append(" new (").append(child.getChildren().get(0).get("name")).append(")").append(".");
+            pre.append(child.getChildren().get(0).get("name")).append(";\n");
+            pre.append("invokespecial(" + tempVar + ",\"<init>\").V;");
+
+            result.append(tempVar);
+            finalList.add(pre.toString());
             finalList.add(result.toString());
             return finalList;
         }
         else {
             JmmNode lengthNode = child.getChildren().get(0).getChildren().get(0); // Get the nodes that are responsible for the array length
             String length;
-            StringBuilder pre = new StringBuilder("");
 
             if(lengthNode.getKind().equals("Integer")) {    // If length is an Integer
                 length = dealWithInteger(lengthNode);
@@ -391,7 +392,60 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         return result.toString();
     }
+    private String getMethodKey(List<JmmNode> children){
+        StringBuilder key = new StringBuilder();
+        key.append(children.get(0).getParent().get("name"));
+        String res = "";
+        for (JmmNode callArgs : children) {
 
+            List<String> stringList = dealWithChild(callArgs);
+
+            if(stringList.size() > 1){
+                res = stringList.get(1);
+            }else{
+                res = stringList.get(0);
+            }
+
+            if(res.split("\\.")[1].equals("i32") || res.split("\\.")[1].equals("array")){
+                key.append("int");
+            }else if (res.split("\\.")[1].equals("bool")){
+                key.append("bool");
+            }else{
+                key.append(res.split("\\.")[1]);
+            }
+        }
+        return key.toString();
+    }
+
+    private List<String> getOllirArgs(List<JmmNode> children){
+        List<String> finalList = new ArrayList<>();
+        StringBuilder pre = new StringBuilder();
+        String res = "";
+        StringBuilder args = new StringBuilder();
+
+        for (JmmNode callArgs : children) {
+
+            List<String> stringList = dealWithChild(callArgs);
+
+            if(stringList.size() > 1){
+                pre.append(stringList.get(0)).append("\n");
+                res = stringList.get(1);
+            }else{
+                res = stringList.get(0);
+            }
+            if (res.matches(".*[+|-|/|*|invoke].*")){
+                List<String> aux = createTemp(res);
+                pre.append(aux.get(0) + ";\n");
+                args.append(", " + aux.get(1));
+            }else {
+                args.append(", " + res);
+            }
+
+        }
+        finalList.add(pre.toString());
+        finalList.add(args.toString());
+        return finalList;
+    }
 
     private List<String> dealWithTwoPart(JmmNode node){
 
@@ -489,7 +543,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                     List<String> opsAr = Arrays.asList("Sum", "Sub", "Mult", "Div", "And", "LessThan");
                     List<String> opsBo = Arrays.asList("And", "Not");
 
-                    if (opsAr.contains(child.getKind())||opsBo.contains(child.getKind())){
+                    if (opsAr.contains(child.getKind()) || opsBo.contains(child.getKind())){
                         before.append(createTemp(dealResult.get(1)).get(0));
                         key.set(key.size()-1, createTemp(dealResult.get(1)).get(1));
                         continue;
@@ -517,12 +571,30 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             }
             else if (this.symbolTableImp.className.equals(objectName)){
                 List<String> temp0 = dealWithChild(leftChild);
+                before.append(temp0.get(0)).append(";\n");
+                result = new StringBuilder();
 
-                List<String> temp1 = dealWithChild(rightChild);
+                if(rightChild.getKind().equals("DotExpression")){
+                    var callArgs = rightChild.getChildren().get(0).getChildren();
+                    Type returnType = this.symbolTableImp.getMethod(getMethodKey(callArgs)).returnType;
+                    String className = temp0.get(1).split("\\.")[1];
+                    String tempVar = getTempVar(getTypeOllir(returnType), true);
+                    String callName = rightChild.getChildren().get(0).get("name");
+                    List<String> argsRes = getOllirArgs(callArgs);
+                    //before.append(argsRes.get(0)).append("\n");
+                    before.append(tempVar).append(" :=.").append(getTypeOllir(returnType)).append(" ");
+                    before.append("invokevirtual(").append(temp0.get(1))
+                            .append(",\"").append(callName).append("\"");
+                    before.append(argsRes.get(1));
+                    before.append(").").append(getTypeOllir(returnType)).append(";\n");
+                    result.append(tempVar);
+                }else{
+                    result.append(temp0.get(1));
+                }
 
-                before.append(temp0);
-                result.append(temp1);
-                System.out.println("temp");
+
+
+
             }else if (this.symbolTableImp.superClass.equals(objectName)){
 
             }
@@ -536,14 +608,13 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         callName = rightChild.getChildren().get(0).get("name");
 
-
-
         StringBuilder key= new StringBuilder(callName);
         StringBuilder pre = new StringBuilder();
         StringBuilder args = new StringBuilder();
         StringBuilder before= new StringBuilder();
         result = new StringBuilder();
         String res="";
+
         for (JmmNode callArgs : rightChild.getChildren().get(0).getChildren()) {
 
             List<String> stringList = dealWithChild(callArgs);
@@ -556,8 +627,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             }
             if (res.matches(".*[+|-|/|*|invoke].*")){
                 List<String> aux = createTemp(res);
-                before.append(aux.get(0)+";\n");
-                args.append(", "+aux.get(1));
+                before.append(aux.get(0) + ";\n");
+                args.append(", " + aux.get(1));
             }else {
                 args.append(", " + res);
             }

@@ -27,9 +27,13 @@ class MethodOverloading {
 	    int r1;
 	    int r2;
 	    int r3;
-	    r1 = this.add(1,2);
-	    r2 = this.add(1,2,3);
-	    r2 = this.add(4,false);
+	    MethodOverloading m;
+
+	    m = new MethodOverloading();
+
+	    r1 = m.add(1,2);
+	    r2 = m.add(1,2,3);
+	    r3 = m.add(4,false);
 
 		io.println(r1);
 		io.println(r2);
