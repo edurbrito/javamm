@@ -840,7 +840,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             }
             if(children.get(0).getKind().equals("Identifier"))
                 leftEqual=children.get(0).get("name")+"."+type;
-            return preEqual + '\n' + "putfield(this," + leftEqual + "," + rightEqual + ").V;\n";
+            return preEqual + '\n' + "putfield (this," + leftEqual + "," + rightEqual + ").V;\n";
         }
         if (rightEqual.contains("i32")) {
             if(!rightEqual.contains("array"))
