@@ -1130,7 +1130,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         }
 
-        String type = getTypeOllir(symbolTableImp.methods.get(this.methodKey).returnType);
+        String type = getTypeOllir(symbolTableImp.methods.get(this.methodKey).returnType, !symbolTableImp.methods.get(this.methodKey).returnType.isArray());
 
         int tempcount=tempsCount++;
         String tempname;
