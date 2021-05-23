@@ -406,9 +406,9 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 res = stringList.get(0);
             }
 
-            if(res.split("\\.")[1].equals("i32") || res.split("\\.")[1].equals("array")){
+            if(res.contains("i32") || res.contains("array")){
                 key.append("int");
-            }else if (res.split("\\.")[1].equals("bool")){
+            }else if (res.contains("bool")){
                 key.append("bool");
             }else{
                 key.append(res.split("\\.")[1]);
@@ -763,8 +763,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         // Get OLLIR type of operation
         Type leftType = getIdentifierType(children.get(0));
 
-        String type = getTypeOllir(leftType, !leftType.isArray());
 
+        String type = getTypeOllir(leftType, !leftType.isArray());
         boolean putfield = isPutfield(children);
 
         String leftEqual, rightEqual, preEqual = "";
@@ -818,6 +818,16 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             if(children.get(0).getKind().equals("Identifier"))
                 leftEqual=children.get(0).get("name")+"."+type;
             return preEqual + '\n' + "putfield(this," + leftEqual + "," + rightEqual + ").V;\n";
+        }
+        if (rightEqual.contains("i32")) {
+            if(!rightEqual.contains("array"))
+                return preEqual + "\n" + leftEqual + " :=." + "i32" + " " + rightEqual + ";\n";
+            return preEqual + "\n" + leftEqual + " :=." + "array.i32" + " " + rightEqual + ";\n";
+        }
+        if (rightEqual.contains("bool")) {
+            if(!rightEqual.contains("array"))
+                return preEqual + "\n" + leftEqual + " :=." + "bool" + " " + rightEqual + ";\n";
+            return preEqual + "\n" + leftEqual + " :=." + "array.bool" + " " + rightEqual + ";\n";
         }
         return preEqual + "\n" + leftEqual + " :=." + type + " " + rightEqual + ";\n";
 
