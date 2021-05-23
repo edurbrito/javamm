@@ -216,7 +216,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             pre.append(tempVar).append(" :=.").append(child.getChildren().get(0).get("name"))
                     .append(" new (").append(child.getChildren().get(0).get("name")).append(")").append(".");
             pre.append(child.getChildren().get(0).get("name")).append(";\n");
-            pre.append("invokespecial(" + tempVar + ",\"<init>\").V;");
+            pre.append("invokespecial (" + tempVar + ",\"<init>\").V;");
 
             result.append(tempVar);
             finalList.add(pre.toString());
@@ -274,7 +274,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             }
         }
         ollirCode.append(".construct " + node.get("name") + "().V {\n");
-        ollirCode.append("" + "invokespecial(this, \"<init>\").V;\n");
+        ollirCode.append("" + "invokespecial (this, \"<init>\").V;\n");
         ollirCode.append("" + "}\n");
 
         for (JmmNode child:node.getChildren()){
@@ -474,12 +474,15 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         if (leftChild.getKind().equals("This")) {
             List<String> listRes = dealWithThisExpression(node);
             String functionType = "";
+
+            if (listRes.get(1).contains("array"))
+                functionType="array.";
             if(listRes.get(1).contains("bool")){
-                functionType = "bool";
+                functionType += "bool";
             }else if (listRes.get(1).contains("i32")){
-                functionType = "i32";
+                functionType += "i32";
             }else{
-                functionType=listRes.get(1).split("\\.")[listRes.get(1).split("\\.").length-1];
+                functionType+=listRes.get(1).split("\\.")[listRes.get(1).split("\\.").length-1];
             }
 
             String tempVar = getTempVar(functionType, true);
@@ -558,7 +561,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
                 result = new StringBuilder();
                 //result.append(before.toString());
-                result.append("invokestatic(" + objectName + ", \"" + methodCall.get("name")+"\"");
+                result.append("invokestatic (" + objectName + ", \"" + methodCall.get("name")+"\"");
                 for (String i :key){
                     result.append(", "+i);
                 }
@@ -583,7 +586,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                     List<String> argsRes = getOllirArgs(callArgs);
                     //before.append(argsRes.get(0)).append("\n");
                     before.append(tempVar).append(" :=.").append(getTypeOllir(returnType)).append(" ");
-                    before.append("invokevirtual(").append(temp0.get(1))
+                    before.append("invokevirtual (").append(temp0.get(1))
                             .append(",\"").append(callName).append("\"");
                     before.append(argsRes.get(1));
                     before.append(").").append(getTypeOllir(returnType)).append(";\n");
@@ -645,7 +648,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
 
 
-        result.append(pre).append("invokevirtual(").append(objectName).append(".").append(className).append(",\"").append(callName).append("\"");
+        result.append(pre).append("invokevirtual (").append(objectName).append(".").append(className).append(",\"").append(callName).append("\"");
         result.append(args.toString());
         result.append(")");
 
@@ -735,7 +738,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 }
             }
 
-            result.append("invokevirtual(this,");
+            result.append("invokevirtual (this,");
             result.append("\""+methodCall.get("name") + "\"").append(args.toString());
 
             result.append(")");
@@ -1140,7 +1143,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         StringBuilder before = new StringBuilder();
         String array = "";
         Type identifierType = getIdentifierType(child);
-        String typeStr = getTypeOllir(identifierType, child.getChildren().size() == 0);
+        String typeStr = getTypeOllir(identifierType, child.getChildren().size() != 0);
 
         if(child.getChildren().size() > 0 && child.getChildren().get(0).getKind().equals("AccessToArray")){     //if is accessing an array
             accessToArray = true;
