@@ -787,7 +787,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         Type leftType = getIdentifierType(children.get(0));
 
 
-        String type = getTypeOllir(leftType, !leftType.isArray());
+        String type = getTypeOllir(leftType, children.get(0).getNumChildren() > 0);
         boolean putfield = isPutfield(children);
 
         String leftEqual, rightEqual, preEqual = "";
@@ -1208,8 +1208,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             before.append(tempVar + ":=.i32 ").append(inline).append(";\n");
             if(isGetfield(child)){
                 String getFTempVar = getTempVar(typeStr, true);
-                before.append(getFTempVar).append(" :=.").append(typeStr).append(" getfield(this, ")
-                        .append(identifierName).append(".").append(typeStr).append(").").append(typeStr).append(";\n");
+                before.append(getFTempVar.split("\\.")[0] + ".array.i32").append(" :=.").append("array.").append(typeStr).append(" getfield(this, ")
+                        .append(identifierName).append(".").append("array.").append(typeStr).append(").").append(typeStr).append(";\n");
                 identifierName = getFTempVar.split("\\.")[0];
             }
             betwPar = tempVar;
