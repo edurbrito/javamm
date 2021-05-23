@@ -1209,7 +1209,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             if(isGetfield(child)){
                 String getFTempVar = getTempVar(typeStr, true);
                 before.append(getFTempVar.split("\\.")[0] + ".array.i32").append(" :=.").append("array.").append(typeStr).append(" getfield(this, ")
-                        .append(identifierName).append(".").append(typeStr).append(").").append(typeStr).append(";\n");
+                        .append(identifierName).append(".").append("array.").append(typeStr).append(").").append(typeStr).append(";\n");
                 identifierName = getFTempVar.split("\\.")[0];
             }
             betwPar = tempVar;
