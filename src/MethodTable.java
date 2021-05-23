@@ -17,7 +17,8 @@ public class MethodTable {
         this.parameters = parameters;
         StringBuilder sigBuilder = new StringBuilder(this.name);
         for (Parameter parameter : parameters) {
-            sigBuilder.append(parameter.getSymbol().getType().getName());
+            String array = parameter.getSymbol().getType().isArray() ? "array" : "";
+            sigBuilder.append(array + parameter.getSymbol().getType().getName());
         }
         this.signature = sigBuilder.toString();
     }

@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.*;
 
 import org.specs.comp.ollir.*;
@@ -56,6 +60,22 @@ public class BackendStage implements JasminBackend {
             superClass = ollirClass.getSuperClass() == null ? "java/lang/Object" : ollirClass.getSuperClass();
 
             String jasminCode = generateJasmin(ollirClass); // Convert node ...
+            File file = new File("jasmin.txt");
+            if(!file.exists()){
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                FileOutputStream outFile = new FileOutputStream(file);
+                outFile.write(jasminCode.getBytes());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             // More reports from this stage
             List<Report> reports = new ArrayList<>();
