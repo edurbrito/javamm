@@ -202,7 +202,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         String type=null;
         if(child.getParent().getChildren().get(0).getKind().equals("Identifier")) {
-            type = getTypeOllir(getIdentifierType(child.getParent().getChildren().get(0)));
+            type = getTypeOllir(getIdentifierType(child.getParent().getChildren().get(0)), !getIdentifierType(child.getParent().getChildren().get(0)).isArray());
         }
 
 
@@ -898,16 +898,15 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
     private String getTempVar(String type, boolean left){
         int tempN = this.tempsCount++;
-        String array = type.contains("array") ? ".array" : "";
 
         if(left)
 
             if (type.contains("bool")){
-                return "tb" + tempN + array + ".bool";
+                return "tb" + tempN + ".bool";
         }else {
-                return "ti" + tempN + array + "."+type;
+                return "ti" + tempN + "." + type;
             }
-        return type.contains("bool") ? "ub" + tempN + array + ".bool" : "ui" + tempN + array + ".i32";
+        return type.contains("bool") ? "ub" + tempN + ".bool" : "ui" + tempN + "." + type;
     }
 
     private List<String> dealWithTemp(List<JmmNode> children, String type){
@@ -1030,6 +1029,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         StringBuilder before = new StringBuilder();
         String array = "";
+        Type identifierType = getIdentifierType(child);
+        String typeStr = getTypeOllir(identifierType, child.getChildren().size() == 0);
 
         if(child.getChildren().size() > 0 && child.getChildren().get(0).getKind().equals("AccessToArray")){     //if is accessing an array
             accessToArray = true;
@@ -1047,14 +1048,19 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             String betwPar;
             String tempVar = getTempVar("i32", true);
             before.append(tempVar + ":=.i32 ").append(inline).append(";\n");
+            if(isGetfield(child)){
+                String getFTempVar = getTempVar(typeStr, true);
+                before.append(getFTempVar).append(" :=.").append(typeStr).append(" getfield(this, ")
+                        .append(identifierName).append(".").append(typeStr).append(").").append(typeStr).append(";\n");
+                identifierName = getFTempVar.split("\\.")[0];
+            }
             betwPar = tempVar;
 
             array = "[" +  betwPar + "]";
 
 
         }
-        Type identifierType = getIdentifierType(child);
-        String typeStr = getTypeOllir(identifierType, child.getChildren().size() != 0);
+
 
         List<String> finalList = new ArrayList<>();
         boolean putfield = isPutfield(child.getParent().getChildren());
