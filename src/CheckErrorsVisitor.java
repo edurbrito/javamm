@@ -52,7 +52,7 @@ public class CheckErrorsVisitor extends PreorderJmmVisitor<List<Report>, Boolean
         int i = 0;
         for (JmmNode argument : arguments) {
             if (argument.getKind().equals("Argument")) {
-                Symbol symbol = new Symbol(new Type(argument.getChildren().get(0).get("name"), argument.getNumChildren() > 0), null);
+                Symbol symbol = new Symbol(new Type(argument.getChildren().get(0).get("name"), argument.getChildren().get(0).getNumChildren() > 0), null);
                 parameters.add(new Parameter(i++, symbol));
             }
         }

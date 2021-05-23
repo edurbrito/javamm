@@ -98,53 +98,53 @@ class TicTacToe {
 
   // Returns a character signifying the winner.
   public int winner() {
-    int[] array2;
+    int[] test_array;
     int winner;
     int i;
-    boolean completearray2;
-    boolean completearray21;
-    boolean completearray22;
+    boolean completeArray;
+    boolean completeArray1;
+    boolean completeArray2;
     winner = 0-1;
-    array2 = new int[3];
-    completearray2 = BoardBase.samearray2(row0);
-    completearray21 = BoardBase.samearray2(row1);
-    completearray22 = BoardBase.samearray2(row2);
+    test_array = new int[3];
+    completeArray = BoardBase.sameArray(row0);
+    completeArray1 = BoardBase.sameArray(row1);
+    completeArray2 = BoardBase.sameArray(row2);
     // Check for three X's or O's in a row.
-    if (completearray2 && 0 < row0[0]){
+    if (completeArray && 0 < row0[0]){
         winner = row0[0];
     }
-    else if (completearray21 && 0 < row1[0]){
+    else if (completeArray1 && 0 < row1[0]){
         winner =  row1[0];
     }
-    else if (completearray22 && 0 < row2[0]){
+    else if (completeArray2 && 0 < row2[0]){
         winner =  row2[0];
     } 
     else{
         i = 0;
         while(winner < 1 && i < 3){
-            array2[0] = row0[i];
-            array2[1] = row1[i];
-            array2[2] = row2[i];
-            completearray2 = BoardBase.samearray2(array2);
-            if (completearray2 && 0 < array2[0]){
-                winner = array2[0];
+            test_array[0] = row0[i];
+            test_array[1] = row1[i];
+            test_array[2] = row2[i];
+            completeArray = BoardBase.sameArray(test_array);
+            if (completeArray && 0 < test_array[0]){
+                winner = test_array[0];
             }else{}
             i=i+1;
         }
         if(winner < 1){
-            array2[0] = row0[0];
-            array2[1] = row1[1];
-            array2[2] = row2[2];
-			completearray2 = BoardBase.samearray2(array2);
-            if (completearray2 && 0 < array2[0]){
-                winner = array2[0];
+            test_array[0] = row0[0];
+            test_array[1] = row1[1];
+            test_array[2] = row2[2];
+			completeArray = BoardBase.sameArray(test_array);
+            if (completeArray && 0 < test_array[0]){
+                winner = test_array[0];
             }else{
-                array2[0] = row0[2];
-                array2[1] = row1[1];
-                array2[2] = row2[0];
-                completearray2 = BoardBase.samearray2(array2);
-                if (completearray2 && 0 < array2[0]){
-                    winner = array2[0];
+                test_array[0] = row0[2];
+                test_array[1] = row1[1];
+                test_array[2] = row2[0];
+                completeArray = BoardBase.sameArray(test_array);
+                if (completeArray && 0 < test_array[0]){
+                    winner = test_array[0];
                 }else{}
             }
         }else{}
