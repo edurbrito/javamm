@@ -77,10 +77,10 @@
 	astore_1
 
 	aload_1
-	istore_2
+	astore_2
 	
-	iload_2
-	ireturn
+	aload_2
+	areturn
 .end method
 
 .method public getRow1()[I
@@ -91,10 +91,10 @@
 	astore_1
 
 	aload_1
-	istore_2
+	astore_2
 	
-	iload_2
-	ireturn
+	aload_2
+	areturn
 .end method
 
 .method public getRow2()[I
@@ -105,10 +105,10 @@
 	astore_1
 
 	aload_1
-	istore_2
+	astore_2
 	
-	iload_2
-	ireturn
+	aload_2
+	areturn
 .end method
 
 .method public MoveRow([II)Z
