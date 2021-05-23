@@ -24,8 +24,8 @@ class FlagDraw {
         int char;
         FlagDraw flag;
 
-        row = 50;//io.read();
-        col = 50;//io.read();
+        row = io.read();
+        col = io.read();
 
         c = 0;
         r = 0;
