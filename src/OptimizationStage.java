@@ -43,7 +43,7 @@ public class OptimizationStage implements JmmOptimization {
                 continue;
             /*if (Pattern.matches("[tu][ib][0-9]+\\..{3,6}",i))
                 continue;*/
-            if(!i.trim().contains(" ")&&!i.contains("}"))
+            if(!i.trim().contains(" ")&&!i.contains("}")&&!i.contains(":")&&!i.contains("ret"))
                 continue;
             i=i.replace(";;",";");
             temp.append("\t".repeat(count)+i+"\n\n");
