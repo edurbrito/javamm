@@ -204,7 +204,7 @@ public class FileTests {
 
         jasminResult.run();
     }
-
+/*
     @Test
     public void Length() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/Length.jmm");
@@ -222,7 +222,7 @@ public class FileTests {
 
         jasminResult.run();
     }
-
+*/
     @Test
     public void Life() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/Life.jmm");
