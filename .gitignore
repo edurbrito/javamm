@@ -43,4 +43,5 @@ AST.json
 out
 
 test.txt
+jasmin.txt
 *.dot
