@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +48,23 @@ public class OptimizationStage implements JmmOptimization {
                 count--;
         }
         ollirCode = temp.toString();
+        File file = new File("test.txt");
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            FileOutputStream outFile = new FileOutputStream(file);
+            outFile.write(ollirCode.getBytes());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         System.out.println(ollirCode);
 
         // More reports from this stag
