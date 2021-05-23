@@ -950,7 +950,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         }
 
 
-        if(arithmeticNode.getChildren().get(1).getKind().equals("TwoPartsExpression")){
+        if(arithmeticNode.getChildren().size() > 0 && arithmeticNode.getChildren().get(1).getKind().equals("TwoPartsExpression")){
             List<String> res = dealWithTwoPart(arithmeticNode.getChildren().get(1));
 
             if(res.size() > 1){
