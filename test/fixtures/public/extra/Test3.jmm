@@ -28,7 +28,7 @@ class Company {
         size = 10;
         i = 0;
 
-        staff = new int[size];
+        staff = new int[10];
 
         while(i < size) {
             staff[i] = i+3;

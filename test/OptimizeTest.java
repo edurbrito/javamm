@@ -291,9 +291,7 @@ public class OptimizeTest {
         //TestUtils.noErrors(result.getReports());
         System.out.println(result.getOllirClass().getClassName());
         result.getOllirClass().show();
-
     }
-
 
     @Test
     public void personal() {//test class variables
@@ -302,7 +300,5 @@ public class OptimizeTest {
         //TestUtils.noErrors(result.getReports());
         System.out.println(result.getOllirClass().getClassName());
         result.getOllirClass().show();
-
     }
-
 }

@@ -1,0 +1,47 @@
+import io;
+
+class FlagDraw {
+
+    public int getChar(int row, int col) {
+        int res;
+
+        if (col < row + 1) {
+            res = 0;
+        }
+        else {
+            res = 1;
+        }
+
+        return res;
+    }
+
+    public static void main(String[] args) {
+
+        int row;
+        int col;
+        int c;
+        int r;
+        int char;
+        FlagDraw flag;
+
+        row = io.read();
+        col = io.read();
+
+        c = 0;
+        r = 0;
+        flag = new FlagDraw();
+
+        while(r < row) {
+
+            while(c < col) {
+                char = flag.getChar(r,c);
+                io.print(char);
+                c = c + 1;
+            }
+
+            io.println();
+            c = 0;
+            r = r + 1;
+        }
+    }
+}

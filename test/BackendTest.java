@@ -42,6 +42,17 @@ public class BackendTest {
         assertEquals("30", output.trim());
     }
 
+
+    @Test
+    public void testHillClimbing() {
+        var result = TestUtils.backend(new OllirResult(SpecsIo.getResource("fixtures/public/ollir/HillClimbing.ollir")));
+        TestUtils.noErrors(result.getReports());
+
+        System.out.println("Jasmin Code: \n" + result.getJasminCode());
+
+        var output = result.run();
+    }
+
     @Test
     public void testClass1() {
 
