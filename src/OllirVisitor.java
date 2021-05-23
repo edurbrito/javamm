@@ -400,7 +400,10 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             List<String> resAccess = dealWithArithmetic(node.getChildren().get(1).getChildren().get(0));
             if(resAccess.size() > 1){
                 res.add(resAccess.get(0));
-                res.add(node.getChildren().get(0).get("name") + "[" + resAccess.get(1) + "]" +".i32");
+                if (!Pattern.matches("[tu][ib][0-9]+\\..{3,4}",resAccess.get(1)))
+                    res.add(node.getChildren().get(0).get("name") + "[" + resAccess.get(1).split(":=")[0] + "]" +".i32");
+                else
+                    res.add(node.getChildren().get(0).get("name") + "[" + resAccess.get(1) + "]" +".i32");
             }else {
                 res.add(node.getChildren().get(0).get("name") + "[" + resAccess.get(0) + "]" +".i32");
             }
