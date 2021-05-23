@@ -1000,11 +1000,23 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         }
 
-        result.append("ret.");
-        result.append(getTypeOllir(symbolTableImp.methods.get(this.methodKey).returnType));
-        result.append(" ");
+        String type = getTypeOllir(symbolTableImp.methods.get(this.methodKey).returnType);
 
-        if(retResult.toString().contains("invoke")){
+        int tempcount=tempsCount++;
+        String tempname;
+        if(type.equals("bool"))
+            tempname="t"+"b"+tempcount;
+        else
+            tempname="t"+"i"+tempcount;
+
+        result.append(tempname+"."+type);result.append(" :=."+type+" " + retResult );result.append(";\n");
+
+        result.append("ret.");
+        result.append(type);
+        result.append(" ");
+        result.append(tempname+"."+type);
+
+        /*if(retResult.toString().contains("invoke")){
             //result.insert(0, createTemp(retResult.toString()).get(0));
             //result.append(createTemp(retResult.toString()));
         }else if(retResult.toString().matches(".*[+|-|/|\\\\*].*")){
@@ -1015,7 +1027,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         }
         else {
             result.append(retResult.toString());
-        }
+        }*/
 
 //            result.append(dealWithChild(child).get(0));
         result.append(";\n");
