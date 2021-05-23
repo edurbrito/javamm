@@ -1,0 +1,58 @@
+import io;
+import MathUtils;
+
+class HillClimbing {
+    int best;
+    int num_iterations;
+
+    public int score(int sol) {
+        int result;
+        int abs;
+        abs = sol - 500;
+        if (abs < 0) {
+            abs = 0 - abs;
+        }
+        else {
+            abs = abs;
+        }
+
+        result = 500 - abs;
+
+        return result;
+    }
+
+    public int execute() {
+        int i;
+        int sol;
+        int score_sol;
+        int score_best;
+
+        i = 0;
+        num_iterations = 50;
+        best = MathUtils.random(0, 1000);
+
+        while(i < num_iterations) {
+            sol = MathUtils.random(0, 1000);
+
+            score_sol = this.score(sol);
+            score_best = this.score(best);
+
+            if(score_best < score_sol) {
+                best = sol;
+            }
+            else{
+                sol = 0;
+            }
+
+            io.println(best);
+            i = i + 1;
+        }
+        return best;
+    }
+
+    public static void main(String[] args) {
+        HillClimbing h;
+        h = new HillClimbing();
+        h.execute();
+    }
+}

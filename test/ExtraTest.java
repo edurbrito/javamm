@@ -11,7 +11,7 @@ public class ExtraTest {
 
     @Test
     public void Test1() {
-        JmmParserResult res = TestUtils.parse("test/fixtures/public/general/Test1.jmm");
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/extra/Test1.jmm");
         assertEquals("Program", res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
@@ -29,7 +29,7 @@ public class ExtraTest {
 
     @Test
     public void Test2() {
-        JmmParserResult res = TestUtils.parse("test/fixtures/public/general/Test2.jmm");
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/extra/Test2.jmm");
         assertEquals("Program", res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
@@ -47,7 +47,7 @@ public class ExtraTest {
 
     @Test
     public void Test3() {
-        JmmParserResult res = TestUtils.parse("test/fixtures/public/general/Test3.jmm");
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/extra/Test3.jmm");
         assertEquals("Program", res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
@@ -65,7 +65,7 @@ public class ExtraTest {
 
     @Test
     public void Test4() {
-        JmmParserResult res = TestUtils.parse("test/fixtures/public/general/Test4.jmm");
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/extra/Test4.jmm");
         assertEquals("Program", res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
@@ -83,7 +83,7 @@ public class ExtraTest {
 
     @Test
     public void Test5() {
-        JmmParserResult res = TestUtils.parse("test/fixtures/public/general/Test5.jmm");
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/extra/Test5.jmm");
         assertEquals("Program", res.getRootNode().getKind());
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
@@ -144,5 +144,23 @@ public class ExtraTest {
         TestUtils.noErrors(res.getReports());
         JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
         TestUtils.noErrors(semanticsResult.getReports());
+    }
+
+    @Test
+    public void HillClimbing() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/extra/HillClimbing.jmm");
+        assertEquals("Program", res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
     }
 }
