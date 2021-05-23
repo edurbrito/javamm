@@ -45,7 +45,7 @@ public class FileTests {
         jasminResult.run();
     }
 
-    @Test
+
     public void Array2() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/Array2.jmm");
         assertEquals("Program",res.getRootNode().getKind());
@@ -386,7 +386,7 @@ public class FileTests {
         jasminResult.run();
     }
 
-    @Test
+
     public void test3() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/test3.jmm");
         assertEquals("Program",res.getRootNode().getKind());
