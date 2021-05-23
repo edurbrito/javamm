@@ -3,6 +3,7 @@ import pt.up.fe.comp.jmm.analysis.table.Symbol;
 import pt.up.fe.comp.jmm.analysis.table.Type;
 import pt.up.fe.comp.jmm.ast.PreorderJmmVisitor;
 import pt.up.fe.comp.jmm.report.Report;
+import pt.up.fe.specs.util.utilities.StringList;
 
 import java.util.*;
 
@@ -612,16 +613,23 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 List<String> opsAr = Arrays.asList("Sum", "Sub", "Mult", "Div", "And", "LessThan");
                 List<String> opsBo = Arrays.asList("And", "Not");
 
+
                 if(stringList.size() > 1){
                     pre.append(stringList.get(0)).append("\n");
-                    if(opsAr.contains(callArgs.getKind())){
+                    if (callArgs.getKind().equals("TwoPartExpression")){
+                        Type type = getIdentifierType(callArgs.getChildren().get(0));
+                        String typeString = getTypeOllir(type,callArgs.getChildren().get(1).getKind().equals("AccessToArray"));
+                        res=getTempVar(typeString,true);
+                        pre.append(res+" :=."+typeString+" "+stringList.get(1)+";");
+                        args.append(res);
+                    }else if(opsAr.contains(callArgs.getKind())){
                         String tempVar = getTempVar("i32", true);
                         pre.append(tempVar).append(" :=.bool ").append(stringList.get(1)).append(";\n");
                         args.append(tempVar);
                         res = tempVar;
-                    }else if(opsBo.contains(callArgs.getKind())){
+                    }else if(opsBo.contains(callArgs.getKind())) {
                         String tempVar = getTempVar("bool", true);
-                        pre.append(tempVar +" :=.bool ").append(stringList.get(1)).append(";\n");
+                        pre.append(tempVar + " :=.bool ").append(stringList.get(1)).append(";\n");
                         args.append(tempVar);
                         res = tempVar;
                     }else{
@@ -991,6 +999,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             }
 
         }
+
         result.append("ret.");
         result.append(getTypeOllir(symbolTableImp.methods.get(this.methodKey).returnType));
         result.append(" ");
@@ -998,7 +1007,13 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         if(retResult.toString().contains("invoke")){
             //result.insert(0, createTemp(retResult.toString()).get(0));
             //result.append(createTemp(retResult.toString()));
-        }else {
+        }else if(retResult.toString().matches(".*[+-/*].*")){
+            List<String> temp = createTemp(retResult.toString());
+            for (String i :temp.subList(0,temp.size()-2))
+                result.insert(0,i+"\n");
+            result.append(temp.get(temp.size()-1));
+        }
+        else {
             result.append(retResult.toString());
         }
 
