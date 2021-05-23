@@ -108,9 +108,9 @@ public class BackendStage implements JasminBackend {
             builder.append("\n");
             builder.append(".field ");
             builder.append(lower(field.getFieldAccessModifier().toString()));
-            builder.append(" ");
+            builder.append(" '");
             builder.append(field.getFieldName());
-            builder.append(" ");
+            builder.append("' ");
             builder.append(getType(field.getFieldType()));
         }
 
