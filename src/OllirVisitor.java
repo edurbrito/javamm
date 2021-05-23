@@ -187,7 +187,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         StringBuilder result = new StringBuilder("Body" + whileNumber + ":\n");
         for (JmmNode child : node.getChildren()) {
             for (String i : dealWithChild(child)) {
-                if (!Pattern.matches("[tu][ib][0-9]+\\..{3}",i))
+                if (!Pattern.matches("[tu][ib][0-9]+\\..{3,4}",i))
                     result.append(i.replace("\n\n", "\n")).append('\n');
             }
         }
@@ -1141,7 +1141,11 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         JmmNode indexNode = accessNode.getChildren().get(0);
 
-        List<String> res =  dealWithArithmetic(indexNode);
+        List<String> res;
+        if(indexNode.getKind().equals("MethodCall"))
+            res=dealWithChild(accessNode.getParent());
+        else
+            res =  dealWithArithmetic(indexNode);
         before += "\n" + res.get(0);
 
         String betwPar;
