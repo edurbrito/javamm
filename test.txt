@@ -158,9 +158,9 @@ TicTacToe  {
 
 		ti12.array.i32 :=.array.i32 getfield(this, row2.array.i32).array.i32;
 
-		ti13.array.i32 :=.array.i32  invokevirtual (this,"MoveRow",ti12.array.i32,$2.column.i32).i32;
+		tb13.bool :=.array.bool  invokevirtual (this,"MoveRow",ti12.array.i32,$2.column.i32).bool;
 
-		tb14.bool :=.bool ti13.array.i32;
+		tb14.bool :=.bool tb13.bool;
 
 		mov.bool :=.bool tb14.bool;
 
@@ -168,9 +168,9 @@ TicTacToe  {
 
 		ti15.array.i32 :=.array.i32 getfield(this, row1.array.i32).array.i32;
 
-		ti16.array.i32 :=.array.i32  invokevirtual (this,"MoveRow",ti15.array.i32,$2.column.i32).i32;
+		tb16.bool :=.array.bool  invokevirtual (this,"MoveRow",ti15.array.i32,$2.column.i32).bool;
 
-		tb17.bool :=.bool ti16.array.i32;
+		tb17.bool :=.bool tb16.bool;
 
 		mov.bool :=.bool tb17.bool;
 
@@ -178,9 +178,9 @@ TicTacToe  {
 
 		ti18.array.i32 :=.array.i32 getfield(this, row0.array.i32).array.i32;
 
-		ti19.array.i32 :=.array.i32  invokevirtual (this,"MoveRow",ti18.array.i32,$2.column.i32).i32;
+		tb19.bool :=.array.bool  invokevirtual (this,"MoveRow",ti18.array.i32,$2.column.i32).bool;
 
-		tb20.bool :=.bool ti19.array.i32;
+		tb20.bool :=.bool tb19.bool;
 
 		mov.bool :=.bool tb20.bool;
 
@@ -256,19 +256,19 @@ TicTacToe  {
 
 		ti1.array.i32 :=.array.i32 getfield(this, row0.array.i32).array.i32;
 
-		tb4.bool :=.bool invokestatic (BoardBase, "samearray2", ti1.array.i32).V;
+		tb4.bool :=.bool invokestatic (BoardBase, "samearray2", ti1.array.i32).bool;
 
 		completearray2.bool :=.bool tb4.bool;
 
 		ti6.array.i32 :=.array.i32 getfield(this, row1.array.i32).array.i32;
 
-		tb9.bool :=.bool invokestatic (BoardBase, "samearray2", ti6.array.i32).V;
+		tb9.bool :=.bool invokestatic (BoardBase, "samearray2", ti6.array.i32).bool;
 
 		completearray21.bool :=.bool tb9.bool;
 
 		ti11.array.i32 :=.array.i32 getfield(this, row2.array.i32).array.i32;
 
-		tb14.bool :=.bool invokestatic (BoardBase, "samearray2", ti11.array.i32).V;
+		tb14.bool :=.bool invokestatic (BoardBase, "samearray2", ti11.array.i32).bool;
 
 		completearray22.bool :=.bool tb14.bool;
 
@@ -324,7 +324,7 @@ TicTacToe  {
 
 		array2[ti30.i32].i32 :=.array.i32 ti31.array.i32;
 
-		tb33.bool :=.bool invokestatic (BoardBase, "samearray2", array2.array.i32).V;
+		tb33.bool :=.bool invokestatic (BoardBase, "samearray2", array2.array.i32).bool;
 
 		completearray2.bool :=.bool tb33.bool;
 
@@ -376,7 +376,7 @@ TicTacToe  {
 
 		array2[ti45.i32].i32 :=.array.i32 ti47.array.i32;
 
-		tb49.bool :=.bool invokestatic (BoardBase, "samearray2", array2.array.i32).V;
+		tb49.bool :=.bool invokestatic (BoardBase, "samearray2", array2.array.i32).bool;
 
 		completearray2.bool :=.bool tb49.bool;
 
@@ -412,7 +412,7 @@ TicTacToe  {
 
 		array2[ti59.i32].i32 :=.array.i32 ti61.array.i32;
 
-		tb63.bool :=.bool invokestatic (BoardBase, "samearray2", array2.array.i32).V;
+		tb63.bool :=.bool invokestatic (BoardBase, "samearray2", array2.array.i32).bool;
 
 		completearray2.bool :=.bool tb63.bool;
 
@@ -546,31 +546,31 @@ TicTacToe  {
 
 		player.i32 :=.i32 ti16.i32;
 
-		ti18.array.i32 :=.array.i32 invokestatic (BoardBase, "playerTurn", player.i32).V;
+		ti18.array.i32 :=.array.i32 invokestatic (BoardBase, "playerTurn", player.i32).array.i32;
 
 		move.array.i32 :=.array.i32 ti18.array.i32;
+
+		ti19.i32 :=.i32 0.i32;
+
+		ti21.i32 :=.i32 1.i32;
 
 		ti20.i32 :=.i32 move[ti19.i32].i32;
 
 		ti22.i32 :=.i32 move[ti21.i32].i32;
 
-		tb23.bool :=.bool ti19.i32 :=.i32 0.i32;
-
-		ti21.i32 :=.i32 1.i32;
-
-		invokevirtual (mygame.TicTacToe,"inbounds", ti20.i32, ti22.i32).i32;
+		tb23.bool :=.bool invokevirtual (mygame.TicTacToe,"inbounds", ti20.i32, ti22.i32).bool;
 
 		if ( tb23.bool !.bool tb23.bool ) goto bodyIf18;
+
+		ti24.i32 :=.i32 0.i32;
+
+		ti26.i32 :=.i32 1.i32;
 
 		ti25.i32 :=.i32 move[ti24.i32].i32;
 
 		ti27.i32 :=.i32 move[ti26.i32].i32;
 
-		tb28.bool :=.bool ti24.i32 :=.i32 0.i32;
-
-		ti26.i32 :=.i32 1.i32;
-
-		invokevirtual (mygame.TicTacToe,"Move", ti25.i32, ti27.i32).i32;
+		tb28.bool :=.bool invokevirtual (mygame.TicTacToe,"Move", ti25.i32, ti27.i32).bool;
 
 		if ( tb28.bool !.bool tb28.bool ) goto bodyIf19;
 

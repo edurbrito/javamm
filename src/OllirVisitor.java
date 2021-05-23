@@ -297,8 +297,12 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 for (JmmNode child1 : child.getChildren())
                     if (child1.getKind().equals("Argument")) {
                         for (JmmNode child2 : child1.getChildren()) {
-                            if (child2.getKind().equals("Type"))
+                            if (child2.getKind().equals("Type")){
+                                if(child2.getNumChildren() > 0){
+                                    methodKey.append("array");
+                                }
                                 methodKey.append(child2.get("name"));
+                            }
                         }
                     }
 
@@ -406,9 +410,10 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 res = stringList.get(0);
             }
 
-            if(res.split("\\.")[1].equals("i32") || res.split("\\.")[1].equals("array")){
-                key.append("int");
-            }else if (res.split("\\.")[1].equals("bool")){
+            if(res.contains("i32") || res.contains("array")){
+                String array = res.contains("array") ? "array" : "";
+                key.append(array + "int");
+            }else if (res.contains("bool")){
                 key.append("bool");
             }else{
                 key.append(res.split("\\.")[1]);
@@ -569,7 +574,11 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
 
                 result.append(")");
-                result.append(".V");
+                Type returnStatic = getIdentifierType(rightChild.getParent().getParent().getChildren().get(0));
+                if(returnStatic != null)
+                    result.append("." + getTypeOllir(returnStatic, !returnStatic.isArray()));
+                else
+                    result.append(".V");
                 result.append(";\n");
             }
             else if (this.symbolTableImp.className.equals(objectName)){
@@ -637,9 +646,10 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             }
 
 //            result.append(dealWithChild(callArgs).get(0));
-            if(res.split("\\.")[1].equals("i32") || res.split("\\.")[1].equals("array")){
-                key.append("int");
-            }else if (res.split("\\.")[1].equals("bool")){
+            if(res.contains("i32") || res.contains("array")){
+                String array = res.contains("array") ? "array" : "";
+                key.append(array + "int");
+            }else if (res.contains("bool")){
                 key.append("bool");
             }else{
                 key.append(res.split("\\.")[1]);
@@ -729,9 +739,10 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                     res = stringList.get(0);
                 }
 
-                if(res.split("\\.")[1].equals("i32") || res.split("\\.")[1].equals("array")){
-                    key.append("int");
-                }else if (res.split("\\.")[1].equals("bool")){
+                if(res.contains("i32") || res.contains("array")){
+                    String array = res.contains("array") ? "array" : "";
+                    key.append(array + "int");
+                }else if (res.contains("bool")){
                     key.append("bool");
                 }else{
                     key.append(res.split("\\.")[1]);
@@ -1010,8 +1021,20 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         List<String> leftPart = dealWithChild(children.get(0));
         String left = "";
         if(leftPart.size() > 1){
-            pre.append(leftPart.get(0)).append("\n");
-            left = leftPart.get(1);
+
+            String[] parts = leftPart.get(1).split("\n");
+            if(parts.length > 1){
+                for(int i = 0; i < parts.length - 1; i++){
+                    pre.append(parts[i]).append("\n");
+                }
+                left = parts[parts.length - 1];
+                pre.append(leftPart.get(0)).append("\n");
+            }else{
+                pre.append(leftPart.get(0)).append("\n");
+                left = leftPart.get(1);
+            }
+
+
         }else{
             left = leftPart.get(0);
         }
