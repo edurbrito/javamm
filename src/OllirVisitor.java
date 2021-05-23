@@ -73,9 +73,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         }
 
 
-
-
-        if(!inCond.contains("&&") && !inCond.contains("<")){
+        if(!inCond.contains("&&") && !inCond.contains("<") && !inCond.contains("!")){
             inCond += " &&.bool 1.bool";
         }
 
@@ -155,7 +153,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
 
 
-        if(!inCond.contains("&&") && !inCond.contains("<")){
+        if(!inCond.contains("&&") && !inCond.contains("<") && !inCond.contains("!")){
             inCond += " &&.bool 1.bool";
         }
 
