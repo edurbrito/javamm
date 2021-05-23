@@ -418,6 +418,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 functionType = "bool";
             }else if (listRes.get(1).contains("i32")){
                 functionType = "i32";
+            }else{
+                functionType=listRes.get(1).split("\\.")[listRes.get(1).split("\\.").length-1];
             }
 
             String tempVar = getTempVar(functionType, true);
@@ -674,6 +676,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         boolean putfield = isPutfield(children);
 
         String leftEqual, rightEqual, preEqual = "";
+
         List<String> resLeft = dealWithChild(children.get(0));
         List<String> resRight = dealWithChild(children.get(1));
 
@@ -720,6 +723,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                 preEqual += preEqual + tempVar +" :=.i32 " + rightEqual + ";\n";
                 rightEqual = tempVar;
             }
+            if(children.get(0).getKind().equals("Identifier"))
+                leftEqual=children.get(0).get("name")+"."+type;
             return preEqual + '\n' + "putfield(this," + leftEqual + "," + rightEqual + ").V;\n";
         }
         return preEqual + "\n" + leftEqual + " :=." + type + " " + rightEqual + ";\n";
@@ -899,7 +904,11 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         if(left)
 
-            return type.contains("bool") ? "tb" + tempN + array + ".bool" : "ti" + tempN + array + ".i32";
+            if (type.contains("bool")){
+                return "tb" + tempN + array + ".bool";
+        }else {
+                return "ti" + tempN + array + "."+type;
+            }
         return type.contains("bool") ? "ub" + tempN + array + ".bool" : "ui" + tempN + array + ".i32";
     }
 
