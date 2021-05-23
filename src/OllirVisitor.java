@@ -274,6 +274,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         ollirCode.append("" + "}\n");
 
         for (JmmNode child:node.getChildren()){
+            this.tempsCount=0;
             switch (child.getKind()){
                 case "Method": {ollirCode.append(dealWithMethod(child)); break;}
                 case "MainMethod": {ollirCode.append(dealWithMainMethod(child)); break;}
@@ -1006,7 +1007,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         if(retResult.toString().contains("invoke")){
             //result.insert(0, createTemp(retResult.toString()).get(0));
             //result.append(createTemp(retResult.toString()));
-        }else if(retResult.toString().matches(".*[+-/*].*")){
+        }else if(retResult.toString().matches(".*[+|-|/|\\\\*].*")){
             List<String> temp = createTemp(retResult.toString());
             for (String i :temp.subList(0,temp.size()-2))
                 result.insert(0,i+"\n");
