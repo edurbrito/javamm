@@ -108,12 +108,15 @@ public class BackendTest {
 
     @Test
     public void testLazySort() {
-        var result = TestUtils.backend(new OllirResult(SpecsIo.getResource("fixtures/public/ollir/LazySort.ollir")));
+        var result = TestUtils.backend(new OllirResult(SpecsIo.getResource("fixtures/public/ollir/QuickSort.ollir")));
+        TestUtils.noErrors(result.getReports());
+        var output = result.run();
+
+        result = TestUtils.backend(new OllirResult(SpecsIo.getResource("fixtures/public/ollir/LazySort.ollir")));
         TestUtils.noErrors(result.getReports());
 
         System.out.println("Jasmin Code: \n" + result.getJasminCode());
 
-        var output = result.run();
-        //assertEquals("3628800", output.trim());
+        output = result.run();
     }
 }
