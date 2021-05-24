@@ -514,8 +514,15 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         }else if(rightChild.getKind().equals("DotExpression") && leftChild.getKind().equals("Identifier") && getIdentifierType(leftChild) != null && getIdentifierType(leftChild).isArray()){
             List<String> resLength = new ArrayList<>();
+            List<String> parameterTempVar = dealWithChild(leftChild);
             String tempVar = getTempVar("i32", true);
-            resLength.add(tempVar + " :=.i32 arraylength(" + getParameterSig(leftChild.get("name")) + leftChild.get("name") + ".array.i32" + ").i32;");
+            if (leftChild.getKind().equals("Identifier")&&parameterTempVar.size()>1) {
+                resLength.add(parameterTempVar.get(0)+tempVar + " :=.i32 arraylength(" + getParameterSig(leftChild.get("name")) + parameterTempVar.get(1) + ".array.i32" + ").i32;");
+
+            }else {
+
+                resLength.add(tempVar + " :=.i32 arraylength(" + getParameterSig(leftChild.get("name")) + leftChild.get("name") + ".array.i32" + ").i32;");
+            }
             resLength.add(tempVar);
             return resLength;
         }
