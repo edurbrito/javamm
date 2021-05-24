@@ -492,11 +492,11 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             List<String> listRes = dealWithThisExpression(node);
             String functionType = "";
 
-            if (listRes.get(1).contains("array") && !listRes.get(1).contains("bool"))
+            if (listRes.get(1).split("\\.")[listRes.get(1).split("\\.").length-2].contains("array") && !listRes.get(1).split("\\.")[listRes.get(1).split("\\.").length-1].contains("bool"))
                 functionType="array.";
-            if(listRes.get(1).contains("bool")){
+            if(listRes.get(1).split("\\.")[listRes.get(1).split("\\.").length-1].contains("bool")){
                 functionType += "bool";
-            }else if (listRes.get(1).contains("i32")){
+            }else if (listRes.get(1).split("\\.")[listRes.get(1).split("\\.").length-1].contains("i32")){
                 functionType += "i32";
             }else{
                 functionType+=listRes.get(1).split("\\.")[listRes.get(1).split("\\.").length-1];
@@ -556,15 +556,8 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                             key.add(tempVar);
                         }else{
                             List<String> res = mountIdentifierOLLIR(child.getChildren().get(0), child.getChildren().get(1));
-                            Type simbol = symbolTableImp.getFieldType(child.getChildren().get(0).get("name"));
                             String tempVar = getTempVar("i32", true);
-                            if (res.get(1).contains("[")&& simbol!=null){
-                                tempVar = getTempVar(getTypeOllir(simbol, !simbol.isArray()), true);
-                                before.append(tempVar+ ":=."+getTypeOllir(simbol,!simbol.isArray())+" "+res.get(1)+";");
-                            }else {
-
-                                before.append(res.get(0) + "\n" + tempVar + " :=.i32 " + res.get(1) + ";\n");
-                            }
+                            before.append(res.get(0) + "\n" + tempVar + " :=.i32 " + res.get(1) + ";\n");
                             key.add(tempVar);
                         }
 
@@ -707,12 +700,20 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         return Arrays.asList(before.toString(),result.toString());
     }
 
+
+
     private List<String> createTemp(String operation) {
         List<String> type;
         if (operation.contains("i32")){
-            type=Arrays.asList("int",".i32");
+            if(operation.contains("array"))
+                type=Arrays.asList("int",".array.i32");
+            else
+                type=Arrays.asList("int",".i32");
         }else{
-            type = Arrays.asList("bool", ".bool");
+            if(operation.contains("array"))
+                type = Arrays.asList("bool", ".array.bool");
+            else
+                type = Arrays.asList("bool", ".bool");
         }
         String temp="t"+ type.get(0).charAt(0)+tempsCount+type.get(1)+" :="+type.get(1)+" "+operation+";";
         String finalOp="t"+ type.get(0).charAt(0)+tempsCount+type.get(1);
