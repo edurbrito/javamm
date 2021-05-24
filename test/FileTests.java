@@ -4,6 +4,9 @@ import pt.up.fe.comp.jmm.JmmParserResult;
 import pt.up.fe.comp.jmm.analysis.JmmSemanticsResult;
 import pt.up.fe.comp.jmm.jasmin.JasminResult;
 import pt.up.fe.comp.jmm.ollir.OllirResult;
+import pt.up.fe.specs.util.SpecsIo;
+
+import java.io.FileInputStream;
 
 import static org.junit.Assert.*;
 
@@ -256,7 +259,7 @@ public class FileTests {
 
         System.out.println(jasminResult.getJasminCode());
 
-        jasminResult.run();
+        jasminResult.run("10000");
     }
 
     @Test
@@ -454,8 +457,8 @@ public class FileTests {
         JasminResult jasminResult = backendStage.toJasmin(ollirResult);
 
         System.out.println(jasminResult.getJasminCode());
-
-        jasminResult.run();
+        String input = SpecsIo.getResource("fixtures/public/TicTacToe.input");
+        jasminResult.run(input);
     }
 
     @Test
