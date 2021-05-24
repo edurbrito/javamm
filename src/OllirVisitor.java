@@ -556,8 +556,15 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                             key.add(tempVar);
                         }else{
                             List<String> res = mountIdentifierOLLIR(child.getChildren().get(0), child.getChildren().get(1));
+                            Type simbol = symbolTableImp.getFieldType(child.getChildren().get(0).get("name"));
                             String tempVar = getTempVar("i32", true);
-                            before.append(res.get(0) + "\n" + tempVar + " :=.i32 " + res.get(1) + ";\n");
+                            if (res.get(1).contains("[")&& simbol!=null){
+                                tempVar = getTempVar(getTypeOllir(simbol, !simbol.isArray()), true);
+                                before.append(tempVar+ ":=."+getTypeOllir(simbol,!simbol.isArray())+" "+res.get(1)+";");
+                            }else {
+
+                                before.append(res.get(0) + "\n" + tempVar + " :=.i32 " + res.get(1) + ";\n");
+                            }
                             key.add(tempVar);
                         }
 
