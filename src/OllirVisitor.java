@@ -572,8 +572,9 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                     List<String> opsBo = Arrays.asList("And", "Not");
 
                     if (opsAr.contains(child.getKind()) || opsBo.contains(child.getKind())){
-                        before.append(createTemp(dealResult.get(1)).get(0));
-                        key.set(key.size()-1, createTemp(dealResult.get(1)).get(1));
+                        List<String> resTemp = createTemp(dealResult.get(1));
+                        before.append(resTemp.get(0));
+                        key.set(key.size()-1, resTemp.get(1));
                         continue;
                     }
 
@@ -613,7 +614,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                     String tempVar = getTempVar(getTypeOllir(returnType), true);
                     String callName = rightChild.getChildren().get(0).get("name");
                     List<String> argsRes = getOllirArgs(callArgs);
-                    //before.append(argsRes.get(0)).append("\n");
+                    before.append(argsRes.get(0)).append("\n");
                     before.append(tempVar).append(" :=.").append(getTypeOllir(returnType)).append(" ");
                     before.append("invokevirtual (").append(temp0.get(1))
                             .append(",\"").append(callName).append("\"");
