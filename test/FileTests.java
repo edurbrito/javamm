@@ -226,7 +226,7 @@ public class FileTests {
         jasminResult.run();
     }
 */
-    @Test
+
     public void Life() {
         JmmParserResult res = TestUtils.parse("test/fixtures/public/Life.jmm");
         assertEquals("Program",res.getRootNode().getKind());
