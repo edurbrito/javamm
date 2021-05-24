@@ -50,7 +50,7 @@ QuickSort  {
 
 		ti7.array.i32 :=.array.i32 L.array.i32;
 
-		invokevirtual (q.QuickSort,"printL", ti7.array.i32).bool;
+		invokestatic (QuickSort,"printL", ti7.array.i32).bool;
 
 		ret.V;
 
