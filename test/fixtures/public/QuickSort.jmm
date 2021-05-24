@@ -37,7 +37,7 @@ class QuickSort {
         return this.quicksort(L, 0, L.length - 1);
     }
 
-    public boolean quicksort(int[] L, int lo, int hi) {
+    public int quicksort(int[] L, int lo, int hi) {
         int p;
 
         if (lo < hi) {

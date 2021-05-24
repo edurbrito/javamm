@@ -9,7 +9,7 @@ Tests:
         -r
 */
 
-import classA;
+
 import io.println;
 
 class test5 {
@@ -106,7 +106,6 @@ class test5 {
     }
 
     public int foo() {
-        classA objA;
         int i1;
         int a;
         int b;
@@ -114,13 +113,11 @@ class test5 {
         boolean flag;
         flag = false;
         a = 2;
-        objA = new classA();
         b = 2 * 3 + 4 / a + 1;
         a = 4;
         b = a + 2;
         this.f2(a + 8);
         this.f2(a + b);
-        i1 = objA.func1(2);
         c = this.f7();
         this.f1(true);
         this.f3();

@@ -603,6 +603,12 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
                 result.append(")");
                 Type returnStatic = getIdentifierType(rightChild.getParent().getParent().getChildren().get(0));
+                if (returnStatic != null && returnStatic.isArray()){
+                    if(rightChild.getParent().getParent().getChildren().get(0).getChildren().size()>0){
+                        if (rightChild.getParent().getParent().getChildren().get(0).getChildren().get(0).getKind().equals("AccessToArray"))
+                            returnStatic=new Type(returnStatic.getName(),false);
+                    }
+                }
                 if(returnStatic != null)
                     result.append("." + getTypeOllir(returnStatic, !returnStatic.isArray()));
                 else
@@ -691,7 +697,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         result.append(")");
 
         try{
-            result.append("." + getTypeOllir(symbolTableImp.methods.get(key.toString()).returnType));
+            result.append("." + getTypeOllir(symbolTableImp.methods.get(key.toString()).returnType,false));
         }catch (NullPointerException e){//if function is from extended superclass
             result.append("." + "i32");
         }

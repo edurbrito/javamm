@@ -4,6 +4,8 @@ class Exam {
 	int size; // = # of scores = next available slot
 	int capacity; // = max number of scores
 
+    public static void main(String[] args){}
+
 	public int validateIndex(int index) {
 
 	    int i;

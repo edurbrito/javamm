@@ -16,7 +16,7 @@ class test2 extends classA {
         return new test2();
     }
 
-    public int f3(classA p) {
+    public int f3(z p) {
         return 3;
     }
 
