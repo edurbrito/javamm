@@ -1266,7 +1266,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
                             .append(identifierName).append(".").append(typeStr).append(").").append(typeStr).append(";\n");
         }
 
-        if(!before.isEmpty())
+        if(before.length() > 0)
             finalList.add(before.toString());
 
         if((putfield && accessToArray) || (isGetfield(child)))

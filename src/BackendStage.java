@@ -286,33 +286,40 @@ public class BackendStage implements JasminBackend {
                     Operand destOp = (Operand) dest;
                     if(leftOp.getName().equals(destOp.getName())) {
                         LiteralElement literal = (LiteralElement) operation.getRightOperand();
-                        builder.append("\n");
-                        builder.append("\t");
-                        builder.append("iinc ");
-                        builder.append(OllirAccesser.getVarTable(method).get(((Operand) operation.getLeftOperand()).getName()).getVirtualReg());
-                        if(operationType.equals(OperationType.ADD))
-                            builder.append(" ");
-                        else
-                            builder.append(" -");
-                        builder.append(literal.getLiteral());
-                        return builder.toString();
+                        int v = Integer.parseInt(literal.getLiteral());
+                        if(v >= -32768 && v <= 32767 && v != 0){
+                            builder.append("\n");
+                            builder.append("\t");
+                            builder.append("iinc ");
+                            builder.append(OllirAccesser.getVarTable(method).get(((Operand) operation.getLeftOperand()).getName()).getVirtualReg());
+                            if(operationType.equals(OperationType.ADD))
+                                builder.append(" ");
+                            else
+                                builder.append(" -");
+                            builder.append(v);
+                            return builder.toString();
+                        }
                     }
                 }
-                else if (!operation.getLeftOperand().isLiteral() && operation.getLeftOperand().isLiteral()) {
+                else if (!operation.getRightOperand().isLiteral() && operation.getLeftOperand().isLiteral()) {
                     Operand rightOp = (Operand) operation.getRightOperand();
                     Operand destOp = (Operand) dest;
                     if (rightOp.getName().equals(destOp.getName())) {
                         LiteralElement literal = (LiteralElement) operation.getLeftOperand();
-                        builder.append("\n");
-                        builder.append("\t");
-                        builder.append("iinc ");
-                        builder.append(OllirAccesser.getVarTable(method).get(((Operand) operation.getRightOperand()).getName()).getVirtualReg());
-                        if (operationType.equals(OperationType.ADD))
-                            builder.append(" ");
-                        else
-                            builder.append(" -");
-                        builder.append(literal.getLiteral());
-                        return builder.toString();
+                        int v = Integer.parseInt(literal.getLiteral());
+                        if(v >= -32768 && v <= 32767 && v != 0){
+                            builder.append("\n");
+                            builder.append("\t");
+                            builder.append("iinc ");
+                            builder.append(OllirAccesser.getVarTable(method).get(((Operand) operation.getRightOperand()).getName()).getVirtualReg());
+                            if (operationType.equals(OperationType.ADD))
+                                builder.append(" ");
+                            else
+                                builder.append(" -");
+
+                            builder.append(v);
+                            return builder.toString();
+                        }
                     }
                 }
             }

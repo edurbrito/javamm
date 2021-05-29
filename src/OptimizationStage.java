@@ -81,6 +81,10 @@ public class OptimizationStage implements JmmOptimization {
     @Override
     public JmmSemanticsResult optimize(JmmSemanticsResult semanticsResult) {
         // THIS IS JUST FOR CHECKPOINT 3
+        ConstantPropagation constantPropagation = new ConstantPropagation((SymbolTableImp) semanticsResult.getSymbolTable());
+        constantPropagation.visit(semanticsResult.getRootNode());
+        constantPropagation.substitute(semanticsResult.getRootNode());
+
         return semanticsResult;
     }
 
