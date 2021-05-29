@@ -95,16 +95,15 @@ public class jmm implements JmmParser {
 
             OptimizationStage optimizationStage = new OptimizationStage();
             OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
-/*
+
             BackendStage backendStage = new BackendStage();
             JasminResult jasminResult = backendStage.toJasmin(ollirResult);
 
             jasminResult.run();
-*/
+
         } catch (Exception e) {
             e.printStackTrace();
             printUsage(e,false);
-            return;
         }
     }
 
