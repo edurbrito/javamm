@@ -756,7 +756,7 @@ public class BackendStage implements JasminBackend {
         Element rightOperand = instruction.getRightOperand();
         Operation operation = instruction.getCondOperation();
 
-        if (rightOperand == null) {
+        if (rightOperand == null || (rightOperand.isLiteral() && (Integer.parseInt(((LiteralElement) rightOperand).getLiteral()) == 0))) {
             builder.append("\n");
             builder.append("\t");
             builder.append("if");
