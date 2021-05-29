@@ -1,7 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import pt.up.fe.comp.jmm.JmmNode;
 import pt.up.fe.comp.jmm.analysis.JmmSemanticsResult;
@@ -85,6 +84,9 @@ public class OptimizationStage implements JmmOptimization {
         constantPropagation.visit(semanticsResult.getRootNode());
         constantPropagation.substitute(semanticsResult.getRootNode());
 
+        ConstantFolding constantFolding = new ConstantFolding();
+        constantFolding.fold(semanticsResult.getRootNode());
+
         return semanticsResult;
     }
 
@@ -93,5 +95,4 @@ public class OptimizationStage implements JmmOptimization {
         // THIS IS JUST FOR CHECKPOINT 3
         return ollirResult;
     }
-
 }

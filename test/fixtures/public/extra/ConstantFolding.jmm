@@ -1,0 +1,26 @@
+import io;
+
+class ConstantFolding {
+
+    public static void main(String[] args) {
+        int simple;
+        int res;
+
+        simple = 4 * 5;
+        io.println(simple);
+
+        res = 1 + 2 - 3 * 4;
+        io.println(res);
+
+        res = 22 / 11 + 4 - 2 + 5;
+        io.println(res);
+
+        io.println(3-2*5+14);
+
+        io.println((1+2)*4-3);
+
+        io.println(2 < 3);
+
+        io.println(4 < 3);
+    }
+}

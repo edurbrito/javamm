@@ -56,7 +56,6 @@ class ConstantPropagation {
         return n1;
     }
 
-
     public static void main(String[] args) {
         int n1;
         int n2;

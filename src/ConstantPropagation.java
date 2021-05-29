@@ -6,10 +6,9 @@ import pt.up.fe.comp.jmm.ast.PreorderJmmVisitor;
 
 import java.util.*;
 
-public class ConstantPropagation extends PreorderJmmVisitor<Boolean, Boolean>{
+public class ConstantPropagation extends PreorderJmmVisitor<Boolean, Boolean> {
 
     private HashMap<Variable, Integer> variables;
-    private HashMap<Variable, Integer> fields;
 
     private SymbolTableImp symbolTableImp;
     private String methodSignature;
@@ -63,7 +62,6 @@ public class ConstantPropagation extends PreorderJmmVisitor<Boolean, Boolean>{
         this.symbolTableImp = symbolTableImp;
 
         this.variables = new HashMap<>();
-        this.fields = new HashMap<>();
 
         addVisit("MainMethod", this::dealWithMethod);
         addVisit("Method", this::dealWithMethod);
