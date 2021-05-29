@@ -1,0 +1,14 @@
+import io;
+
+class While {
+    public static void main(String[] args) {
+        int a;
+        int i;
+        i = 0;
+        a = 20;
+        while (i < a) {
+            i = i + 1;
+            io.println(i);
+        }
+    }
+}

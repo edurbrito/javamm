@@ -15,6 +15,7 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
     private int whileCounter = 1;
     private int tempsCount = 0, tempIf = 0;
     private boolean hasReturn = false;
+    private boolean optimizedWhiles = false;
 
     public OllirVisitor(SymbolTableImp symbolTableImp) {
         super();
@@ -22,7 +23,10 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         this.symbolTableImp = symbolTableImp;
 
         addVisit("Class", this::dealWithClass);
+    }
 
+    public void setOptimizedWhiles(boolean optimizedWhiles){
+        this.optimizedWhiles = optimizedWhiles;
     }
 
     public String getOllirCode(){return this.ollirCode.toString();}
@@ -127,16 +131,29 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         for (JmmNode child : node.getChildren()) {
             switch (child.getKind()) {
                 case "WhileCondition": {
-                    result.append(dealWithWhileCondition(child, whileNumber));
+                    if(this.optimizedWhiles){
+                        result.append("goto Test" + whileNumber + ";\n");
+                        result.append("Loop" + whileNumber + ":\n");
+                    }
+                    else{
+                        result.append(dealWithWhileCondition(child, whileNumber));
+                    }
                     continue;
                 }
                 case "WhileBody": {
-                    result.append(dealWithWhileBody(child, whileNumber));
+                    if(this.optimizedWhiles){
+                        result.append(dealWithOptimizedWhileBody(child, whileNumber));
+                        result.append(dealWithOptimizedWhileCondition(child.getParent().getChildren().get(0), whileNumber));
+                    }
+                    else{
+                        result.append(dealWithWhileBody(child, whileNumber));
+                    }
                     continue;
                 }
             }
         }
-        result.append("EndLoop" + whileNumber + ":\n");
+        if (!this.optimizedWhiles)
+            result.append("EndLoop" + whileNumber + ":\n");
         return result.toString();
     }
 
@@ -153,8 +170,6 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
             inCond = cond.get(0);
         }
 
-
-
         if(!inCond.contains("&&") && !inCond.contains("<") && !inCond.contains("!")){
             inCond += " &&.bool 1.bool";
         }
@@ -163,40 +178,54 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
 
         result.append("if ( " + inCond + ") goto Body" + whileNumber + ";\n");
         result.append("goto EndLoop" + whileNumber + ";\n");
+        return result.toString();
+    }
 
-        /*
+    private String dealWithOptimizedWhileCondition(JmmNode node, int whileNumber) {
+        StringBuilder result = new StringBuilder();
         JmmNode ConditionNode = node.getChildren().get(0);
-        for (String i : dealWithChild(ConditionNode)) {
-            result.append(i).append('\n');
-        }*/
 
+        List<String> cond = dealWithChild(ConditionNode);
+        String pre = "", inCond = "";
+        if(cond.size() > 1){
+            pre = cond.get(0);
+            inCond = cond.get(1);
+        }else{
+            inCond = cond.get(0);
+        }
 
-       /* result.deleteCharAt(result.lastIndexOf("\n")); //necessary to locate where to put if condition
-        result.insert(result.lastIndexOf("\n") + 1, "if (");
-        if (result.lastIndexOf(";") == result.length() - 1)//remove any ; that should not exist
-            result.deleteCharAt(result.lastIndexOf(";"));
-        result.append(") goto Body" + whileNumber + ";\n");
+        if(!inCond.contains("&&") && !inCond.contains("<") && !inCond.contains("!")){
+            inCond += " &&.bool 1.bool";
+        }
 
-        result.append("goto EndLoop" + whileNumber + ";\n");
+        result.append(pre).append("\n");
 
-        */
+        result.append("Test" + whileNumber + ":\n");
+        result.append("if ( " + inCond + ") goto Loop" + whileNumber + ";\n");
         return result.toString();
     }
 
     private String dealWithWhileBody(JmmNode node, int whileNumber) {
         StringBuilder result = new StringBuilder("Body" + whileNumber + ":\n");
+        result.append(dealWithBodyInstructions(node, whileNumber));
+        result.append("goto Loop" + whileNumber + ";\n");
+        return result.toString();
+    }
+
+    private String dealWithOptimizedWhileBody(JmmNode node, int whileNumber) {
+        return dealWithBodyInstructions(node, whileNumber);
+    }
+
+    private String dealWithBodyInstructions(JmmNode node, int whileNumber) {
+        StringBuilder result = new StringBuilder();
         for (JmmNode child : node.getChildren()) {
             for (String i : dealWithChild(child)) {
                 if (!Pattern.matches("[tu][ib][0-9]+\\..{3,4}",i))
                     result.append(i.replace("\n\n", "\n")).append('\n');
             }
         }
-        //result.append(";\n");
-        result.append("goto Loop" + whileNumber + ";\n");
-
         return result.toString();
     }
-
 
     private List<String> dealWithAllocationExpression(JmmNode child) {
         StringBuilder result = new StringBuilder();
@@ -208,7 +237,6 @@ public class OllirVisitor extends PreorderJmmVisitor<List<Report>, Boolean> {
         if(child.getParent().getChildren().get(0).getKind().equals("Identifier")) {
             type = getTypeOllir(getIdentifierType(child.getParent().getChildren().get(0)), !getIdentifierType(child.getParent().getChildren().get(0)).isArray());
         }
-
 
         if (child.getChildren().get(0).getKind().equals("Object")) {
             String tempVar = getTempVar(child.getChildren().get(0).get("name"), true);

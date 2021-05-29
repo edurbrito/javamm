@@ -23,6 +23,8 @@ import pt.up.fe.comp.jmm.report.Report;
 
 public class OptimizationStage implements JmmOptimization {
 
+    private boolean optimized = false;
+
     @Override
     public OllirResult toOllir(JmmSemanticsResult semanticsResult) {
 
@@ -30,6 +32,8 @@ public class OptimizationStage implements JmmOptimization {
 
         // Convert the AST to a String containing the equivalent OLLIR code
         OllirVisitor visitor = new OllirVisitor(( SymbolTableImp) semanticsResult.getSymbolTable());
+        visitor.setOptimizedWhiles(this.optimized);
+
         visitor.visit(node);
         String ollirCode = visitor.getOllirCode();
 
@@ -86,6 +90,8 @@ public class OptimizationStage implements JmmOptimization {
 
         ConstantFolding constantFolding = new ConstantFolding();
         constantFolding.fold(semanticsResult.getRootNode());
+
+        this.optimized = true;
 
         return semanticsResult;
     }

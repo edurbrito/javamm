@@ -794,6 +794,8 @@ public class BackendStage implements JasminBackend {
                 break;
         }
 
+        this.setMaxStack();
+
         builder.append(" ");
         builder.append(instruction.getLabel());
 

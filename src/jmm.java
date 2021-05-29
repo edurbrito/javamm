@@ -94,6 +94,11 @@ public class jmm implements JmmParser {
             }
 
             OptimizationStage optimizationStage = new OptimizationStage();
+
+            if(o) {
+                semanticsResult = optimizationStage.optimize(semanticsResult);
+            }
+
             OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
 
             BackendStage backendStage = new BackendStage();

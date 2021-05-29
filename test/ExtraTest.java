@@ -223,4 +223,24 @@ public class ExtraTest {
 
         jasminResult.run();
     }
+
+    @Test
+    public void WhileOptimize() {
+        JmmParserResult res = TestUtils.parse("test/fixtures/public/extra/While.jmm");
+        assertEquals("Program", res.getRootNode().getKind());
+        TestUtils.noErrors(res.getReports());
+        JmmSemanticsResult semanticsResult = TestUtils.analyse(res);
+        TestUtils.noErrors(semanticsResult.getReports());
+
+        OptimizationStage optimizationStage = new OptimizationStage();
+        semanticsResult = optimizationStage.optimize(semanticsResult);
+        OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
+
+        BackendStage backendStage = new BackendStage();
+        JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+        System.out.println(jasminResult.getJasminCode());
+
+        jasminResult.run();
+    }
 }
