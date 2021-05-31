@@ -29,10 +29,10 @@ class HillClimbing {
 
         i = 0;
         num_iterations = 50;
-        best = MathUtils.random(0, 1000);
+        best = MathUtils.random(1, 1000);
 
         while(i < num_iterations) {
-            sol = MathUtils.random(0, 1000);
+            sol = MathUtils.random(1, 1000);
 
             score_sol = this.score(sol);
             score_best = this.score(best);

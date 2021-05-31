@@ -1,7 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import pt.up.fe.comp.jmm.JmmNode;
 import pt.up.fe.comp.jmm.analysis.JmmSemanticsResult;
@@ -24,6 +23,8 @@ import pt.up.fe.comp.jmm.report.Report;
 
 public class OptimizationStage implements JmmOptimization {
 
+    private boolean optimized = false;
+
     @Override
     public OllirResult toOllir(JmmSemanticsResult semanticsResult) {
 
@@ -31,6 +32,8 @@ public class OptimizationStage implements JmmOptimization {
 
         // Convert the AST to a String containing the equivalent OLLIR code
         OllirVisitor visitor = new OllirVisitor(( SymbolTableImp) semanticsResult.getSymbolTable());
+        visitor.setOptimizedWhiles(this.optimized);
+
         visitor.visit(node);
         String ollirCode = visitor.getOllirCode();
 
@@ -41,8 +44,6 @@ public class OptimizationStage implements JmmOptimization {
         for(String i:ollirCode.split("\n")){
             if(i.length()==0)
                 continue;
-            /*if (Pattern.matches("[tu][ib][0-9]+\\..{3,6}",i))
-                continue;*/
             if(!i.trim().contains(" ")&&!i.contains("}")&&!i.contains(":")&&!i.contains("ret"))
                 continue;
             i=i.replace(";;",";");
@@ -53,22 +54,6 @@ public class OptimizationStage implements JmmOptimization {
                 count--;
         }
         ollirCode = temp.toString();
-        File file = new File("test.txt");
-        if(!file.exists()){
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        try {
-            FileOutputStream outFile = new FileOutputStream(file);
-            outFile.write(ollirCode.getBytes());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         System.out.println(ollirCode);
 
@@ -81,6 +66,15 @@ public class OptimizationStage implements JmmOptimization {
     @Override
     public JmmSemanticsResult optimize(JmmSemanticsResult semanticsResult) {
         // THIS IS JUST FOR CHECKPOINT 3
+        ConstantPropagation constantPropagation = new ConstantPropagation((SymbolTableImp) semanticsResult.getSymbolTable());
+        constantPropagation.visit(semanticsResult.getRootNode());
+        constantPropagation.substitute(semanticsResult.getRootNode());
+
+        ConstantFolding constantFolding = new ConstantFolding();
+        constantFolding.fold(semanticsResult.getRootNode());
+
+        this.optimized = true;
+
         return semanticsResult;
     }
 
@@ -89,5 +83,4 @@ public class OptimizationStage implements JmmOptimization {
         // THIS IS JUST FOR CHECKPOINT 3
         return ollirResult;
     }
-
 }

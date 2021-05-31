@@ -1,0 +1,88 @@
+import io;
+class ConstantPropagation {
+
+    int f1;
+
+    public int testMethod(int n3){
+        int n1;
+        int n2;
+
+        f1 = 0;
+        n1 = 4;
+        n2 = 200;
+        n3 = 11000;
+
+        n1 = n1 + n2;
+        n1 = n1 + n3;
+
+        io.println(f1);
+        io.println(n1);
+
+        if(n2 < n1){
+            n1 = n2;
+        }
+        else{
+            n1 = 6;
+        }
+
+        io.println(n1);
+
+        return n1;
+    }
+
+    public int testMethod2(int n3){
+        int n1;
+        int n2;
+
+        f1 = 0;
+        n1 = 4;
+        n2 = 200;
+
+        n1 = n1 + n2;
+        n1 = n1 + n3;
+
+        io.println(f1);
+        io.println(n1);
+
+        if(n2 < n1){
+            n1 = n2;
+        }
+        else{
+            n1 = 6;
+        }
+
+        io.println(n1);
+
+        return n1;
+    }
+
+    public static void main(String[] args) {
+        int n1;
+        int n2;
+        int n3;
+        ConstantPropagation pg;
+
+        n1 = 3;
+        n2 = 100;
+        n3 = 12000;
+
+        n1 = n1 + n2;
+        n1 = n3 + n1;
+
+        io.println(n2);
+        io.println(n1);
+
+        if(n2 < n1){
+            n1 = n2;
+        }
+        else{
+            n1 = 5;
+        }
+
+        io.println(n1);
+
+        pg = new ConstantPropagation();
+        pg.testMethod(5);
+        pg.testMethod2(5);
+    }
+}

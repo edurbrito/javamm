@@ -51,7 +51,7 @@ public class BackendStage implements JasminBackend {
             // Example of what you can do with the OLLIR class
             ollirClass.checkMethodLabels(); // check the use of labels in the OLLIR loaded
             ollirClass.buildCFGs(); // build the CFG of each method
-            ollirClass.outputCFGs(); // output to .dot files the CFGs, one per method
+            // ollirClass.outputCFGs(); // output to .dot files the CFGs, one per method
             ollirClass.buildVarTables(); // build the table of variables for each method
             ollirClass.show(); // print to console main information about the input OLLIR
 
@@ -60,22 +60,6 @@ public class BackendStage implements JasminBackend {
             superClass = ollirClass.getSuperClass() == null ? "java/lang/Object" : ollirClass.getSuperClass();
 
             String jasminCode = generateJasmin(ollirClass); // Convert node ...
-            File file = new File("jasmin.txt");
-            if(!file.exists()){
-                try {
-                    file.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            try {
-                FileOutputStream outFile = new FileOutputStream(file);
-                outFile.write(jasminCode.getBytes());
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
             // More reports from this stage
             List<Report> reports = new ArrayList<>();
@@ -286,33 +270,40 @@ public class BackendStage implements JasminBackend {
                     Operand destOp = (Operand) dest;
                     if(leftOp.getName().equals(destOp.getName())) {
                         LiteralElement literal = (LiteralElement) operation.getRightOperand();
-                        builder.append("\n");
-                        builder.append("\t");
-                        builder.append("iinc ");
-                        builder.append(OllirAccesser.getVarTable(method).get(((Operand) operation.getLeftOperand()).getName()).getVirtualReg());
-                        if(operationType.equals(OperationType.ADD))
-                            builder.append(" ");
-                        else
-                            builder.append(" -");
-                        builder.append(literal.getLiteral());
-                        return builder.toString();
+                        int v = Integer.parseInt(literal.getLiteral());
+                        if(v >= -32768 && v <= 32767 && v != 0){
+                            builder.append("\n");
+                            builder.append("\t");
+                            builder.append("iinc ");
+                            builder.append(OllirAccesser.getVarTable(method).get(((Operand) operation.getLeftOperand()).getName()).getVirtualReg());
+                            if(operationType.equals(OperationType.ADD))
+                                builder.append(" ");
+                            else
+                                builder.append(" -");
+                            builder.append(v);
+                            return builder.toString();
+                        }
                     }
                 }
-                else if (!operation.getLeftOperand().isLiteral() && operation.getLeftOperand().isLiteral()) {
+                else if (!operation.getRightOperand().isLiteral() && operation.getLeftOperand().isLiteral()) {
                     Operand rightOp = (Operand) operation.getRightOperand();
                     Operand destOp = (Operand) dest;
                     if (rightOp.getName().equals(destOp.getName())) {
                         LiteralElement literal = (LiteralElement) operation.getLeftOperand();
-                        builder.append("\n");
-                        builder.append("\t");
-                        builder.append("iinc ");
-                        builder.append(OllirAccesser.getVarTable(method).get(((Operand) operation.getRightOperand()).getName()).getVirtualReg());
-                        if (operationType.equals(OperationType.ADD))
-                            builder.append(" ");
-                        else
-                            builder.append(" -");
-                        builder.append(literal.getLiteral());
-                        return builder.toString();
+                        int v = Integer.parseInt(literal.getLiteral());
+                        if(v >= -32768 && v <= 32767 && v != 0){
+                            builder.append("\n");
+                            builder.append("\t");
+                            builder.append("iinc ");
+                            builder.append(OllirAccesser.getVarTable(method).get(((Operand) operation.getRightOperand()).getName()).getVirtualReg());
+                            if (operationType.equals(OperationType.ADD))
+                                builder.append(" ");
+                            else
+                                builder.append(" -");
+
+                            builder.append(v);
+                            return builder.toString();
+                        }
                     }
                 }
             }
@@ -749,7 +740,7 @@ public class BackendStage implements JasminBackend {
         Element rightOperand = instruction.getRightOperand();
         Operation operation = instruction.getCondOperation();
 
-        if (rightOperand == null) {
+        if (rightOperand == null || (rightOperand.isLiteral() && (Integer.parseInt(((LiteralElement) rightOperand).getLiteral()) == 0))) {
             builder.append("\n");
             builder.append("\t");
             builder.append("if");
@@ -786,6 +777,8 @@ public class BackendStage implements JasminBackend {
             default:
                 break;
         }
+
+        this.setMaxStack();
 
         builder.append(" ");
         builder.append(instruction.getLabel());
