@@ -78,13 +78,20 @@ public class jmm implements JmmParser {
                 throw new Exception("Flag -r must receive a positive integer");
             }
 
+            File ff = new File(fileName);
+
+            if(!(ff.exists() && ff.isFile())){
+                throw new Exception("Not a valid filepath");
+            }
+
             jmm main = new jmm();
 
             JmmParserResult parserResult = main.parse(fileName);
             if(parserResult.getReports().size() > 0){
                 throw new Exception("There were syntatical errors");
             }
-            String name = fileName.substring(fileName.lastIndexOf("\\")+1).split("\\.")[0];
+
+            String name = ff.getName().split("\\.")[0];
 
             FileOutputStream jsonFile = new FileOutputStream(name + ".json");
             jsonFile.write(parserResult.toJson().getBytes());
