@@ -1,7 +1,5 @@
 package pt.up.fe.comp.jmm.analysis.table;
 
-import java.util.Objects;
-
 public class Type {
     private final String name;
     private final boolean isArray;
@@ -56,6 +54,17 @@ public class Type {
         } else if (!name.equals(other.name))
             return false;
         return true;
+    }
+
+    public String print() {
+        var builder = new StringBuilder();
+
+        builder.append(getName());
+        if (isArray) {
+            builder.append("[]");
+        }
+
+        return builder.toString();
     }
 
 }
