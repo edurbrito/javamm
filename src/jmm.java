@@ -3,11 +3,13 @@ import pt.up.fe.comp.jmm.JmmParser;
 import pt.up.fe.comp.jmm.JmmParserResult;
 import pt.up.fe.comp.jmm.analysis.JmmSemanticsResult;
 import pt.up.fe.comp.jmm.jasmin.JasminResult;
+import pt.up.fe.comp.jmm.jasmin.JasminUtils;
 import pt.up.fe.comp.jmm.ollir.OllirResult;
 import pt.up.fe.comp.jmm.report.Report;
 import pt.up.fe.comp.jmm.report.ReportType;
 import pt.up.fe.comp.jmm.report.Stage;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -29,11 +31,8 @@ public class jmm implements JmmParser {
 
             root.dump(""); // prints the tree on the screen
 
-            FileOutputStream jsonFile = new FileOutputStream("AST.json");
-
             JmmParserResult parserResult = new JmmParserResult(root, javamm.getReports());
-            jsonFile.write(parserResult.toJson().getBytes());
-            jsonFile.close();
+
             return parserResult;
         } catch (Exception e) {
             // printUsage(e,true);
@@ -85,6 +84,11 @@ public class jmm implements JmmParser {
             if(parserResult.getReports().size() > 0){
                 throw new Exception("There were syntatical errors");
             }
+            String name = fileName.substring(fileName.lastIndexOf("\\")+1).split("\\.")[0];
+
+            FileOutputStream jsonFile = new FileOutputStream(name + ".json");
+            jsonFile.write(parserResult.toJson().getBytes());
+            jsonFile.close();
 
             AnalysisStage analysisStage = new AnalysisStage();
 
@@ -92,6 +96,10 @@ public class jmm implements JmmParser {
             if(semanticsResult.getReports().size() > 0){
                 throw new Exception("There were semantic errors");
             }
+
+            FileOutputStream symbolTable = new FileOutputStream(name + ".symbols.txt");
+            symbolTable.write(semanticsResult.getSymbolTable().print().getBytes());
+            symbolTable.close();
 
             OptimizationStage optimizationStage = new OptimizationStage();
 
@@ -101,8 +109,18 @@ public class jmm implements JmmParser {
 
             OllirResult ollirResult = optimizationStage.toOllir(semanticsResult);
 
+            FileOutputStream ollirStream = new FileOutputStream(name + ".ollir");
+            ollirStream.write(ollirResult.getOllirCode().getBytes());
+            ollirStream.close();
+
             BackendStage backendStage = new BackendStage();
             JasminResult jasminResult = backendStage.toJasmin(ollirResult);
+
+            FileOutputStream jasminStream = new FileOutputStream(name + ".j");
+            jasminStream.write(jasminResult.getJasminCode().getBytes());
+            jasminStream.close();
+
+            JasminUtils.assemble(new File(name + ".j"), new File("./"));
 
             jasminResult.run();
 

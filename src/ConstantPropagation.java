@@ -94,6 +94,10 @@ public class ConstantPropagation extends PreorderJmmVisitor<Boolean, Boolean> {
                 if(this.symbolTableImp.getLocalVariables(this.methodSignature).contains(v) || this.symbolTableImp.getParameters(this.methodSignature).contains(v) || (!this.methodSignature.equals("main") && this.symbolTableImp.getFields().contains(v)))
                     this.variables.put(newVariable, Integer.parseInt(leftSide.get("value")));
             }
+            else {
+                newVariable.addAssign();
+                this.variables.put(newVariable, 0);
+            }
         }
         return true;
     }
@@ -162,6 +166,9 @@ public class ConstantPropagation extends PreorderJmmVisitor<Boolean, Boolean> {
                         return true;
                     }
                 }
+            }
+            else{
+                return false;
             }
         }
 

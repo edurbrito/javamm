@@ -44,8 +44,6 @@ public class OptimizationStage implements JmmOptimization {
         for(String i:ollirCode.split("\n")){
             if(i.length()==0)
                 continue;
-            /*if (Pattern.matches("[tu][ib][0-9]+\\..{3,6}",i))
-                continue;*/
             if(!i.trim().contains(" ")&&!i.contains("}")&&!i.contains(":")&&!i.contains("ret"))
                 continue;
             i=i.replace(";;",";");
@@ -56,22 +54,6 @@ public class OptimizationStage implements JmmOptimization {
                 count--;
         }
         ollirCode = temp.toString();
-        File file = new File("test.txt");
-        if(!file.exists()){
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        try {
-            FileOutputStream outFile = new FileOutputStream(file);
-            outFile.write(ollirCode.getBytes());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         System.out.println(ollirCode);
 
