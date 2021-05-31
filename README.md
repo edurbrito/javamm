@@ -3,10 +3,10 @@
 
 
 (Names, numbers, self assessment, and contribution of the members of the group to the project according to:)
-NAME: Eduardo Ribas Brito, NR: 201806271, GRADE: 20, CONTRIBUTION: 30%
-NAME: Luís Miguel Maia Marques Torres E Silva, NR: 201808912, GRADE: 20, CONTRIBUTION: 20%
-NAME: Paulo Jorge Salgado Marinho Ribeiro, NR: 201806505, GRADE: 20, CONTRIBUTION: 30%
-NAME: Ricardo Amaral Nunes, NR: 201706860, GRADE: 20, CONTRIBUTION: 20%
+NAME: Eduardo Ribas Brito, NR: 201806271, GRADE: 20, CONTRIBUTION: 25%
+NAME: Luís Miguel Maia Marques Torres E Silva, NR: 201808912, GRADE: 20, CONTRIBUTION: 25%
+NAME: Paulo Jorge Salgado Marinho Ribeiro, NR: 201806505, GRADE: 20, CONTRIBUTION: 25%
+NAME: Ricardo Amaral Nunes, NR: 201706860, GRADE: 20, CONTRIBUTION: 25%
 
 ...
 
