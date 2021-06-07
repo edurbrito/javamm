@@ -1,4 +1,11 @@
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import pt.up.fe.comp.jmm.JmmParser;
 import pt.up.fe.comp.jmm.JmmParserResult;
 import pt.up.fe.comp.jmm.analysis.JmmSemanticsResult;
@@ -9,23 +16,19 @@ import pt.up.fe.comp.jmm.report.Report;
 import pt.up.fe.comp.jmm.report.ReportType;
 import pt.up.fe.comp.jmm.report.Stage;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class jmm implements JmmParser {
 
     public static final Pattern rOption = Pattern.compile("-r=(\\d+)");
     public static final Pattern oOption = Pattern.compile("-o");
     public static final Pattern fileOption = Pattern.compile(".+\\.jmm$");
 
-    public JmmParserResult parse(String jmmFile){
+    @Override
+    public JmmParserResult parse(String code) {
 
         try {
-            Javamm javamm = new Javamm(new FileInputStream(jmmFile));
+            // JB: Input of parse in the source code, not a file
+            // Javamm javamm = new Javamm(new FileInputStream(jmmFile));
+            Javamm javamm = new Javamm(new ByteArrayInputStream(code.getBytes()));
 
             SimpleNode root = javamm.Parse(); // returns reference to root node
 
@@ -38,9 +41,11 @@ public class jmm implements JmmParser {
             // printUsage(e,true);
             ArrayList<Report> reports = new ArrayList<Report>();
             if (e instanceof ParseException)
-                reports.add(new Report(ReportType.ERROR, Stage.SYNTATIC, ((ParseException) e).currentToken.beginLine, "Detected generic error: " + e.getMessage()));
+                reports.add(new Report(ReportType.ERROR, Stage.SYNTATIC, ((ParseException) e).currentToken.beginLine,
+                        "Detected generic error: " + e.getMessage()));
             else
-                reports.add(new Report(ReportType.ERROR, Stage.SYNTATIC, e.getStackTrace()[0].getLineNumber(), "Detected generic error: " + e.getMessage()));
+                reports.add(new Report(ReportType.ERROR, Stage.SYNTATIC, e.getStackTrace()[0].getLineNumber(),
+                        "Detected generic error: " + e.getMessage()));
             return new JmmParserResult(null, reports);
         }
     }
@@ -80,14 +85,14 @@ public class jmm implements JmmParser {
 
             File ff = new File(fileName);
 
-            if(!(ff.exists() && ff.isFile())){
+            if (!(ff.exists() && ff.isFile())) {
                 throw new Exception("Not a valid filepath");
             }
 
             jmm main = new jmm();
 
             JmmParserResult parserResult = main.parse(fileName);
-            if(parserResult.getReports().size() > 0){
+            if (parserResult.getReports().size() > 0) {
                 throw new Exception("There were syntatical errors");
             }
 
@@ -100,7 +105,7 @@ public class jmm implements JmmParser {
             AnalysisStage analysisStage = new AnalysisStage();
 
             JmmSemanticsResult semanticsResult = analysisStage.semanticAnalysis(parserResult);
-            if(semanticsResult.getReports().size() > 0){
+            if (semanticsResult.getReports().size() > 0) {
                 throw new Exception("There were semantic errors");
             }
 
@@ -110,7 +115,7 @@ public class jmm implements JmmParser {
 
             OptimizationStage optimizationStage = new OptimizationStage();
 
-            if(o) {
+            if (o) {
                 semanticsResult = optimizationStage.optimize(semanticsResult);
             }
 
@@ -133,7 +138,7 @@ public class jmm implements JmmParser {
 
         } catch (Exception e) {
             e.printStackTrace();
-            printUsage(e,false);
+            printUsage(e, false);
         }
     }
 
@@ -142,8 +147,9 @@ public class jmm implements JmmParser {
     }
 
     public static void printUsage(Exception e, boolean stackTrace) {
-        if(stackTrace)
+        if (stackTrace)
             e.printStackTrace();
-        System.err.println("Error: " + String.format("[%s] ", e.getClass().getSimpleName()) + e.getMessage() + "\nUsage: java jmm [-r=<num>] [-o] <input_file.jmm>");
+        System.err.println("Error: " + String.format("[%s] ", e.getClass().getSimpleName()) + e.getMessage()
+                + "\nUsage: java jmm [-r=<num>] [-o] <input_file.jmm>");
     }
 }
