@@ -1,16 +1,7 @@
-## GROUP: COMP2021-3C
+# The JMM language
+Jmm is a compiler for the Java minus minus language, a subset of the Java language. 
 
-(Names, numbers, self assessment, and contribution of the members of the group to the project according to:)
-NAME: Eduardo Ribas Brito, NR: 201806271, GRADE: 20, CONTRIBUTION: 25%
-NAME: Luís Miguel Maia Marques Torres E Silva, NR: 201808912, GRADE: 20, CONTRIBUTION: 25%
-NAME: Paulo Jorge Salgado Marinho Ribeiro, NR: 201806505, GRADE: 20, CONTRIBUTION: 25%
-NAME: Ricardo Amaral Nunes, NR: 201706860, GRADE: 20, CONTRIBUTION: 25%
-
-GLOBAL Grade of the project: 18
-
-
-## SUMMARY: (Describe what your tool does and its main features.)
-Jmm is a compiler for the Java minus minus language, a subset of the Java language. It's divided into five main sections:
+It's divided into five main sections:
 1. Lexical analyzer: divides the code into a chain of tokens;
 2. Syntactic analyzer: parses the chain of tokens, reporting any syntactical errors, and constructing a AST;
 3. Semantic analyzer: analyses the code for semantic errors, and constructs the SymbolTable;
@@ -23,13 +14,13 @@ We implemented some enhancements in our project:
 3. The optimizations Constant Propagation, Constant Folding and optimized While loops are implemented.
 
 
-## DEALING WITH SYNTACTIC ERRORS: (Describe how the syntactic error recovery of your tool works. Does it exit after the first error?)
+## DEALING WITH SYNTACTIC ERRORS:
 The syntactic error recovery acts in while cycles. 
 When encountering an error in one, it recovers from the error, reporting it and discarding the rest of the loop. 
 However, for other errors, it returns immediately.
 
 
-## SEMANTIC ANALYSIS: (Refer the semantic rules implemented by your tool.)
+## SEMANTIC ANALYSIS:
 The main rules implemented are:
 * all operations must be of the same type;
 * it is not possible to use arrays directly in arithmetic/boolean expressions;
@@ -43,7 +34,7 @@ Extras:
 * Verifies if variables are initialized.
 
 
-## CODE GENERATION: (describe how the code generation of your tool works and identify the possible problems your tool has regarding code generation.)
+## CODE GENERATION:
 In order to generate JMC, the tool needs to first generate an intermediate code representation, the ollir code. 
 Starting in the first node of the AST, the tool traverses the tree, and, according to the node kind, it calls helper functions to parse it. 
 For complex expressions, temporary variables are used to store intermediate and final calculations.
@@ -52,7 +43,7 @@ The resulting ollir code is formatted and cleaned up to be parsed by an ollir pa
 Afterwards a jasmin representation is generated based on the ollir parser result.
 
 
-## TASK DISTRIBUTION: (Identify the set of tasks done by each member of the project. You can divide this by checkpoint if it helps)
+## TASK DISTRIBUTION:
 
 ### Checkpoint 1
 Creating the tokens - Eduardo and Paulo
@@ -76,7 +67,7 @@ Tests - Everyone
 Implementation of optimizations - Eduardo and Paulo
 
 
-## PROS: (Identify the most positive aspects of your tool)
+## PROS:
 This tool can handle expressions with small and medium complexity and run its code appropriately.
 Some clever tests prove that in spite of the language simplicity, it is versatile and can handle most use cases.
 The tool is fast on compiling and executing.
@@ -84,7 +75,7 @@ It handles arithmetic expressions and precedence rules very well.
 Generates comprehensive errors for users.
 
 
-## CONS: (Identify the most negative aspects of your tool)
+## CONS:
 Ollir code generation fails in some difficult expressions not generating the appropriate temporary variables or not the proper type assignments.
 Ollir code generation does not take into account efficiency.
 Ollir code generation is coded in a way that it is difficult to evolve/improve functionalities due to numerous "patches" instead of refactors.
@@ -156,3 +147,11 @@ We also included in this project the class ``src-lib/pt/up/fe/comp/jmm/report/Re
 We have included the interface ``src-lib/pt/up/fe/comp/jmm/JmmParser.java``, which you should implement in a class that has a constructor with no parameters (please check ``src/Main.java`` for an example). This class will be used to test your parser. The interface has a single method, ``parse``, which receives a String with the code to parse, and returns a JmmParserResult instance. This instance contains the root node of your AST, as well as a List of Report instances that you collected during parsing.
 
 To configure the name of the class that implements the JmmParser interface, use the file ``parser.properties``.
+
+
+## GROUP: COMP2021-3C
+
+NAME: Eduardo Brito, NR: 201806271, CONTRIBUTION: 25%
+NAME: Luís Miguel Maia Marques Torres E Silva, NR: 201808912, CONTRIBUTION: 25%
+NAME: Paulo Jorge Salgado Marinho Ribeiro, NR: 201806505, CONTRIBUTION: 25%
+NAME: Ricardo Amaral Nunes, NR: 201706860, CONTRIBUTION: 25%
