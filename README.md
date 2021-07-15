@@ -1,5 +1,5 @@
-# The JMM language
-Jmm is a compiler for the Java minus minus language, a subset of the Java language. 
+# JMM
+This is a compiler for the Java minus minus language, a subset of the Java language.
 
 It's divided into five main sections:
 1. Lexical analyzer: divides the code into a chain of tokens;
